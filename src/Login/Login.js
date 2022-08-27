@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import logo from "../Cabeza_Logo.jpg";
 
 export default function Login() {
+
   const [loginData, setLoginData] = useState({
     id_number: "",
     password: "",
@@ -16,21 +18,7 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    tryFetch();
-    //navigate("/Dashboard");
-  }
-
-  async function tryFetch() {
-    try {
-      const responde = await fetch('localhost/Login.php');
-      if (Response.ok) {
-        console.log('Piola');
-      } else {
-        console.log('Piolant');
-      }
-    } catch (error) {
-      console.log('Chale : ', error.message);
-    }
+    navigate("/Dashboard");
   }
 
   return (

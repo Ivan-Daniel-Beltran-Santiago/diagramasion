@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../Cabeza_Logo.jpg";
 
 export default function Login() {
-
   const [loginData, setLoginData] = useState({
     id_number: "",
     password: "",
@@ -23,10 +21,13 @@ export default function Login() {
 
   return (
     <>
-      <img src={logo} className="App-logo" alt="logo" />
+      <div className="header">
+        <img src={logo} className="App-logo" alt="logo" />
+      </div>
       <div className="login">
         <h2 className="title">Iniciar sesión</h2>
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}>
           <h4>Matrícula/Número de control</h4>
           <input
             type="text"

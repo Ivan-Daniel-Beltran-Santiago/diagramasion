@@ -10,8 +10,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/Preferences" element={<Preferences />} />
       </Routes>
     </BrowserRouter>
   );

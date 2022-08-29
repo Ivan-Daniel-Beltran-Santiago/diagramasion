@@ -1,45 +1,107 @@
 import './App.css';
-import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Dashboard from './Dashboard/Dashboard';
-import Login from './Login/Login';
-import Preferences from './Preferences/Preferences';
+import React from 'react';
+import logo from './Cabeza_Logo.jpg';
 
-function App(props) {
-  const [token, setToken] = useState();
-  const isLoggedVisible = props.isLoggedVisible;
-  if(isLoggedVisible) {
-    return <Login setToken={setToken} />
+function App() {
+
+  /*function openWindow(windowName) {
+    var i;
+    var x = document.getElementsByClassName("menuVista");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    document.getElementById(windowName).style.display = "block";
+  }*/
+
+  const openWindow = (event) => {
+    var i;
+    var x = document.getElementsByClassName("modules");
+    var y = event.target.id;
+    for (i = 0; i < x.length; i++) {
+      if (x[i].id === y) {
+        x[i].style.display = "block";
+      } else {
+        x[i].style.display = "none";
+      }
+    }
   }
+
   return (
-    /*<div className="App">
+    <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <div class="login">
-          <h2 class="title">Iniciar sesión</h2>
-          <form>
-            <h4>Matrícula/Número de control</h4>
-            <input type="text" id="id number" placeholder="Matrícula/Número de control" />
-            <h4>Contraseña</h4>
-            <input type="password" id="password" placeholder="Contraseña"/>
-            <input type="submit" id="save" value="Ingresar" class="ingress"/>
-            <p>Si es tu primera vez en el sistema, la contraseña es tu matrícula</p>
-          </form>
-        </div>
       </header>
-    </div>*/
-    <div className="wrapper">
-      <h1>Application</h1>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/Dashboard'>
-            <Dashboard />
-          </Route>
-          <Route path='/Preferences'>
-            <Preferences />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <div>
+        <div>
+          <div className="content-section">
+            <div className="contentSelector">
+              <button id="bienvenidaEncargada" className="button" onClick={openWindow}>Bienvenida</button>
+              <button id="administrarSolicitudes" className="button" onClick={openWindow}>Administración de Solicitudes</button>
+              <button id="administracionGeneral" className="button" onClick={openWindow}>Administración General</button>
+              <button className="button" onClick={openWindow}>Información de Usuario</button>
+            </div>
+            <div>
+              <div className="content">
+                <div id="bienvenidaEncargada" className="modules">
+                  <p>
+                    <span className="nuevasSolicitudes"> Aquí va el número de solicitudes nuevas</span>
+                  </p>
+                  <p>
+										<span className="requiereAtencion">Aquí va el número de solicitudes que requieren atención de la encargada para continuar</span>
+									</p>
+                  <p>
+										<span className="requiereAjustes">
+											Aquí va el número de solicitudes que han encontrado impedimentos y no han sido atendidos por el estudiante
+										</span>
+									</p>
+                </div>
+                <div id="administrarSolicitudes" className="modules" style={{ display: 'none' }}>
+                  <table className="tablas">
+                    <tbody>
+                      <tr className="Cabecera">
+                        <th>ID de la Solicitud</th>
+                        <th>Tramite Solicitado</th>
+                        <th>Fecha de Solicitud</th>
+                        <th>Estatus Actual</th>
+                        <th>Fecha de Ultima Actualización</th>
+                      </tr>
+                      <tr>
+                        <th>39</th>
+                        <th>Orfandad</th>
+                        <th>23/10/2077</th>
+                        <th>Recien iniciada</th>
+                        <th>-</th>
+                      </tr>
+                      <tr className="registroPar">
+                        <th>666</th>
+                        <th>Orfandad</th>
+                        <th>01/01/0001</th>
+                        <th>En espera del deposito</th>
+                        <th>31/12/2021</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div id="administracionGeneral" className="modules" style={{ display: 'none' }}>
+                  <div className="dateContainer">
+                    <p><label className="labelDate">Fecha de inicio</label></p>                    
+                    <input type="date" className="dates"></input>
+                    <p><label className="labelDate">Fecha de finalización</label></p>
+                    <input type="date" className="dates"></input>
+                    <button>Generar Informe Estadístico</button>
+                  </div>
+                  <div>
+									<form>
+										<input type="file" id="subirArchivos" name="Subir archivo Excel"></input>
+										<p><input type="submit" value="Cargar Inicios de Sesión"></input></p>
+									</form>
+								  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

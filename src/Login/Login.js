@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import logo from "../Cabeza_Logo.jpg";
 
 export default function Login() {
@@ -16,7 +17,19 @@ export default function Login() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    navigate("/Dashboard");
+    const loginAttempt = loginData;
+    axios.post('http://localhost:3001', loginAttempt)
+    .then((response)=>{
+      if(response.data==='Success'){
+        alert("Conectao")
+      } else {
+        alert(response.data + " | " + loginData.id_number + " , " + loginData.password);
+      }
+    })
+    .catch(err=>{
+      console.log("Error");
+      console.error(err);
+    });
   }
 
   return (

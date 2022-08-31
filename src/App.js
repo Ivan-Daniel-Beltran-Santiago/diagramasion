@@ -38,7 +38,7 @@ function App() {
               <button id="bienvenidaEncargada" className="button" onClick={openWindow}>Bienvenida</button>
               <button id="administrarSolicitudes" className="button" onClick={openWindow}>Administración de Solicitudes</button>
               <button id="administracionGeneral" className="button" onClick={openWindow}>Administración General</button>
-              <button className="button" onClick={openWindow}>Información de Usuario</button>
+              <button id="informacionUsuario" className="button" onClick={openWindow}>Información de Usuario</button>
             </div>
             <div>
               <div className="content">
@@ -47,13 +47,13 @@ function App() {
                     <span className="nuevasSolicitudes"> Aquí va el número de solicitudes nuevas</span>
                   </p>
                   <p>
-										<span className="requiereAtencion">Aquí va el número de solicitudes que requieren atención de la encargada para continuar</span>
-									</p>
+                    <span className="requiereAtencion">Aquí va el número de solicitudes que requieren atención de la encargada para continuar</span>
+                  </p>
                   <p>
-										<span className="requiereAjustes">
-											Aquí va el número de solicitudes que han encontrado impedimentos y no han sido atendidos por el estudiante
-										</span>
-									</p>
+                    <span className="requiereAjustes">
+                      Aquí va el número de solicitudes que han encontrado impedimentos y no han sido atendidos por el estudiante
+                    </span>
+                  </p>
                 </div>
                 <div id="administrarSolicitudes" className="modules" style={{ display: 'none' }}>
                   <table className="tablas">
@@ -84,19 +84,47 @@ function App() {
                 </div>
                 <div id="administracionGeneral" className="modules" style={{ display: 'none' }}>
                   <div className="dateContainer">
-                    <p><label className="labelDate">Fecha de inicio</label></p>                    
+                    <p><label className="labelDate">Fecha de inicio</label></p>
                     <input type="date" className="dates"></input>
                     <p><label className="labelDate">Fecha de finalización</label></p>
                     <input type="date" className="dates"></input>
                     <button>Generar Informe Estadístico</button>
                   </div>
                   <div>
-									<form>
-										<input type="file" id="subirArchivos" name="Subir archivo Excel"></input>
-										<p><input type="submit" value="Cargar Inicios de Sesión"></input></p>
-									</form>
-								  </div>
+                    <form>
+                      <input type="file" id="subirArchivos" name="Subir archivo Excel"></input>
+                      <p><input type="submit" className="loadLogin" value="Cargar Inicios de Sesión"></input></p>
+                    </form>
+                  </div>
                 </div>
+                <div id="informacionUsuario" className="modules" style={{ display: 'none' }}>
+                  <form className="info_usuario">
+                    <label>Matricula</label>
+                    <p>La matricula del usuario activo</p>
+                    <label>Nombre: </label>
+                    <p>El nombre completo del usuario activo</p>
+                  </form>
+                  <form className="info_usuario">
+                    <p>
+                      <label>Nueva contraseña: </label>
+                      <input type="password" placeholder="Nueva contraseña"></input>
+                    </p>
+                    <p>
+                      <label>Repetir nueva contraseña: </label>
+                      <input type="password" placeholder="Nueva contraseña"></input>
+                    </p>
+                    <p>
+                      <label>Contraseña actual: </label>
+                      <input type="password" placeholder="Contraseña actual"></input>
+                    </p>
+                    <p>
+                      <label>Correo electrónico: </label>
+                      <input type="email" placeholder="Correo actual del usuario activo."></input>
+                    </p>
+                  </form>
+                  <button className="confirmarCambios">Confirmar cambios</button>
+                </div>
+                <button id="salirButton" className="logout">Salir</button>
               </div>
             </div>
           </div>

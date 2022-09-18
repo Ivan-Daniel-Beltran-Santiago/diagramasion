@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import logo from "../Cabeza_Logo.jpg";
+import "./Login.css";
 
 export default function Login() {
   const [loginData, setLoginData] = useState({
@@ -22,6 +24,7 @@ export default function Login() {
     .then((response)=>{
       if(response.data==='Success'){
         alert("Conectao")
+        navigate("/Menu-Encargada");
       } else {
         alert(response.data + " | " + loginData.id_number + " , " + loginData.password);
       }

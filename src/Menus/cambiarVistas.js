@@ -5,8 +5,6 @@ import InformacionUsuario from "./Submodulos/informacionUsuario";
 
 const VistaMenuActual = (VistaIndex) => {
   switch (VistaIndex.VistaIndex) {
-    case 1:
-      return <MenuBienvenidaEncargada />;
     case 2:
       return <AdmnistrarSolicitudes />;
     case 5:
@@ -14,7 +12,11 @@ const VistaMenuActual = (VistaIndex) => {
     case 6:
       return <InformacionUsuario />;
     default:
-      return null;
+      if (VistaIndex.VistaIndex < 7) {
+        return <MenuBienvenidaEncargada />;
+      } else {
+        return null;
+      }
   }
 };
 

@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./menuEncargada.css";
 
 import Header from "../header";
 import VistaMenuActual from "./cambiarVistas";
+import { useNavigate } from "react-router-dom";
 
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas
   const [indexVisible, setIndexVisible] = useState({index:1});
+
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    setIndexVisible(0);
+  },[]);
 
   //La vista tal cual
   return (
@@ -48,7 +55,7 @@ function MenuEncargada() {
             <div>
               <div className="content">
                 <VistaMenuActual VistaIndex={indexVisible}/>
-                <button id="salirButton" className="logout">
+                <button id="salirButton" className="logout" onClick={()=>{navigate("/")}}> 
                   Salir
                 </button>
               </div>

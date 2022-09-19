@@ -20,19 +20,30 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     const loginAttempt = loginData;
-    axios.post('http://localhost:3001', loginAttempt)
-    .then((response)=>{
-      if(response.data==='Success'){
-        alert("Conectao")
-        navigate("/Menu-Encargada");
-      } else {
-        alert(response.data + " | " + loginData.id_number + " , " + loginData.password);
-      }
-    })
-    .catch(err=>{
-      console.log("Error");
-      console.error(err);
-    });
+    axios
+      .post("http://localhost:3001", loginAttempt)
+      .then((response) => {
+        if (response.data === "Success") {
+          alert("Conectao");
+          if (loginData.id_number.length > 7) {
+            navigate("/Menu-Estudiante");
+          } else {
+            navigate("/Menu-Encargada");
+          }
+        } else {
+          alert(
+            response.data +
+              " | " +
+              loginData.id_number +
+              " , " +
+              loginData.password
+          );
+        }
+      })
+      .catch((err) => {
+        console.log("Error");
+        console.error(err);
+      });
   }
 
   return (
@@ -42,8 +53,7 @@ export default function Login() {
       </div>
       <div className="login">
         <h2 className="title">Iniciar sesión</h2>
-        <form
-          onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <h4>Matrícula/Número de control</h4>
           <input
             type="text"

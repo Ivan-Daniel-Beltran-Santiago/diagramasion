@@ -1,4 +1,4 @@
-function MenuBienvenidaEncargada() {
+function BienvenidaEncargada() {
   return (
     <div id="bienvenidaEncargada" className="modules">
       <p>
@@ -22,4 +22,4 @@ function MenuBienvenidaEncargada() {
     </div>
   );
 }
-export default MenuBienvenidaEncargada;
+export default BienvenidaEncargada;

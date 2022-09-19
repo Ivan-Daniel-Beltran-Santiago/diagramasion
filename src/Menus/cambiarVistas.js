@@ -1,6 +1,9 @@
-import MenuBienvenidaEncargada from "./Submodulos/bienvenida";
+import BienvenidaEncargada from "./Submodulos/bienvenidaEncargada";
 import AdmnistrarSolicitudes from "./Submodulos/administrarSolicitudes";
 import AdministracionGeneral from "./Submodulos/administracionGeneral";
+import BienvenidaEstudiante from "./Submodulos/bienvenidaEstudiante";
+import SolicitarTramite from "./Submodulos/solicitarTramite";
+import SolicitudEstudiante from "./Submodulos/solicitudEstudiante";
 import InformacionUsuario from "./Submodulos/informacionUsuario";
 
 const VistaMenuActual = (VistaIndex) => {
@@ -11,11 +14,15 @@ const VistaMenuActual = (VistaIndex) => {
       return <AdministracionGeneral />;
     case 6:
       return <InformacionUsuario />;
+    case 8:
+      return <SolicitarTramite />;
+    case 9:
+      return <SolicitudEstudiante />;
     default:
       if (VistaIndex.VistaIndex < 7) {
-        return <MenuBienvenidaEncargada />;
+        return <BienvenidaEncargada />;
       } else {
-        return null;
+        return <BienvenidaEstudiante />;
       }
   }
 };

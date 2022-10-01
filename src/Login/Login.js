@@ -21,9 +21,9 @@ export default function Login() {
     event.preventDefault();
     const loginAttempt = loginData;
     axios
-      .post("http://localhost:3001", loginAttempt)
+      .post("http://localhost:3001/Login", loginAttempt)
       .then((response) => {
-        if (response.data === "Success") {
+        if (response.status === 200) {
           alert("Conectao");
           if (loginData.id_number.length > 7) {
             navigate("/Menu-Estudiante");

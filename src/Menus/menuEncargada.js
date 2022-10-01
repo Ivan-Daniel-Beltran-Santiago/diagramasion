@@ -3,17 +3,15 @@ import "./menuEncargada.css";
 
 import Header from "../header";
 import VistaMenuActual from "./cambiarVistas";
-import { useNavigate } from "react-router-dom";
+import RegresarMenu from "./regresarMenu";
 
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas
-  const [indexVisible, setIndexVisible] = useState({index:1});
+  const [indexVisible, setIndexVisible] = useState({ index: 1 });
 
-  const navigate = useNavigate();
-
-  useEffect(()=>{
+  useEffect(() => {
     setIndexVisible(0);
-  },[]);
+  }, []);
 
   //La vista tal cual
   return (
@@ -26,38 +24,44 @@ function MenuEncargada() {
               <button
                 id="bienvenidaEncargada"
                 className="button"
-                onClick={()=>{setIndexVisible(1)}}
+                onClick={() => {
+                  setIndexVisible(1);
+                }}
               >
                 Bienvenida
               </button>
               <button
                 id="administrarSolicitudes"
                 className="button"
-                onClick={()=>{setIndexVisible(2)}}
+                onClick={() => {
+                  setIndexVisible(2);
+                }}
               >
                 Administración de Solicitudes
               </button>
               <button
                 id="administracionGeneral"
                 className="button"
-                onClick={()=>{setIndexVisible(5)}}
+                onClick={() => {
+                  setIndexVisible(5);
+                }}
               >
                 Administración General
               </button>
               <button
                 id="informacionUsuario"
                 className="button"
-                onClick={()=>{setIndexVisible(6)}}
+                onClick={() => {
+                  setIndexVisible(6);
+                }}
               >
                 Información de Usuario
               </button>
             </div>
             <div>
               <div className="content">
-                <VistaMenuActual VistaIndex={indexVisible}/>
-                <button id="salirButton" className="logout" onClick={()=>{navigate("/")}}> 
-                  Salir
-                </button>
+                <VistaMenuActual VistaIndex={indexVisible} />
+                <RegresarMenu />
               </div>
             </div>
           </div>

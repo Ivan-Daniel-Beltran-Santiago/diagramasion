@@ -23,21 +23,20 @@ export default function Login() {
     axios
       .post("http://localhost:3001/Login", loginAttempt)
       .then((response) => {
-        if (response.status === 200) {
-          alert("Conectao");
-          if (loginData.id_number.length > 7) {
-            navigate("/Menu-Estudiante");
-          } else {
-            navigate("/Menu-Encargada");
-          }
-        } else {
-          alert(
-            response.data +
-              " | " +
-              loginData.id_number +
-              " , " +
-              loginData.password
-          );
+        switch (response.data.Code) {
+          case 1:
+            if (loginData.id_number.length > 7) {
+              navigate("/Menu-Estudiante");
+            } else {
+              navigate("/Menu-Encargada");
+            }
+            break;
+          case -1:
+            alert("Usuario y/o contraseña incorrectos");
+            break;
+          default:
+            alert("Usuario no encontrado");
+            break;
         }
       })
       .catch((err) => {

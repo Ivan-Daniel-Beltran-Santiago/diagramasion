@@ -6,20 +6,20 @@ import SolicitarTramite from "./Submodulos/solicitarTramite";
 import SolicitudEstudiante from "./Submodulos/solicitudEstudiante";
 import InformacionUsuario from "./Submodulos/informacionUsuario";
 
-const VistaMenuActual = (VistaIndex) => {
-  switch (VistaIndex.VistaIndex) {
+const VistaMenuActual = ({ VistaIndex, currentUser }) => {
+  switch (VistaIndex) {
     case 2:
       return <AdmnistrarSolicitudes />;
     case 5:
       return <AdministracionGeneral />;
     case 6:
-      return <InformacionUsuario />;
+      return <InformacionUsuario currentUser={currentUser} />;
     case 8:
       return <SolicitarTramite />;
     case 9:
       return <SolicitudEstudiante />;
     default:
-      if (VistaIndex.VistaIndex < 7) {
+      if (VistaIndex < 7) {
         return <BienvenidaEncargada />;
       } else {
         return <BienvenidaEstudiante />;

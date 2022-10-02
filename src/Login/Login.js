@@ -28,7 +28,9 @@ export default function Login() {
             if (loginData.id_number.length > 7) {
               navigate("/Menu-Estudiante");
             } else {
-              navigate("/Menu-Encargada");
+              navigate("/Menu-Encargada", {
+                state: [{ loginID: loginData.id_number }],
+              });
             }
             break;
           case -1:

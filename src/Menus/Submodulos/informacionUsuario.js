@@ -1,14 +1,11 @@
-function InformacionUsuario() {
+function InformacionUsuario({ currentUser }) {
   return (
-    <div
-      id="informacionUsuario"
-      className="modules"
-    >
+    <div id="informacionUsuario" className="modules">
       <form className="info_usuario">
-        <label>Matricula</label>
-        <p>La matricula del usuario activo</p>
+        <label>Matricula:</label>
+        <p>{currentUser.controlNumber}</p>
         <label>Nombre: </label>
-        <p>El nombre completo del usuario activo</p>
+        <p>{currentUser.fullName}</p>
       </form>
       <form className="info_usuario">
         <p>
@@ -25,10 +22,7 @@ function InformacionUsuario() {
         </p>
         <p>
           <label>Correo electrónico: </label>
-          <input
-            type="email"
-            placeholder="Correo actual del usuario activo."
-          ></input>
+          <input type="email" placeholder={currentUser.eMail}></input>
         </p>
       </form>
       <button className="confirmarCambios">Confirmar cambios</button>

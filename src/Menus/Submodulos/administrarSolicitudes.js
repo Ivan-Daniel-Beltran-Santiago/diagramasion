@@ -6,25 +6,6 @@ import RegistrosSolicitud from "./registrosSolicitud";
 
 function AdmnistrarSolicitudes() {
   const [filtroEstatus, setFiltroEstatus] = useState(3);
-  const [listaSolicitudes, setListaSolicitudes] = useState([]);
-
-  const retrieveRequests = useCallback(() => {
-    axios
-      .post("http://localhost:3001/RequestList", {
-        estatus: filtroEstatus,
-      })
-      .then((response) => {
-        setListaSolicitudes(response.data);
-      });
-  }, [filtroEstatus]);
-
-  useEffect(() => {
-    setFiltroEstatus(3);
-  }, []);
-
-  useEffect(() => {
-    retrieveRequests();
-  }, [retrieveRequests]);
 
   return (
     <div id="administrarSolicitudes">
@@ -40,7 +21,7 @@ function AdmnistrarSolicitudes() {
         </button>
       </div>
       <section className="listContainer">
-        <RegistrosSolicitud listArray={{ listaSolicitudes }} />
+        <RegistrosSolicitud estatusSolicitado={{ filtroEstatus }} />
       </section>
     </div>
   );

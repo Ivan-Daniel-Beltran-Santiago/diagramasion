@@ -1,16 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import axios from "axios";
 import RegistroSolicitud from "./registroSolicitud";
 
-function RegistrosSolicitud({ listArray }) {
-  const [arregloRegistros, setArregloRegistros] = useState();
+function RegistrosSolicitud({ estatusSolicitado }) {
+  const [listaSolicitudes, setListaSolicitudes] = useState([{}]);
+
+  const retrieveRequests = useCallback(() => {
+    axios
+      .post("http://localhost:3001/RequestList", {
+        estatus: estatusSolicitado.filtroEstatus,
+      })
+      .then((response) => {
+        setListaSolicitudes(response.data);
+      });
+  }, [estatusSolicitado]);
 
   useEffect(() => {
-    setArregloRegistros(listArray);
-  }, [listArray]);
+    retrieveRequests();
+  }, [retrieveRequests]);
 
-  const registroSolicitud = (value) => {
-    <RegistroSolicitud registro={value} />;
-  };
   return (
     <table className="tablas">
       <tbody>
@@ -22,22 +30,17 @@ function RegistrosSolicitud({ listArray }) {
           <th>Estatus Actual</th>
           <th>Fecha de Ultima Actualización</th>
         </tr>
-        <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
-        <tr className="registroPar">
-          <th>666</th>
-          <th></th>
-          <th>Orfandad</th>
-          <th>01/01/0001</th>
-          <th>En espera del deposito</th>
-          <th>31/12/2021</th>
-        </tr>
+        {listaSolicitudes.map(function (item) {
+          var registroUsuario = item.Usuario ?? "Indefinido";
+          var registroTramite = item.Tramite ?? "Indefinido";
+          return (
+            <RegistroSolicitud
+              registro={item}
+              usuario={registroUsuario}
+              tramite={registroTramite}
+            />
+          );
+        })}
       </tbody>
     </table>
   );

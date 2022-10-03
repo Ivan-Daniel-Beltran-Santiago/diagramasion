@@ -1,18 +1,11 @@
 function AdmnistrarSolicitudes() {
   return (
-    <div
-      id="administrarSolicitudes"
-      className="modules"
-      style={{display:"grid", gridTemplateAreas:"buttonContainer listContainer listContainer listContainer"}}
-    >
-      <aside className="buttonContainer">
-        <button
-          id="bienvenidaEncargada"
-          className="button"
-        >
-          Bienvenida
-        </button>
-      </aside>
+    <div id="administrarSolicitudes">
+      <div>
+        <button className="button">Documentos Cargados</button>
+        <button className="button">Solicitud aceptada, en espera</button>
+        <button className="button">Solicitud aprobada y finiquito en espera</button>
+      </div>
       <section className="listContainer">
         <table className="tablas">
           <tbody>

@@ -26,7 +26,9 @@ export default function Login() {
         switch (response.data.Code) {
           case 1:
             if (loginData.id_number.length > 7) {
-              navigate("/Menu-Estudiante");
+              navigate("/Menu-Estudiante", {
+                state: [{ loginID: loginData.id_number }],
+              });
             } else {
               navigate("/Menu-Encargada", {
                 state: [{ loginID: loginData.id_number }],

@@ -42,6 +42,27 @@
   border-style: inset;
 }
 
+.listContainer{
+  width: 90%;
+  padding: 10px;
+  margin: 20px;
+  margin-top:15px;
+  border: 2px;
+  border-style: inset;
+  grid-area: listContainer;
+  display: flex;
+}
+
+.buttonContainer{
+  width: 20%;
+  margin: 20px;
+  margin-top:15px;
+  border: 2px;
+  border-style: inset;
+  grid-area: buttonContainer;
+  display: flex;
+}
+
 .content{
   padding-top:20px;
 }

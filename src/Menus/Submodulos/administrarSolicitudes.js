@@ -28,7 +28,7 @@ function AdmnistrarSolicitudes() {
 
   return (
     <div id="administrarSolicitudes">
-      <div>
+      <div className="buttonContainer">
         <button className="button" onClick={() => setFiltroEstatus(3)}>
           Documentos Cargados
         </button>

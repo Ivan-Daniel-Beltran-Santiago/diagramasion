@@ -1,37 +1,46 @@
+import axios from "axios";
+import { useCallback, useEffect } from "react";
+import { useState } from "react";
+
+import RegistrosSolicitud from "./registrosSolicitud";
+
 function AdmnistrarSolicitudes() {
+  const [filtroEstatus, setFiltroEstatus] = useState(3);
+  const [listaSolicitudes, setListaSolicitudes] = useState([]);
+
+  const retrieveRequests = useCallback(() => {
+    axios
+      .post("http://localhost:3001/RequestList", {
+        estatus: filtroEstatus,
+      })
+      .then((response) => {
+        setListaSolicitudes(response.data);
+      });
+  }, [filtroEstatus]);
+
+  useEffect(() => {
+    setFiltroEstatus(3);
+  }, []);
+
+  useEffect(() => {
+    retrieveRequests();
+  }, [retrieveRequests]);
+
   return (
     <div id="administrarSolicitudes">
       <div>
-        <button className="button">Documentos Cargados</button>
-        <button className="button">Solicitud aceptada, en espera</button>
-        <button className="button">Solicitud aprobada y finiquito en espera</button>
+        <button className="button" onClick={() => setFiltroEstatus(3)}>
+          Documentos Cargados
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(6)}>
+          Solicitud aceptada, en espera
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(9)}>
+          Solicitud aprobada y finiquito en espera
+        </button>
       </div>
       <section className="listContainer">
-        <table className="tablas">
-          <tbody>
-            <tr className="Cabecera">
-              <th>ID de la Solicitud</th>
-              <th>Tramite Solicitado</th>
-              <th>Fecha de Solicitud</th>
-              <th>Estatus Actual</th>
-              <th>Fecha de Ultima Actualización</th>
-            </tr>
-            <tr>
-              <th>39</th>
-              <th>Orfandad</th>
-              <th>23/10/2077</th>
-              <th>Recien iniciada</th>
-              <th>-</th>
-            </tr>
-            <tr className="registroPar">
-              <th>666</th>
-              <th>Orfandad</th>
-              <th>01/01/0001</th>
-              <th>En espera del deposito</th>
-              <th>31/12/2021</th>
-            </tr>
-          </tbody>
-        </table>
+        <RegistrosSolicitud listArray={{ listaSolicitudes }} />
       </section>
     </div>
   );

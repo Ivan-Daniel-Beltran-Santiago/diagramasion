@@ -20,10 +20,16 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     const loginAttempt = loginData;
+    /*
     navigate("/Menu-Encargada", {
       state: [{ loginID: loginData.id_number }],
     });
-    /*
+    */
+   /*
+    navigate("/Menu-Estudiante", {
+      state: [{ loginID: loginData.id_number }],
+    });
+    */
     axios
       .post("http://localhost:3001/Login", loginAttempt)
       .then((response) => {
@@ -51,7 +57,6 @@ export default function Login() {
         console.log("Error");
         console.error(err);
       });
-      */
   }
 
   return (

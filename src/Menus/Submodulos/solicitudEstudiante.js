@@ -1,19 +1,4 @@
 function SolicitudEstudiante() {
-  const actualizarProgreso = (event) => {
-    var elem = document.getElementById("progreso");
-    var width = 0;
-    var id = setInterval(frame, 10);
-    function frame() {
-      if (width >= 100) {
-        clearInterval(id);
-      } else {
-        width++;
-        elem.style.width = width + "%";
-        elem.innerHTML = width * 1 + "%";
-      }
-    }
-  };
-
   return (
     <div id="solicitudEstudiante" className="modules">
       <div className="contenedorSolicitud">
@@ -51,9 +36,6 @@ function SolicitudEstudiante() {
             0%
           </div>
         </div>
-        <button className="debugProgressBar" onClick={actualizarProgreso}>
-          Debug: Barra de progreso
-        </button>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import Header from "../header";
+import LogoHeader from "./Auxiliary/Logo_Header";
 import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 import "./Login.css";
 
@@ -24,7 +24,7 @@ export default function Login() {
 
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/Login";
-    
+
     /*
     navigate("/Menu-Encargada", {
       state: [{ loginID: loginData.id_number }],
@@ -42,6 +42,16 @@ export default function Login() {
       .then((response) => {
         switch (response.data.Code) {
           case 1:
+            /*
+            navigate("/Menu", {
+              state: [
+                {
+                  loginID: loginData.id_number,
+                  loginType: loginData.id_number.length > 7 ? 7 : 1,
+                },
+              ],
+            });
+            */
             if (loginData.id_number.length > 7) {
               navigate("/Menu-Estudiante", {
                 state: [{ loginID: loginData.id_number }],
@@ -68,7 +78,7 @@ export default function Login() {
 
   return (
     <>
-      <Header />
+      <LogoHeader />
       <div className="login">
         <h2 className="title">Iniciar sesión</h2>
         <form onSubmit={handleSubmit}>

@@ -5,7 +5,7 @@ import "./menuEncargada.css";
 
 import Header from "../header";
 import VistaMenuActual from "./cambiarVistas";
-import RegresarMenu from "./regresarMenu";
+import RegresarMenu from "../View/Auxiliary/regresarMenu";
 
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas

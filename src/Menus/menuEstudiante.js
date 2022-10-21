@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import "./menuEstudiante.css";
 import VistaMenuActual from "./cambiarVistas";
 import Header from "../header";
-import RegresarMenu from "./regresarMenu";
+import RegresarMenu from "../View/Auxiliary/regresarMenu";
 
 function MenuEstudiante() {
   //Uso del State para cambiarse entre ventanas

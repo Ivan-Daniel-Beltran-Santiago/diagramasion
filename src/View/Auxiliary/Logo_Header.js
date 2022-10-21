@@ -1,10 +1,10 @@
-import logo from "./Cabeza_Logo.jpg";
+import logo from "./ITH-Logo.jpg";
 
-function Header() {
+function LogoHeader() {
   return (
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
     </header>
   );
 }
-export default Header;
+export default LogoHeader;

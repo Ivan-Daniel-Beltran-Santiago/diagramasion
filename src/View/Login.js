@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import logo from "../Cabeza_Logo.jpg";
+import Header from "../header";
+import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 import "./Login.css";
 
 export default function Login() {
@@ -20,18 +21,24 @@ export default function Login() {
   async function handleSubmit(event) {
     event.preventDefault();
     const loginAttempt = loginData;
+
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/Login";
+    
     /*
     navigate("/Menu-Encargada", {
       state: [{ loginID: loginData.id_number }],
     });
     */
-   /*
+
+    /*
     navigate("/Menu-Estudiante", {
       state: [{ loginID: loginData.id_number }],
     });
     */
+
     axios
-      .post("http://localhost:3001/Login", loginAttempt)
+      .post(srvReq, loginAttempt)
       .then((response) => {
         switch (response.data.Code) {
           case 1:
@@ -61,9 +68,7 @@ export default function Login() {
 
   return (
     <>
-      <div className="header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </div>
+      <Header />
       <div className="login">
         <h2 className="title">Iniciar sesión</h2>
         <form onSubmit={handleSubmit}>

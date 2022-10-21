@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./Login/Login";
+import Login from "./View/Login";
 import MenuEncargada from "./Menus/menuEncargada";
 import MenuEstudiante from "./Menus/menuEstudiante";
 

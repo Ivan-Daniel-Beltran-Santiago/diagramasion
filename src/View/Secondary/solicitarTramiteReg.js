@@ -6,7 +6,8 @@ const SolicitarRegistroTramite = ({
   informacion,
   requisitos,
   emailDest,
-  allowNewRequest
+  Request,
+  User,
 }) => {
   const [isActive, setIsActive] = useState(false);
   const [transactionMetadata, setTransactionMetadata] = useState({
@@ -14,8 +15,19 @@ const SolicitarRegistroTramite = ({
     trReq: "",
   });
 
-  const EnviarRequisitos = (event) => {
-    event.preventDefault();
+  const RegistrarSolicitud = () => {
+    let currentDate =
+      Date.getFullYear() + "/" + (Date.getMonth + 1) + "/" + Date.getDay();
+    axios.post("http://localhost:3001/NewUserApplication", {
+      fecha_inicio: currentDate,
+      fecha_act: currentDate,
+      estatus: 1,
+      retroalim: "Solicitud iniciada",
+      estudiante: User.controlNumber,
+    });
+  };
+
+  const EnviarRequisitos = () => {
     axios
       .post("http://localhost:3001/SendEmail", {
         destinatario: emailDest,
@@ -24,9 +36,22 @@ const SolicitarRegistroTramite = ({
       .then((response) => {
         console.log(response);
       })
+      .then(() => {
+        alert("Solicitud creada con exito.");
+      })
       .catch((error) => {
         console.log(error);
+        alert("Fallo a la hora de crear la solicitud");
       });
+  };
+
+  const handleRequestSubmit = (event) => {
+    event.preventDefault();
+    if (Request) {
+      EnviarRequisitos();
+    } else {
+      alert("Usted ya tiene una solicitud en progreso.");
+    }
   };
 
   return (

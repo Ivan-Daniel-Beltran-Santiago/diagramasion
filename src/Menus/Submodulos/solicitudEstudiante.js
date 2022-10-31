@@ -8,6 +8,12 @@ function SolicitudEstudiante({ UserApplication }) {
     retroalim: "",
   });
 
+  const SubirDocumentos = (event) => {
+    event.preventDefault();
+    alert("Documentos subidos con exito");
+    document.getElementById("subirArchivos").value = "";
+  };
+
   useEffect(() => {
     setRequestData(
       UserApplication ?? {
@@ -48,6 +54,7 @@ function SolicitudEstudiante({ UserApplication }) {
             type="submit"
             className="confirmDocumentUpload"
             value="Confirmar subida de documentos"
+            onClick={SubirDocumentos}
           ></input>
         </p>
       </div>

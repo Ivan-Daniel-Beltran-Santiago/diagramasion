@@ -4,7 +4,12 @@ import SolicitarRegistroTramite from "../../View/Secondary/solicitarTramiteReg";
 
 function SolicitarTramite({ correoDest, UserApplication }) {
   const [transactionList, setTransactionList] = useState([{}]);
-  const [activeRequest, setActiveRequest] = useState(false);
+  const [activeRequest, setActiveRequest] = useState({
+    fecha_inicio: "",
+    tramite: "",
+    estatus: 0,
+    retroalim: "",
+  });
 
   const retrieveTransactions = useCallback(() => {
     axios
@@ -16,7 +21,7 @@ function SolicitarTramite({ correoDest, UserApplication }) {
 
   useEffect(() => {
     retrieveTransactions();
-    setActiveRequest(UserApplication.estatus > 0 ? true : false);
+    setActiveRequest(UserApplication);
   }, [retrieveTransactions, setActiveRequest, UserApplication]);
 
   return (
@@ -29,7 +34,7 @@ function SolicitarTramite({ correoDest, UserApplication }) {
             informacion={metadata ? metadata[0] : ""}
             requisitos={metadata ? metadata[1] : ""}
             emailDest={correoDest}
-            allowNewRequest={activeRequest}
+            Request={UserApplication}
           />
         );
       })}

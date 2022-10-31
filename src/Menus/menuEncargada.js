@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./menuEncargada.css";
 
-import Header from "../header";
-import VistaMenuActual from "./cambiarVistas";
+import LogoHeader from "../View/Auxiliary/Logo_Header";
+import CambiarVistaController from "../Controller/cambiarVistas";
 import RegresarMenu from "../View/Auxiliary/regresarMenu";
 
 function MenuEncargada() {
@@ -46,7 +46,7 @@ function MenuEncargada() {
   //El menú de vistas
   return (
     <div className="App">
-      <Header />
+      <LogoHeader />
       <div>
         <div>
           <div className="content-section">
@@ -90,7 +90,7 @@ function MenuEncargada() {
             </div>
             <div>
               <div className="content">
-                <VistaMenuActual
+                <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
                 />

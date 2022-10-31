@@ -88,6 +88,7 @@ export default function Login() {
             name="id_number"
             placeholder="Matrícula/Número de control"
             onChange={handleInputChange}
+            required
           />
           <h4>Contraseña</h4>
           <input
@@ -95,6 +96,7 @@ export default function Login() {
             name="password"
             placeholder="Contraseña"
             onChange={handleInputChange}
+            required
           />
           <input type="submit" id="save" value="Ingresar" className="ingress" />
           <p>

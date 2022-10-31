@@ -21,7 +21,7 @@ const MenuUsuario = () => {
 
   useEffect(() => {
     setIndexVisible(location.state[0].loginType === 7 ? 7 : 1);
-  }, []);
+  }, [location]);
 
   return (
     <div className="App">

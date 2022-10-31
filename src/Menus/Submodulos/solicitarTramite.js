@@ -1,40 +1,38 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import SolicitarRegistroTramite from "../../View/Secondary/solicitarTramiteReg";
 
-function SolicitarTramite() {
-  const accordionData = {
-    title: "Nombre del trámite",
-  };
+function SolicitarTramite({ correoDest, UserApplication }) {
+  const [transactionList, setTransactionList] = useState([{}]);
+  const [activeRequest, setActiveRequest] = useState(false);
 
-  const { title } = accordionData;
+  const retrieveTransactions = useCallback(() => {
+    axios
+      .post("http://localhost:3001/RequestTransactionList")
+      .then((response) => {
+        setTransactionList(response.data);
+      });
+  }, []);
 
-  const [isActive, setIsActive] = useState(false);
+  useEffect(() => {
+    retrieveTransactions();
+    setActiveRequest(UserApplication.estatus > 0 ? true : false);
+  }, [retrieveTransactions, setActiveRequest, UserApplication]);
 
   return (
     <div id="administrarSolicitudes" className="modules">
-      <React.Fragment>
-        <div className="nombreTramite">
-          <div className="accordion-item">
-            <div
-              className="tituloAcordeon"
-              onClick={() => setIsActive(!isActive)}
-            >
-              <div>{title}</div>
-              <div>{isActive ? "-" : "+"}</div>
-            </div>
-            {isActive && (
-              <div className="contenidoAcordeon">
-                <p>
-                  <label>Información:</label>
-                </p>
-                <p>
-                  <label>Requisitos:</label>
-                </p>
-                <button className="solicitarTramite">Solicitar</button>
-              </div>
-            )}
-          </div>
-        </div>
-      </React.Fragment>
+      {transactionList.map(function (item) {
+        const metadata = item.Tramite_Ms;
+        return (
+          <SolicitarRegistroTramite
+            nombre={item.nombre_T}
+            informacion={metadata ? metadata[0] : ""}
+            requisitos={metadata ? metadata[1] : ""}
+            emailDest={correoDest}
+            allowNewRequest={activeRequest}
+          />
+        );
+      })}
     </div>
   );
 }

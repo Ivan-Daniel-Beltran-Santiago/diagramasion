@@ -7,7 +7,7 @@ function RegistrosSolicitud({ estatusSolicitado }) {
 
   const retrieveRequests = useCallback(() => {
     axios
-      .post("http://localhost:3001/RequestList", {
+      .post("http://localhost:3001/RequestApplicationList", {
         estatus: estatusSolicitado.filtroEstatus,
       })
       .then((response) => {

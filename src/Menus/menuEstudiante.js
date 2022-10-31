@@ -3,8 +3,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 import "./menuEstudiante.css";
-import VistaMenuActual from "./cambiarVistas";
-import Header from "../header";
+import LogoHeader from "../View/Auxiliary/Logo_Header";
+import CambiarVistaController from "../Controller/cambiarVistas";
 import RegresarMenu from "../View/Auxiliary/regresarMenu";
 
 function MenuEstudiante() {
@@ -19,6 +19,13 @@ function MenuEstudiante() {
     eMail: "",
     currentCarrer: "",
     currentSemester: 0,
+  });
+
+  const [userApplication, setUserApplication] = useState({
+    fecha_inicio: "",
+    tramite: "",
+    estatus: "",
+    retroalim: "",
   });
 
   const retrieveUserInfo = useCallback(() => {
@@ -41,14 +48,35 @@ function MenuEstudiante() {
       });
   }, [location]);
 
+  const retrieveUserApplications = useCallback(() => {
+    axios
+      .post("http://localhost:3001/RequestUserApplication", {
+        matriculaUsuario: location.state[0].loginID,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setUserApplication({
+          fecha_inicio: response.data.fecha_Sol,
+          tramite: response.data.Tramite.nombre_T,
+          estatus: response.data.estatus,
+          retroalim: response.data.retroalimentacion,
+        });
+      })
+      .catch((err) => {
+        console.log("Error");
+        console.error(err);
+      });
+  }, [location]);
+
   useEffect(() => {
     setIndexVisible(7);
     retrieveUserInfo();
-  }, [retrieveUserInfo]);
+    retrieveUserApplications();
+  }, [retrieveUserInfo, retrieveUserApplications]);
 
   return (
     <div className="App">
-      <Header />
+      <LogoHeader />
       <div>
         <div>
           <div className="content-section">
@@ -84,9 +112,10 @@ function MenuEstudiante() {
             </div>
             <div>
               <div className="content">
-                <VistaMenuActual
+                <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
+                  userApp={userApplication}
                 />
                 <RegresarMenu />
               </div>

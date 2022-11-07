@@ -10,7 +10,9 @@ function SolicitudEstudiante({ UserApplication }) {
 
   const SubirDocumentos = (event) => {
     event.preventDefault();
-    alert("Documentos subidos con exito");
+    alert(
+      "Se encuentran problemas con el documento, por favor de revisar las especificaciones."
+    );
     document.getElementById("subirArchivos").value = "";
   };
 
@@ -30,11 +32,15 @@ function SolicitudEstudiante({ UserApplication }) {
       <div className="contenedorSolicitud">
         <p>
           <label>Fecha en la que se solicitó: </label>
-          {requestData.fecha_inicio ?? "No se encontro ninguna solicitud "}
+          {requestData.fecha_inicio === ""
+            ? "No se encontro ninguna solicitud "
+            : requestData.fecha_inicio}
         </p>
         <p>
           <label>Trámite solicitado: </label>
-          {requestData.tramite ?? "No se encontro ninguna solicitud "}
+          {requestData.tramite === ""
+            ? "No se encontro ninguna solicitud "
+            : requestData.tramite}
         </p>
         <p>
           <label>Estatus: </label>
@@ -46,7 +52,9 @@ function SolicitudEstudiante({ UserApplication }) {
           <label>Retroalimentación disponible</label>
         </p>
         <pre>
-          {requestData.retroalim ?? "No se encontro ninguna solicitud "}
+          {requestData.retroalim === ""
+            ? "No se encontro ninguna solicitud "
+            : requestData.retroalim}
         </pre>
         <input type="file" id="subirArchivos" name="Elegir archivos"></input>
         <p>

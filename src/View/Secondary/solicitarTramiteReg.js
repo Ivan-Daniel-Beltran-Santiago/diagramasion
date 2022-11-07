@@ -47,8 +47,10 @@ const SolicitarRegistroTramite = ({
 
   const handleRequestSubmit = (event) => {
     event.preventDefault();
-    if (Request) {
+    if (!Request) {
+      RegistrarSolicitud();
       EnviarRequisitos();
+      alert("Solicitud creada con exito");
     } else {
       alert("Usted ya tiene una solicitud en progreso.");
     }
@@ -75,7 +77,7 @@ const SolicitarRegistroTramite = ({
                 ? "Requisitos no disponibles"
                 : transactionMetadata.trReq}
             </p>
-            <button className="solicitarTramite" onClick={EnviarRequisitos}>
+            <button className="solicitarTramite" onClick={handleRequestSubmit}>
               Solicitar
             </button>
           </div>

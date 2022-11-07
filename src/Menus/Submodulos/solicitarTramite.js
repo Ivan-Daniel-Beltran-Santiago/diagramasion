@@ -34,7 +34,7 @@ function SolicitarTramite({ correoDest, UserApplication }) {
             informacion={metadata ? metadata[0] : ""}
             requisitos={metadata ? metadata[1] : ""}
             emailDest={correoDest}
-            Request={UserApplication}
+            Request={activeRequest}
           />
         );
       })}

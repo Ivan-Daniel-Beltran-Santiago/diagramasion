@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import { Toast } from "primereact/toast";
+import axios from "axios";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
 function InformacionUsuario({ currentUser }) {
   const NewPassOne = useRef(null);
@@ -70,10 +72,47 @@ function InformacionUsuario({ currentUser }) {
     }
     if (validChanges) {
       if (CurrentPass.current.value !== "") {
-        //Llamar a la api aqui
+        showToast(
+          "info",
+          "Cambios en proceso",
+          "Los cambios se estan procesando"
+        );
+
+        const srvDir = new ServerConnectionConfig();
+        const srvReq = srvDir.getServer() + "/UpdateUserInfo";
+
+        const userUpdateInfo = {
+          matriculaUsuario: currentUser.controlNumber,
+          contraseñaUsuario: CurrentPass.current.value,
+          correoUsuario: currentUser.eMail,
+          nuevaContraseña: NewPassOne.current.value,
+          nuevoCorreo: NewEmail.current.value,
+        };
+
+        axios.post(srvReq, userUpdateInfo).then((response) => {
+          switch (response.data.Code) {
+            case 1:
+              showToast(
+                "success",
+                "Cambios aplicados",
+                "Favor de cerrar sesión para que los cambios tomen efecto"
+              );
+              break;
+            case -1:
+              showToast(
+                "error",
+                "Contraseña incorrecta",
+                "La contraseña ingresada no es correcta, los cambios no seran realizados"
+              );
+              break;
+            default:
+              showToast("warn", "Error inesperado", "Intentelo mas tarde");
+              break;
+          }
+        });
       } else {
         showToast(
-          "error",
+          "warn",
           "Operación invalida",
           "Para realizar cambios debes colocar tu contraseña actual"
         );

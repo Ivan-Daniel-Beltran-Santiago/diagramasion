@@ -6,6 +6,13 @@ import MenuUsuario from "./View/menuUsuario";
 import MenuEncargada from "./Menus/menuEncargada";
 import MenuEstudiante from "./Menus/menuEstudiante";
 
+import "primereact/resources/themes/saga-green/theme.css";
+import "primereact/resources/themes/saga-orange/theme.css";
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/themes/saga-purple/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +21,7 @@ function App() {
         <Route path="/Menu" element={<MenuUsuario />} />
         <Route path="/Menu-Encargada" element={<MenuEncargada />} />
         <Route path="/Menu-Estudiante" element={<MenuEstudiante />} />
+        <Route path="/Menu/Solicitud" />
       </Routes>
     </BrowserRouter>
   );

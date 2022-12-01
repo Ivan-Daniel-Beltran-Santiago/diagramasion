@@ -6,6 +6,7 @@ import "./menuEstudiante.css";
 import LogoHeader from "../View/Auxiliary/Logo_Header";
 import CambiarVistaController from "../Controller/cambiarVistas";
 import RegresarMenu from "../View/Auxiliary/regresarMenu";
+import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 
 function MenuEstudiante() {
   //Uso del State para cambiarse entre ventanas
@@ -29,8 +30,11 @@ function MenuEstudiante() {
   });
 
   const retrieveUserInfo = useCallback(() => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/StudentInfo";
+
     axios
-      .post("http://localhost:3001/StudentInfo", {
+      .post(srvReq, {
         loginID: location.state[0].loginID,
       })
       .then((response) => {
@@ -49,8 +53,11 @@ function MenuEstudiante() {
   }, [location]);
 
   const retrieveUserApplications = useCallback(() => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/RequestUserApplication";
+
     axios
-      .post("http://localhost:3001/RequestUserApplication", {
+      .post(srvReq, {
         matriculaUsuario: location.state[0].loginID,
       })
       .then((response) => {

@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useState } from "react";
 import SolicitarRegistroTramite from "../../View/Secondary/solicitarTramiteReg";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function SolicitarTramite({ correoDest, UserApplication }) {
+function SolicitarTramite({ correoDest, UserApplication, CurretActiveUser }) {
   const [transactionList, setTransactionList] = useState([{}]);
   const [activeRequest, setActiveRequest] = useState({
     fecha_inicio: "",
@@ -12,11 +13,12 @@ function SolicitarTramite({ correoDest, UserApplication }) {
   });
 
   const retrieveTransactions = useCallback(() => {
-    axios
-      .post("http://localhost:3001/RequestTransactionList")
-      .then((response) => {
-        setTransactionList(response.data);
-      });
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/RequestTransactionList";
+
+    axios.post(srvReq).then((response) => {
+      setTransactionList(response.data);
+    });
   }, []);
 
   useEffect(() => {
@@ -35,6 +37,7 @@ function SolicitarTramite({ correoDest, UserApplication }) {
             requisitos={metadata ? metadata[1] : ""}
             emailDest={correoDest}
             Request={activeRequest}
+            User={CurretActiveUser}
           />
         );
       })}

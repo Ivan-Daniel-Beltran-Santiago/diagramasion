@@ -1,5 +1,7 @@
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
+import { Toast } from "primereact/toast";
 
 const SolicitarRegistroTramite = ({
   nombre,
@@ -15,49 +17,115 @@ const SolicitarRegistroTramite = ({
     trReq: "",
   });
 
-  const RegistrarSolicitud = () => {
-    let currentDate =
-      Date.getFullYear() + "/" + (Date.getMonth + 1) + "/" + Date.getDay();
-    axios.post("http://localhost:3001/NewUserApplication", {
-      fecha_inicio: currentDate,
-      fecha_act: currentDate,
-      estatus: 1,
-      retroalim: "Solicitud iniciada",
-      estudiante: User.controlNumber,
+  const toast = useRef(null);
+  let successfullApplication = false;
+
+  const showToast = (severityValue, summaryValue, detailValue) => {
+    toast.current.show({
+      closable: false,
+      life: 5000,
+      severity: severityValue,
+      summary: summaryValue,
+      detail: detailValue,
     });
   };
 
-  const EnviarRequisitos = () => {
+  const RegistrarSolicitud = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/NewUserApplication";
     axios
-      .post("http://localhost:3001/SendEmail", {
-        destinatario: emailDest,
-        tramite: nombre,
+      .post(srvReq, {
+        estudiante: User.controlNumber,
       })
       .then((response) => {
-        console.log(response);
+        switch (response.data.Code) {
+          case 1:
+            showToast(
+              "success",
+              "Solicitud registrada con exito",
+              "Su solicitud ha sido procesada exitosamente"
+            );
+            successfullApplication = true;
+            break;
+          default:
+            showToast(
+              "error",
+              "Error inesperado",
+              "Porfavor intentelo mas tarde"
+            );
+            break;
+        }
       })
-      .then(() => {
-        alert("Solicitud creada con exito.");
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Fallo a la hora de crear la solicitud");
+      .catch(() => {
+        showToast("error", "Error inesperado", "Porfavor intentelo mas tarde");
       });
+  };
+
+  const EnviarRequisitos = () => {
+    if (successfullApplication) {
+      showToast(
+        "info",
+        "Espere un momento",
+        "Recibira un correo con la informacion y requisitos, porfavor aguarde"
+      );
+      const srvDir = new ServerConnectionConfig();
+      const srvReq = srvDir.getServer() + "/SendEmail";
+      axios
+        .post(srvReq, {
+          destinatario: emailDest,
+          tramite: nombre,
+        })
+        .then((response) => {
+          switch (response.data.Code) {
+            case 1:
+              showToast(
+                "success",
+                "Correo enviado con exito",
+                "En poco tiempo recibiras un correo con la informacion y requisitos del tramite"
+              );
+              break;
+            default:
+              showToast(
+                "error",
+                "Error inesperado",
+                "Porfavor intentelo mas tarde"
+              );
+              break;
+          }
+        })
+        .catch(() => {
+          showToast(
+            "error",
+            "Error inesperado",
+            "Porfavor intentelo mas tarde"
+          );
+        });
+    }
   };
 
   const handleRequestSubmit = (event) => {
     event.preventDefault();
-    if (!Request) {
+    if (Request.estatus === "") {
+      showToast(
+        "info",
+        "Solicitud en proceso",
+        "Su solicitud esta siendo procesada"
+      );
       RegistrarSolicitud();
       EnviarRequisitos();
-      alert("Solicitud creada con exito");
+      successfullApplication = false;
     } else {
-      alert("Usted ya tiene una solicitud en progreso.");
+      showToast(
+        "error",
+        "Solicitud cancelada",
+        "Usted ya cuenta con una solicitud en progreso"
+      );
     }
   };
 
   return (
     <div className="nombreTramite">
+      <Toast ref={toast} position="top-right" />
       <div className="accordion-item">
         <div className="tituloAcordeon" onClick={() => setIsActive(!isActive)}>
           <div>{nombre}</div>

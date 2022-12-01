@@ -20,7 +20,7 @@ const CambiarVistaController = ({ VistaIndex, currentUser, userApp }) => {
         <SolicitarTramite
           correoDest={currentUser.eMail}
           UserApplication={userApp}
-          User={currentUser}
+          CurretActiveUser={currentUser}
         />
       );
     case 9:

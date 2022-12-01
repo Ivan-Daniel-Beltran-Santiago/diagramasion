@@ -85,8 +85,14 @@ function InformacionUsuario({ currentUser }) {
           matriculaUsuario: currentUser.controlNumber,
           contraseñaUsuario: CurrentPass.current.value,
           correoUsuario: currentUser.eMail,
-          nuevaContraseña: NewPassOne.current.value,
-          nuevoCorreo: NewEmail.current.value,
+          nuevaContraseña:
+            NewPassOne.current.value !== ""
+              ? NewPassOne.current.value
+              : CurrentPass.current.value,
+          nuevoCorreo:
+            NewEmail.current.value !== ""
+              ? NewEmail.current.value
+              : currentUser.eMail,
         };
 
         axios.post(srvReq, userUpdateInfo).then((response) => {

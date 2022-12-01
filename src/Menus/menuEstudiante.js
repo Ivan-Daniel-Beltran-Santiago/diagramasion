@@ -38,8 +38,8 @@ function MenuEstudiante() {
           controlNumber: response.data[0].matricula,
           fullName: response.data[0].nombre_C,
           eMail: response.data[0].correo_e,
-          currentCarrer: response.data[0].carrera,
-          currentSemester: response.data[0].semestre,
+          currentCarrer: response.data[0].Estudiante.carrera,
+          currentSemester: response.data[0].Estudiante.semestre,
         });
       })
       .catch((err) => {

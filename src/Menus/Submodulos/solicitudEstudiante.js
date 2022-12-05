@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function SolicitudEstudiante({ UserApplication }) {
   const [requestData, setRequestData] = useState({
@@ -8,11 +8,16 @@ function SolicitudEstudiante({ UserApplication }) {
     retroalim: "",
   });
 
+  const uploadingDocuments = useRef(null);
+
+  const estatusLexico = {
+    1: "Solicitud iniciada, en espera de documentos",
+    2: "Documentos subidos, en espera de revisión",
+  };
+
   const SubirDocumentos = (event) => {
     event.preventDefault();
-    alert(
-      "Se encuentran problemas con el documento, por favor de revisar las especificaciones."
-    );
+    console.log(uploadingDocuments.current.value);
     document.getElementById("subirArchivos").value = "";
   };
 
@@ -45,7 +50,7 @@ function SolicitudEstudiante({ UserApplication }) {
         <p>
           <label>Estatus: </label>
           {requestData.estatus > 0
-            ? requestData.estatus
+            ? estatusLexico[requestData.estatus]
             : "No se encontro ninguna solicitud "}
         </p>
         <p>
@@ -56,7 +61,14 @@ function SolicitudEstudiante({ UserApplication }) {
             ? "No se encontro ninguna solicitud "
             : requestData.retroalim}
         </pre>
-        <input type="file" id="subirArchivos" name="Elegir archivos"></input>
+        <input
+          type="file"
+          ref={uploadingDocuments}
+          id="subirArchivos"
+          name="Elegir archivos"
+          accept=".pdf"
+          multiple
+        ></input>
         <p>
           <input
             type="submit"

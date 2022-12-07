@@ -32,14 +32,11 @@ export default function Login() {
       if (event.target.name === "id_number") {
         let idValidatorStudent = new RegExp("^(M|m)?[0-9]{8}$");
         let idValidatorAdmin = new RegExp("^[0-9]{4}$");
-        console.log("Student: " + idValidatorStudent.test(inputChange));
-        console.log("Admin: " + idValidatorAdmin.test(inputChange));
         setValidID(
           idValidatorStudent.test(inputChange) ||
             idValidatorAdmin.test(inputChange)
         );
       } else {
-        // eslint-disable-next-line no-control-regex
         let idValidator = new RegExp("^[0-9]{4,8}$");
         setValidPass(idValidator.test(inputChange));
       }

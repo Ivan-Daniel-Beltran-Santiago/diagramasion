@@ -31,14 +31,14 @@ export default function Login() {
     if (inputChange.length > 0) {
       if (event.target.name === "id_number") {
         let idValidatorStudent = new RegExp("^(M|m)?[0-9]{8}$");
-        let idValidatorAdmin = new RegExp("^[0-9]{4}$");
+        let idValidatorAdmin = new RegExp("^[0-9]{5}$");
         setValidID(
           idValidatorStudent.test(inputChange) ||
             idValidatorAdmin.test(inputChange)
         );
       } else {
-        let idValidator = new RegExp("^[0-9]{4,8}$");
-        setValidPass(idValidator.test(inputChange));
+        let passwordValidator = new RegExp("^[0-9]{4,8}$");
+        setValidPass(passwordValidator.test(inputChange));
       }
     }
   };

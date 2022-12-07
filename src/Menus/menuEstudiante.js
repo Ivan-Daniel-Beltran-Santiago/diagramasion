@@ -33,7 +33,6 @@ function MenuEstudiante() {
         loginID: location.state[0].loginID,
       })
       .then((response) => {
-        console.log(response.data);
         setCurrentUser({
           controlNumber: response.data.matricula,
           fullName: response.data.nombre_C,

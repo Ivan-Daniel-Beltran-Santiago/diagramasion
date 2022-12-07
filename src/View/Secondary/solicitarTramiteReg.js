@@ -13,6 +13,7 @@ const SolicitarRegistroTramite = ({
   const [isActive, setIsActive] = useState(false);
   const [successfullApplication, setSuccessfullApllication] = useState(false);
   const [activeRequest, setActiveRequest] = useState(HasRequest);
+
   const [transactionMetadata, setTransactionMetadata] = useState({
     trInfo: "",
     trReq: "",

@@ -1,4 +1,7 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
+import { Toast } from "primereact/toast";
 
 function SolicitudEstudiante({ UserApplication }) {
   const [requestData, setRequestData] = useState({
@@ -7,20 +10,73 @@ function SolicitudEstudiante({ UserApplication }) {
     estatus: "",
     retroalim: "",
   });
-
-  const uploadingDocuments = useRef(null);
+  const [filesToUpload, setFilesToUpload] = useState(null);
 
   const estatusLexico = {
     1: "Solicitud iniciada, en espera de documentos",
     2: "Documentos subidos, en espera de revisión",
   };
 
-  const SubirDocumentos = (event) => {
+  const toast = useRef(null);
+
+  const showToast = (severityValue, summaryValue, detailValue) => {
+    toast.current.show({
+      closable: false,
+      life: 5000,
+      severity: severityValue,
+      summary: summaryValue,
+      detail: detailValue,
+    });
+  };
+
+  function delay(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+
+  const onChangeHandler = (event) => {
+    setFilesToUpload(event.target.files);
+  };
+
+  const SubirDocumentos = async (event) => {
     event.preventDefault();
-    console.log(uploadingDocuments.current.value);
-    let files = event.target.files;
-    console.log(files);
-    document.getElementById("subirArchivos").value = "";
+
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/UploadDocuments";
+
+    const data = new FormData();
+    for (var x = 0; x < filesToUpload.length; x++) {
+      if (filesToUpload[x].size >= 2000000) {
+        showToast(
+          "error",
+          "Archivo demasiado grande\n" + filesToUpload[x].name,
+          "Los archivos no deben superar los 2MB de tamaño"
+        );
+        return;
+      }
+      data.append("file", filesToUpload[x]);
+    }
+
+    for (var documento of data.entries()) {
+      if (documento[1].size >= 2000000) {
+        showToast(
+          "error",
+          "Archivo muy pesado:\n" + documento[1].name,
+          "Solo se permiten archivos de 2 MB"
+        );
+        return;
+      }
+      await axios
+        .post(srvReq, {
+          fileName: documento[1].name,
+          fileBlob: documento[1],
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -36,6 +92,7 @@ function SolicitudEstudiante({ UserApplication }) {
 
   return (
     <div id="solicitudEstudiante" className="modules">
+      <Toast ref={toast} position="top-right" />
       <div className="contenedorSolicitud">
         <p>
           <label>Fecha en la que se solicitó: </label>
@@ -65,11 +122,11 @@ function SolicitudEstudiante({ UserApplication }) {
         </pre>
         <input
           type="file"
-          ref={uploadingDocuments}
           id="subirArchivos"
           name="Elegir archivos"
           accept=".pdf"
           multiple
+          onChange={onChangeHandler}
         ></input>
         <p>
           <input

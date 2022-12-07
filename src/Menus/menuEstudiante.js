@@ -33,12 +33,13 @@ function MenuEstudiante() {
         loginID: location.state[0].loginID,
       })
       .then((response) => {
+        console.log(response.data);
         setCurrentUser({
-          controlNumber: response.data[0].matricula,
-          fullName: response.data[0].nombre_C,
-          eMail: response.data[0].correo_e,
-          currentCarrer: response.data[0].Estudiante.carrera,
-          currentSemester: response.data[0].Estudiante.semestre,
+          controlNumber: response.data.matricula,
+          fullName: response.data.nombre_C,
+          eMail: response.data.correo_e,
+          currentCarrer: response.data.Estudiante.carrera,
+          currentSemester: response.data.Estudiante.semestre,
         });
       })
       .catch((err) => {

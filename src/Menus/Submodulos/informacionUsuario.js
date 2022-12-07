@@ -1,14 +1,23 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import axios from "axios";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
 function InformacionUsuario({ currentUser }) {
-  const NewPassOne = useRef(null);
-  const NewPassTwo = useRef(null);
-  const NewEmail = useRef(null);
   const CurrentPass = useRef(null);
   const toast = useRef(null);
+
+  const [userInfo, setUserInfo] = useState({
+    matriculaUsuario: "",
+    contraseñaUsuario: "",
+    newPassword: "",
+    confirmPassword: "",
+    newEmail: "",
+  });
+  const [validEmail, setValidEmail] = useState(false);
+  const [validPass, setValidPass] = useState(false);
+  const [validConfirm, setValidConfirm] = useState(false);
+  const [equalPass, setEqualPass] = useState(false);
 
   const showToast = (severityValue, summaryValue, detailValue) => {
     toast.current.show({
@@ -20,57 +29,43 @@ function InformacionUsuario({ currentUser }) {
     });
   };
 
-  const updateChanges = () => {
-    let validChanges = false;
-    if (NewPassOne.current.value !== "" || NewEmail.current.value !== "") {
-      if (NewPassOne.current.value !== "") {
-        if (NewPassTwo.current.value === NewPassOne.current.value) {
-          const passwordRGEX = new RegExp("[0-9]{4,8}");
-          const newPassValid = passwordRGEX.test(NewPassOne.current.value);
-          if (newPassValid) {
-            validChanges = true;
-          } else {
-            showToast(
-              "warn",
-              "Cambio de contraseña invalido",
-              "La nueva contraseña no tiene un formato valido"
-            );
-            validChanges = false;
-          }
-        } else {
-          showToast(
-            "warn",
-            "Cambio de contraseña invalido",
-            "Ambas contraseñas deben coincidir"
-          );
-          validChanges = false;
-        }
-      }
-      if (NewEmail.current.value !== "") {
-        const emailRGEX = new RegExp(
-          "[A-Za-z0-9_.]{4,20}@[A-Za-z0-9_.]{4,10}.[A-Za-z0-9_.]{2,3}"
+  const handleInputChange = (event) => {
+    setUserInfo({ ...userInfo, [event.target.name]: event.target.value });
+    validateInputChange(event);
+  };
+
+  const validateInputChange = (event) => {
+    let entry = event.target.value;
+    switch (event.target.name) {
+      case "newPassword":
+        let passwordValidator = new RegExp("^[0-9]{4,8}$");
+        setValidPass(passwordValidator.test(entry));
+        setEqualPass(
+          document.getElementById("newPassword").value ===
+            document.getElementById("confirmPassword").value
         );
-        const newEmailValid = emailRGEX.test(NewEmail.current.value);
-        if (newEmailValid) {
-          validChanges = true;
-        } else {
-          showToast(
-            "warn",
-            "Cambio de correo invalido",
-            "El nuevo correo no tiene un formato valido"
-          );
-          validChanges = false;
-        }
-      }
-    } else {
-      showToast(
-        "warn",
-        "Operación invalida",
-        "No hay valores nuevos para cambiar"
-      );
-      validChanges = false;
+        break;
+      case "confirmPassword":
+        let confirmValidator = new RegExp("^[0-9]{4,8}$");
+        setValidConfirm(confirmValidator.test(entry));
+        setEqualPass(
+          document.getElementById("newPassword").value ===
+            document.getElementById("confirmPassword").value
+        );
+        break;
+      case "newEmail":
+        let emailValidator =
+          // eslint-disable-next-line no-useless-escape
+          /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        setValidEmail(emailValidator.test(entry));
+        break;
+      default:
+        break;
     }
-    if (validChanges) {
+  };
+
+  const updateChanges = () => {
+    if (equalPass || validEmail) {
       if (CurrentPass.current.value !== "") {
         showToast(
           "info",
@@ -80,42 +75,35 @@ function InformacionUsuario({ currentUser }) {
 
         const srvDir = new ServerConnectionConfig();
         const srvReq = srvDir.getServer() + "/UpdateUserInfo";
-
-        const userUpdateInfo = {
-          matriculaUsuario: currentUser.controlNumber,
-          contraseñaUsuario: CurrentPass.current.value,
-          correoUsuario: currentUser.eMail,
-          nuevaContraseña:
-            NewPassOne.current.value !== ""
-              ? NewPassOne.current.value
-              : CurrentPass.current.value,
-          nuevoCorreo:
-            NewEmail.current.value !== ""
-              ? NewEmail.current.value
-              : currentUser.eMail,
-        };
-
-        axios.post(srvReq, userUpdateInfo).then((response) => {
-          switch (response.data.Code) {
-            case 1:
-              showToast(
-                "success",
-                "Cambios aplicados",
-                "Favor de cerrar sesión para que los cambios tomen efecto"
-              );
-              break;
-            case -1:
-              showToast(
-                "error",
-                "Contraseña incorrecta",
-                "La contraseña ingresada no es correcta, los cambios no seran realizados"
-              );
-              break;
-            default:
-              showToast("warn", "Error inesperado", "Intentelo mas tarde");
-              break;
-          }
-        });
+        axios
+          .post(srvReq, {
+            matriculaUsuario: currentUser.controlNumber,
+            contraseñaUsuario: CurrentPass.current.value,
+            correoUsuario: currentUser.eMail,
+            newPassword: userInfo.newPassword,
+            newEmail: userInfo.newEmail,
+          })
+          .then((response) => {
+            switch (response.data.Code) {
+              case 1:
+                showToast(
+                  "success",
+                  "Cambios aplicados",
+                  "Favor de cerrar sesión para que los cambios tomen efecto"
+                );
+                break;
+              case -1:
+                showToast(
+                  "error",
+                  "Contraseña incorrecta",
+                  "La contraseña ingresada no es correcta, los cambios no seran realizados"
+                );
+                break;
+              default:
+                showToast("warn", "Error inesperado", "Intentelo mas tarde");
+                break;
+            }
+          });
       } else {
         showToast(
           "warn",
@@ -151,26 +139,33 @@ function InformacionUsuario({ currentUser }) {
         <p>
           <label>Nueva contraseña: </label>
           <input
-            ref={NewPassOne}
             type="password"
             placeholder="Nueva contraseña"
             autoComplete="off"
-            maxLength={8}
-            minLength={4}
+            name="newPassword"
+            id="newPassword"
+            onChange={handleInputChange}
           ></input>
         </p>
         <p>
           <label>Repetir nueva contraseña: </label>
           <input
-            ref={NewPassTwo}
             type="password"
-            placeholder="Nueva contraseña"
+            placeholder="Repetir nueva contraseña"
             autoComplete="off"
-            maxLength={8}
-            minLength={4}
+            name="confirmPassword"
+            id="confirmPassword"
+            onChange={handleInputChange}
           ></input>
         </p>
-        <h9>Debe contener entre 4 y 8 digitos </h9>
+        {((!validPass && userInfo.newPassword.length > 0) ||
+          (!validConfirm && userInfo.confirmPassword.length > 0)) && (
+          <label>La nueva contraseña debe contener entre 4 y 8 digitos </label>
+        )}
+        <br />
+        {!equalPass && (
+          <label>La contraseña debe coindidir en ambos campos</label>
+        )}
         <p>
           <label>Contraseña actual: </label>
           <input
@@ -178,19 +173,36 @@ function InformacionUsuario({ currentUser }) {
             type="password"
             placeholder="Contraseña actual"
             autoComplete="off"
-            maxLength={8}
-            minLength={4}
+            name="contraseñaUsuario"
+            id="contraseñaUsuario"
+            onChange={handleInputChange}
           ></input>
         </p>
         <p>
           <label>Correo electrónico: </label>
           <input
-            ref={NewEmail}
             type="email"
             placeholder={currentUser.eMail}
-            maxLength={34}
+            name="newEmail"
+            id="newEmail"
+            onChange={handleInputChange}
           ></input>
         </p>
+        {!validEmail && (
+          <div>
+            <label>
+              El correo electronico debe seguir el siguiente formato:
+            </label>
+            <br />
+            <label>-Al menos un caracter/digito antes y despues del @</label>
+            <br />
+            <label>-Se permiten solo los simbolos @ y . </label>
+            <br />
+            <label>
+              -De 2 a 3 caracteres al final como el .com o .mx o similares
+            </label>
+          </div>
+        )}
       </form>
       <button className="confirmarCambios" onClick={updateChanges}>
         Confirmar cambios

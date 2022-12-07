@@ -22,12 +22,7 @@ function MenuEstudiante() {
     currentSemester: 0,
   });
 
-  const [userApplication, setUserApplication] = useState({
-    fecha_inicio: "",
-    tramite: "",
-    estatus: "",
-    retroalim: "",
-  });
+  const [UserHasApplication, setUserHasApplication] = useState(false);
 
   const retrieveUserInfo = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
@@ -52,22 +47,16 @@ function MenuEstudiante() {
       });
   }, [location]);
 
-  const retrieveUserApplications = useCallback(() => {
+  const retrieveUserApplication = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/RequestUserApplication";
+    const srvReq = srvDir.getServer() + "/UserHasApplication";
 
     axios
       .post(srvReq, {
         matriculaUsuario: location.state[0].loginID,
       })
       .then((response) => {
-        console.log(response.data);
-        setUserApplication({
-          fecha_inicio: response.data.fecha_Sol,
-          tramite: response.data.Tramite.nombre_T,
-          estatus: response.data.estatus,
-          retroalim: response.data.retroalimentacion,
-        });
+        setUserHasApplication(response.data.hassApplication);
       })
       .catch((err) => {
         console.log("Error");
@@ -78,8 +67,8 @@ function MenuEstudiante() {
   useEffect(() => {
     setIndexVisible(7);
     retrieveUserInfo();
-    retrieveUserApplications();
-  }, [retrieveUserInfo, retrieveUserApplications]);
+    retrieveUserApplication();
+  }, [retrieveUserInfo, retrieveUserApplication]);
 
   return (
     <div className="App">
@@ -122,7 +111,7 @@ function MenuEstudiante() {
                 <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
-                  userApp={userApplication}
+                  userHasApp={UserHasApplication}
                 />
                 <RegresarMenu />
               </div>

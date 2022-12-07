@@ -3,14 +3,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import SolicitarRegistroTramite from "../../View/Secondary/solicitarTramiteReg";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function SolicitarTramite({ correoDest, UserApplication, CurretActiveUser }) {
+function SolicitarTramite({ UserHasOngoingApplication, CurretActiveUser }) {
   const [transactionList, setTransactionList] = useState([{}]);
-  const [activeRequest, setActiveRequest] = useState({
-    fecha_inicio: "",
-    tramite: "",
-    estatus: 0,
-    retroalim: "",
-  });
 
   const retrieveTransactions = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
@@ -23,8 +17,7 @@ function SolicitarTramite({ correoDest, UserApplication, CurretActiveUser }) {
 
   useEffect(() => {
     retrieveTransactions();
-    setActiveRequest(UserApplication);
-  }, [retrieveTransactions, setActiveRequest, UserApplication]);
+  }, [retrieveTransactions]);
 
   return (
     <div id="administrarSolicitudes" className="modules">
@@ -35,8 +28,7 @@ function SolicitarTramite({ correoDest, UserApplication, CurretActiveUser }) {
             nombre={item.nombre_T}
             informacion={metadata ? metadata[0] : ""}
             requisitos={metadata ? metadata[1] : ""}
-            emailDest={correoDest}
-            Request={activeRequest}
+            HasRequest={UserHasOngoingApplication}
             User={CurretActiveUser}
           />
         );

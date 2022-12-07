@@ -18,6 +18,8 @@ function SolicitudEstudiante({ UserApplication }) {
   const SubirDocumentos = (event) => {
     event.preventDefault();
     console.log(uploadingDocuments.current.value);
+    let files = event.target.files;
+    console.log(files);
     document.getElementById("subirArchivos").value = "";
   };
 

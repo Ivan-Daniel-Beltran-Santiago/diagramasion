@@ -6,7 +6,7 @@ import SolicitarTramite from "../Menus/Submodulos/solicitarTramite";
 import SolicitudEstudiante from "../Menus/Submodulos/solicitudEstudiante";
 import InformacionUsuario from "../Menus/Submodulos/informacionUsuario";
 
-const CambiarVistaController = ({ VistaIndex, currentUser, userApp }) => {
+const CambiarVistaController = ({ VistaIndex, currentUser, userHasApp }) => {
   switch (VistaIndex) {
     case 2:
       return <AdmnistrarSolicitudes />;
@@ -18,13 +18,12 @@ const CambiarVistaController = ({ VistaIndex, currentUser, userApp }) => {
     case 8:
       return (
         <SolicitarTramite
-          correoDest={currentUser.eMail}
-          UserApplication={userApp}
+          UserHasOngoingApplication={userHasApp}
           CurretActiveUser={currentUser}
         />
       );
     case 9:
-      return <SolicitudEstudiante UserApplication={userApp} />;
+      return <SolicitudEstudiante />;
     default:
       if (VistaIndex < 7) {
         return <BienvenidaEncargada />;

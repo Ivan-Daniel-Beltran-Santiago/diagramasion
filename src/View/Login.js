@@ -14,12 +14,36 @@ export default function Login() {
     password: "",
   });
 
+  const [validID, setValidID] = useState(false);
+  const [validPass, setValidPass] = useState(false);
+
   const navigate = useNavigate();
 
   const toast = useRef(null);
 
   const handleInputChange = (event) => {
     setLoginData({ ...loginData, [event.target.name]: event.target.value });
+    validateInputChange(event);
+  };
+
+  const validateInputChange = (event) => {
+    let inputChange = event.target.value;
+    if (inputChange.length > 0) {
+      if (event.target.name === "id_number") {
+        let idValidatorStudent = new RegExp("^(M|m)?[0-9]{8}$");
+        let idValidatorAdmin = new RegExp("^[0-9]{4}$");
+        console.log("Student: " + idValidatorStudent.test(inputChange));
+        console.log("Admin: " + idValidatorAdmin.test(inputChange));
+        setValidID(
+          idValidatorStudent.test(inputChange) ||
+            idValidatorAdmin.test(inputChange)
+        );
+      } else {
+        // eslint-disable-next-line no-control-regex
+        let idValidator = new RegExp("^[0-9]{4,8}$");
+        setValidPass(idValidator.test(inputChange));
+      }
+    }
   };
 
   const showToast = (severityValue, summaryValue, detailValue) => {
@@ -41,13 +65,7 @@ export default function Login() {
 
     const loginAttempt = loginData;
 
-    const userNameRGEX = new RegExp("(M|m)?[0-9]{4,8}");
-    const passwordRGEX = new RegExp("[0-9]{4,8}");
-
-    const userValid = userNameRGEX.test(loginAttempt.id_number);
-    const passwordValid = passwordRGEX.test(loginAttempt.password);
-
-    if (!userValid) {
+    if (!validID) {
       showToast(
         "warn",
         "Entrada invalida",
@@ -56,7 +74,7 @@ export default function Login() {
       return;
     }
 
-    if (!passwordValid) {
+    if (!validPass) {
       showToast(
         "warn",
         "Entrada invalida",
@@ -116,7 +134,11 @@ export default function Login() {
             });
             break;
           case -1:
-            showToast("error", "Datos invalidos", "Contraseña incorrecta");
+            showToast(
+              "error",
+              "Datos invalidos",
+              "Usuario y/o contraseña incorrectos"
+            );
             break;
           default:
             showToast(
@@ -147,27 +169,25 @@ export default function Login() {
             name="id_number"
             placeholder="Matrícula/Número de control"
             onChange={handleInputChange}
-            required
             autoComplete="off"
-            maxLength={9}
-            minLength={4}
           />
-          <h9>
-            Debe contener 8 digitos, puede tener una m o M al principio si se
-            trata de un estudiante de posgrado{" "}
-          </h9>
+          {!validID && loginData.id_number.length > 0 && (
+            <label>
+              Debe contener 8 digitos, puede tener una m o M al principio si se
+              trata de un estudiante de posgrado{" "}
+            </label>
+          )}
           <h4>Contraseña</h4>
           <input
             type="password"
             name="password"
             placeholder="Contraseña"
             onChange={handleInputChange}
-            required
             autoComplete="off"
-            maxLength={8}
-            minLength={4}
           />
-          <h9>Debe contener entre 4 y 8 digitos </h9>
+          {!validPass && loginData.password.length > 0 && (
+            <label>Debe contener entre 4 y 8 digitos </label>
+          )}
           <br />
           <input type="submit" id="save" value="Ingresar" className="ingress" />
           <p>

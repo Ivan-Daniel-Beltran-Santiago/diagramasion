@@ -7,18 +7,18 @@ const SolicitarRegistroTramite = ({
   nombre,
   informacion,
   requisitos,
-  emailDest,
-  Request,
+  HasRequest,
   User,
 }) => {
   const [isActive, setIsActive] = useState(false);
+  const [successfullApplication, setSuccessfullApllication] = useState(false);
+  const [activeRequest, setActiveRequest] = useState(HasRequest);
   const [transactionMetadata, setTransactionMetadata] = useState({
     trInfo: "",
     trReq: "",
   });
 
   const toast = useRef(null);
-  let successfullApplication = false;
 
   const showToast = (severityValue, summaryValue, detailValue) => {
     toast.current.show({
@@ -29,6 +29,10 @@ const SolicitarRegistroTramite = ({
       detail: detailValue,
     });
   };
+
+  function delay(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
 
   const RegistrarSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
@@ -45,7 +49,8 @@ const SolicitarRegistroTramite = ({
               "Solicitud registrada con exito",
               "Su solicitud ha sido procesada exitosamente"
             );
-            successfullApplication = true;
+            delay(2000);
+            setSuccessfullApllication(true);
             break;
           default:
             showToast(
@@ -72,7 +77,7 @@ const SolicitarRegistroTramite = ({
       const srvReq = srvDir.getServer() + "/SendEmail";
       axios
         .post(srvReq, {
-          destinatario: emailDest,
+          destinatario: User.eMail,
           tramite: nombre,
         })
         .then((response) => {
@@ -105,15 +110,25 @@ const SolicitarRegistroTramite = ({
 
   const handleRequestSubmit = (event) => {
     event.preventDefault();
-    if (Request.estatus === "") {
+    if (!activeRequest) {
       showToast(
         "info",
         "Solicitud en proceso",
         "Su solicitud esta siendo procesada"
       );
+      delay(2000);
       RegistrarSolicitud();
+      delay(1000);
+      showToast(
+        "info",
+        "Espere un momento",
+        "Se le enviara un correo con los requisitos"
+      );
+      delay(1000);
       EnviarRequisitos();
-      successfullApplication = false;
+      delay(1000);
+      setSuccessfullApllication(false);
+      setActiveRequest(true);
     } else {
       showToast(
         "error",

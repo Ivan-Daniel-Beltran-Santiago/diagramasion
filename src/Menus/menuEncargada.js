@@ -6,6 +6,7 @@ import "./menuEncargada.css";
 import LogoHeader from "../View/Auxiliary/Logo_Header";
 import CambiarVistaController from "../Controller/cambiarVistas";
 import RegresarMenu from "../View/Auxiliary/regresarMenu";
+import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas
@@ -20,15 +21,18 @@ function MenuEncargada() {
   });
 
   const retrieveUserInfo = useCallback(() => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/AdminInfo";
+
     axios
-      .post("http://localhost:3001/AdminInfo", {
+      .post(srvReq, {
         loginID: location.state[0].loginID,
       })
       .then((response) => {
         setCurrentUser({
-          controlNumber: response.data[0].matricula,
-          fullName: response.data[0].nombre_C,
-          eMail: response.data[0].correo_e,
+          controlNumber: response.data.matricula,
+          fullName: response.data.nombre_C,
+          eMail: response.data.correo_e,
         });
       })
       .catch((err) => {

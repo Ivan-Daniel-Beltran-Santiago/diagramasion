@@ -23,7 +23,7 @@ const CambiarVistaController = ({ VistaIndex, currentUser, userHasApp }) => {
         />
       );
     case 9:
-      return <SolicitudEstudiante />;
+      return <SolicitudEstudiante currentUserInformation={currentUser} />;
     default:
       if (VistaIndex < 7) {
         return <BienvenidaEncargada />;

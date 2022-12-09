@@ -161,10 +161,11 @@ function SolicitudEstudiante({ currentUserInformation }) {
         matriculaUsuario: currentUserInformation.controlNumber,
       })
       .then((result) => {
+        console.log(result.data);
         setRequestData({
           id: result.data.id,
           fecha_inicio: result.data.fecha_Sol,
-          tramite: result.data.Tramite.nombre_T,
+          tramite: result.data.Tramite.nombre_T ?? "No disponible",
           estatus: result.data.estatus,
           retroalim: result.data.retroalimentacion,
         });
@@ -181,6 +182,8 @@ function SolicitudEstudiante({ currentUserInformation }) {
       .post(srvReq, {
         id: requestData.id,
         nuevoEstatus: progresionEstatus[requestData.estatus],
+        estatusAnterior: requestData.estatus,
+        retralimentacion: requestData.retroalim,
       })
       .then((result) => {
         console.log(result);

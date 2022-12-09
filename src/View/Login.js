@@ -169,7 +169,7 @@ export default function Login() {
             autoComplete="off"
           />
           {!validID && loginData.id_number.length > 0 && (
-            <label>
+            <label className="LoginWarning">
               Debe contener 8 digitos, puede tener una m o M al principio si se
               trata de un estudiante de posgrado{" "}
             </label>
@@ -183,8 +183,9 @@ export default function Login() {
             autoComplete="off"
           />
           {!validPass && loginData.password.length > 0 && (
-            <label>Debe contener entre 4 y 8 digitos </label>
+            <label className="LoginWarning">Debe contener entre 4 y 8 digitos </label>
           )}
+          <br />
           <br />
           <input type="submit" id="save" value="Ingresar" className="ingress" />
           <p>

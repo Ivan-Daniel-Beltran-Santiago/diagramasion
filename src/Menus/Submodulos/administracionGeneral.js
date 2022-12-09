@@ -1,18 +1,15 @@
 function AdministracionGeneral() {
   return (
-    <div
-      id="administracionGeneral"
-      className="modules"
-    >
+    <div id="administracionGeneral" className="modules">
       <div className="dateContainer">
         <p>
           <label className="labelDate">Fecha de inicio</label>
         </p>
-        <input type="date" className="dates"></input>
+        <input type="date" className="dates" min={"2022-11-01"}></input>
         <p>
           <label className="labelDate">Fecha de finalización</label>
         </p>
-        <input type="date" className="dates"></input>
+        <input type="date" className="dates" min={"2022-11-01"}></input>
         <button>Generar Informe Estadístico</button>
       </div>
       <div>

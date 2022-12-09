@@ -160,12 +160,18 @@ function InformacionUsuario({ currentUser }) {
         </p>
         {((!validPass && userInfo.newPassword.length > 0) ||
           (!validConfirm && userInfo.confirmPassword.length > 0)) && (
-          <label>La nueva contraseña debe contener entre 4 y 8 digitos </label>
+          <label className="LoginWarning">
+            La nueva contraseña debe contener entre 4 y 8 digitos{" "}
+          </label>
         )}
         <br />
-        {!equalPass && (
-          <label>La contraseña debe coindidir en ambos campos</label>
-        )}
+        {!equalPass &&
+          userInfo.newPassword.length > 0 &&
+          userInfo.confirmPassword.length > 0 && (
+            <label className="LoginWarning">
+              La contraseña debe coindidir en ambos campos
+            </label>
+          )}
         <p>
           <label>Contraseña actual: </label>
           <input
@@ -188,17 +194,21 @@ function InformacionUsuario({ currentUser }) {
             onChange={handleInputChange}
           ></input>
         </p>
-        {!validEmail && (
+        {!validEmail && userInfo.newEmail.length > 0 && (
           <div>
-            <label>
+            <label className="LoginWarning">
               El correo electronico debe seguir el siguiente formato:
             </label>
             <br />
-            <label>-Al menos un caracter/digito antes y despues del @</label>
+            <label className="LoginWarning">
+              -Al menos un caracter/digito antes y despues del @
+            </label>
             <br />
-            <label>-Se permiten solo los simbolos @ y . </label>
+            <label className="LoginWarning">
+              -Se permiten solo los simbolos @ y .{" "}
+            </label>
             <br />
-            <label>
+            <label className="LoginWarning">
               -De 2 a 3 caracteres al final como el .com o .mx o similares
             </label>
           </div>

@@ -163,11 +163,11 @@ function SolicitudEstudiante({ currentUserInformation }) {
       .then((result) => {
         console.log(result.data);
         setRequestData({
-          id: result.data.id,
-          fecha_inicio: result.data.fecha_Sol,
-          tramite: result.data.Tramite.nombre_T ?? "No disponible",
-          estatus: result.data.estatus,
-          retroalim: result.data.retroalimentacion,
+          id: result.data[0].id,
+          fecha_inicio: result.data[0].fecha_Sol,
+          tramite: result.data[0].Tramite.nombre_T ?? "No disponible",
+          estatus: result.data[0].estatus,
+          retroalim: result.data[0].retroalimentacion,
         });
       })
       .catch((error) => {

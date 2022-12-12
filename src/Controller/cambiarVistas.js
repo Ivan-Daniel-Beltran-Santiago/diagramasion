@@ -5,11 +5,19 @@ import BienvenidaEstudiante from "../Menus/Submodulos/bienvenidaEstudiante";
 import SolicitarTramite from "../Menus/Submodulos/solicitarTramite";
 import SolicitudEstudiante from "../Menus/Submodulos/solicitudEstudiante";
 import InformacionUsuario from "../Menus/Submodulos/informacionUsuario";
+import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 
-const CambiarVistaController = ({ VistaIndex, currentUser, userHasApp }) => {
+const CambiarVistaController = ({
+  VistaIndex,
+  currentUser,
+  userHasApp,
+  openSingleApplication,
+}) => {
   switch (VistaIndex) {
     case 2:
-      return <AdmnistrarSolicitudes />;
+      return <AdmnistrarSolicitudes openSingleApp={openSingleApplication} />;
+    case 3:
+      return <AdministrarSolicitud />;
     case 5:
       return <AdministracionGeneral />;
     case 6:

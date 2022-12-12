@@ -20,6 +20,15 @@ function MenuEncargada() {
     eMail: "",
   });
 
+  const [informacionSolicitud, setInformacionSolicitud] = useState({
+    nombreSolicitante: "",
+    tramiteSolicitado: "",
+    estatusAlMomento: "",
+    fechaSolicitacion: "",
+    fechaUltimaActualizacion: "",
+    documentosAsociados: [],
+  });
+
   const retrieveUserInfo = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/AdminInfo";
@@ -74,6 +83,15 @@ function MenuEncargada() {
                 Administración de Solicitudes
               </button>
               <button
+                id="administrarSolicitud"
+                className="button"
+                onClick={() => {
+                  setIndexVisible(3);
+                }}
+              >
+                Administrar Solicitud Individual
+              </button>
+              <button
                 id="administracionGeneral"
                 className="button"
                 onClick={() => {
@@ -97,6 +115,7 @@ function MenuEncargada() {
                 <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
+                  openSingleApplication={setInformacionSolicitud}
                 />
                 <RegresarMenu />
               </div>

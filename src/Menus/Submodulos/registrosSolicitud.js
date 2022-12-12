@@ -1,19 +1,23 @@
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import RegistroSolicitud from "./registroSolicitud";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
 function RegistrosSolicitud({ estatusSolicitado }) {
+  const srvDir = new ServerConnectionConfig();
+  const srvReq = srvDir.getServer() + "/RequestApplicationList";
+
   const [listaSolicitudes, setListaSolicitudes] = useState([{}]);
 
   const retrieveRequests = useCallback(() => {
     axios
-      .post("http://localhost:3001/RequestApplicationList", {
+      .post(srvReq, {
         estatus: estatusSolicitado.filtroEstatus,
       })
       .then((response) => {
         setListaSolicitudes(response.data);
       });
-  }, [estatusSolicitado]);
+  }, [estatusSolicitado, srvReq]);
 
   useEffect(() => {
     retrieveRequests();
@@ -29,6 +33,7 @@ function RegistrosSolicitud({ estatusSolicitado }) {
           <th>Fecha de Solicitud</th>
           <th>Estatus Actual</th>
           <th>Fecha de Ultima Actualización</th>
+          <th>Cargar información</th>
         </tr>
         {listaSolicitudes.map(function (item) {
           var registroUsuario = item.Usuario ?? "Indefinido";

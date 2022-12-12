@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function AdministrarSolicitud(DatosSolicitud) {
+function AdministrarSolicitud() {
   const barraProgresoEstatus = {
     1: 0,
     2: 20,
@@ -32,12 +32,20 @@ function AdministrarSolicitud(DatosSolicitud) {
     12: "Solicitud terminada",
   };
   const [documentList, setDocumentList] = useState();
+  const [datosSolicitud, setDatosSolicitud] = useState({
+    nombreSolicitante: "",
+    tramiteSolicitado: "",
+    estatusAlMomento: "",
+    fechaSolicitacion: "",
+    fechaUltimaActualizacion: "",
+  });
+  const [files, setFiles] = useState();
 
   const conseguirDocumentos = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/retrieveDocuments";
     axios
-      .post(srvReq, { solicitudID: DatosSolicitud.idSolicitud })
+      .post(srvReq, { solicitudID: "" })
       .then((result) => {
         console.log(result);
       })
@@ -46,8 +54,28 @@ function AdministrarSolicitud(DatosSolicitud) {
       });
   };
 
+  const conseguirSolicitudDebug = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/RequestUserApplication";
+    axios
+      .post(srvReq, { matriculaUsuario: "19330538" })
+      .then((result) => {
+        setDatosSolicitud({
+          nombreSolicitante: result.data[0].Usuario.nombre_C,
+          tramiteSolicitado: result.data[0].Tramite.nombre_T,
+          estatusAlMomento: result.data[0].estatus,
+          fechaSolicitacion: result.data[0].fecha_Sol,
+          fechaUltimaActualizacion: result.data[0].fecha_Act,
+        });
+        setDocumentList(result.data[0].Documentos);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
-    conseguirDocumentos();
+    conseguirSolicitudDebug();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -55,25 +83,29 @@ function AdministrarSolicitud(DatosSolicitud) {
       <form class="w3-container">
         <label>Nombre del solicitante: </label>
         <label>
-          {DatosSolicitud.nombreSolicitante ?? "No se ha cargado ninguna solicitud"}
+          {datosSolicitud.nombreSolicitante ??
+            "No se ha cargado ninguna solicitud"}
         </label>
         <br />
         <br />
         <label>Trámite que solicita: </label>
         <label>
-          {DatosSolicitud.tramiteSolicitado ?? "No se ha cargado ninguna solicitud"}
+          {datosSolicitud.tramiteSolicitado ??
+            "No se ha cargado ninguna solicitud"}
         </label>
         <br />
         <br />
         <label>Estatus actual: </label>
         <label>
-          {DatosSolicitud.estatusAlMomento ?? "No se ha cargado ninguna solicitud"}
+          {datosSolicitud.estatusAlMomento ??
+            "No se ha cargado ninguna solicitud"}
         </label>
         <br />
         <br />
         <label>Fecha en que se solicitó: </label>
         <label>
-          {DatosSolicitud.fechaSolicitacion ?? "No se ha cargado ninguna solicitud"}
+          {datosSolicitud.fechaSolicitacion ??
+            "No se ha cargado ninguna solicitud"}
         </label>
         <br />
         <br />
@@ -85,10 +117,12 @@ function AdministrarSolicitud(DatosSolicitud) {
               id="progreso"
               className="progresando"
               style={{
-                width: barraProgresoEstatus[DatosSolicitud.estatusAlMomento ?? 0] + "%",
+                width:
+                  barraProgresoEstatus[datosSolicitud.estatusAlMomento ?? 0] +
+                  "%",
               }}
             >
-              {barraProgresoEstatus[DatosSolicitud.estatusAlMomento ?? 0] + "%"}
+              {barraProgresoEstatus[datosSolicitud.estatusAlMomento ?? 0] + "%"}
             </div>
           </div>
         </div>
@@ -96,16 +130,24 @@ function AdministrarSolicitud(DatosSolicitud) {
         <br />
         <label>Fecha del último estatus: </label>
         <label>
-          {DatosSolicitud.fechaUltimaActualizacion ?? "No se ha cargado ninguna solicitud"}
+          {datosSolicitud.fechaUltimaActualizacion ??
+            "No se ha cargado ninguna solicitud"}
         </label>
         <br />
         <br />
         <label>Lista de documentos: </label>
-        <br />
-        <label>Documento con fotos de la patitas mimiendo</label>
-        <br />
-        <label>Documento con fotos de la patitas siendo patitas</label>
-        <br />
+        {documentList &&
+          documentList.map(function (item) {
+            //documento_Data
+            var archivo = new File(item.documento_Data);
+            console.log(archivo);
+            return (
+              <div>
+                <label>{item.nombre_D}</label>
+                <br />
+              </div>
+            );
+          })}
         <br />
       </form>
       <form className="w3-container">

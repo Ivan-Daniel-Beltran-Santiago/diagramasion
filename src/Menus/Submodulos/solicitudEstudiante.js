@@ -29,6 +29,21 @@ function SolicitudEstudiante({ currentUserInformation }) {
     12: "Solicitud terminada",
   };
 
+  const barraProgresoEstatus = {
+    1: 0,
+    2: 20,
+    3: 15,
+    4: 40,
+    5: 50,
+    6: 75,
+    7: 55,
+    8: 65,
+    9: 55,
+    10: 75,
+    11: 80,
+    12: 100,
+  };
+
   const progresionEstatus = {
     1: 2,
     3: 2,
@@ -161,7 +176,6 @@ function SolicitudEstudiante({ currentUserInformation }) {
         matriculaUsuario: currentUserInformation.controlNumber,
       })
       .then((result) => {
-        console.log(result.data);
         setRequestData({
           id: result.data[0].id,
           fecha_inicio: result.data[0].fecha_Sol,
@@ -183,7 +197,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
         id: requestData.id,
         nuevoEstatus: progresionEstatus[requestData.estatus],
         estatusAnterior: requestData.estatus,
-        retralimentacion: requestData.retroalim,
+        retroAnterior: requestData.retroalim,
       })
       .then((result) => {
         console.log(result);
@@ -274,8 +288,14 @@ function SolicitudEstudiante({ currentUserInformation }) {
             <label>Progreso de la solicitud: </label>
 
             <div className="progressBar">
-              <div id="progreso" className="progresando" value="0%">
-                0%
+              <div
+                id="progreso"
+                className="progresando"
+                style={{
+                  width: barraProgresoEstatus[requestData.estatus ?? 0] + "%",
+                }}
+              >
+                {barraProgresoEstatus[requestData.estatus ?? 0] + "%"}
               </div>
             </div>
           </div>

@@ -3,16 +3,21 @@ import React, { useCallback, useEffect, useState } from "react";
 import SolicitarRegistroTramite from "../../View/Secondary/solicitarTramiteReg";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function SolicitarTramite({ UserHasOngoingApplication, CurretActiveUser }) {
+function SolicitarTramite({ CurretActiveUser }) {
   const [transactionList, setTransactionList] = useState([{}]);
 
   const retrieveTransactions = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/RequestTransactionList";
 
-    axios.post(srvReq).then((response) => {
-      setTransactionList(response.data);
-    });
+    axios
+      .post(srvReq)
+      .then((response) => {
+        setTransactionList(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   useEffect(() => {
@@ -25,10 +30,10 @@ function SolicitarTramite({ UserHasOngoingApplication, CurretActiveUser }) {
         const metadata = item.Tramite_Ms;
         return (
           <SolicitarRegistroTramite
-            nombre={item.nombre_T}
+            nombre={item.nombre_Tramite}
+            idTramite={item.id_Tramite}
             informacion={metadata ? metadata[0] : ""}
             requisitos={metadata ? metadata[1] : ""}
-            HasRequest={UserHasOngoingApplication}
             User={CurretActiveUser}
           />
         );

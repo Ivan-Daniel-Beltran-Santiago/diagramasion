@@ -22,8 +22,6 @@ function MenuEstudiante() {
     currentSemester: 0,
   });
 
-  const [UserHasApplication, setUserHasApplication] = useState(false);
-
   const retrieveUserInfo = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/StudentInfo";
@@ -35,7 +33,7 @@ function MenuEstudiante() {
       .then((response) => {
         setCurrentUser({
           controlNumber: response.data.matricula,
-          fullName: response.data.nombre_C,
+          fullName: response.data.nombre_Completo,
           eMail: response.data.correo_e,
           currentCarrer: response.data.Estudiante.carrera,
           currentSemester: response.data.Estudiante.semestre,
@@ -47,28 +45,10 @@ function MenuEstudiante() {
       });
   }, [location]);
 
-  const retrieveUserApplication = useCallback(() => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/UserHasApplication";
-
-    axios
-      .post(srvReq, {
-        matriculaUsuario: location.state[0].loginID,
-      })
-      .then((response) => {
-        setUserHasApplication(response.data.hassApplication);
-      })
-      .catch((err) => {
-        console.log("Error");
-        console.error(err);
-      });
-  }, [location]);
-
   useEffect(() => {
     setIndexVisible(7);
     retrieveUserInfo();
-    retrieveUserApplication();
-  }, [retrieveUserInfo, retrieveUserApplication]);
+  }, [retrieveUserInfo]);
 
   return (
     <div className="App">
@@ -111,7 +91,6 @@ function MenuEstudiante() {
                 <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
-                  userHasApp={UserHasApplication}
                 />
                 <RegresarMenu />
               </div>

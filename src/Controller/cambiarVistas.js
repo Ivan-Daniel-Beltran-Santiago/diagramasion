@@ -24,12 +24,7 @@ const CambiarVistaController = ({
     case 10:
       return <InformacionUsuario currentUser={currentUser} />;
     case 8:
-      return (
-        <SolicitarTramite
-          UserHasOngoingApplication={userHasApp}
-          CurretActiveUser={currentUser}
-        />
-      );
+      return <SolicitarTramite CurretActiveUser={currentUser} />;
     case 9:
       return <SolicitudEstudiante currentUserInformation={currentUser} />;
     default:

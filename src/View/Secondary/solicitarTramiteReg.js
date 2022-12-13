@@ -1,18 +1,16 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 import { Toast } from "primereact/toast";
 
 const SolicitarRegistroTramite = ({
+  idTramite,
   nombre,
   informacion,
   requisitos,
-  HasRequest,
   User,
 }) => {
   const [isActive, setIsActive] = useState(false);
-  const [successfullApplication, setSuccessfullApllication] = useState(false);
-  const [activeRequest, setActiveRequest] = useState(HasRequest);
 
   const [transactionMetadata, setTransactionMetadata] = useState({
     trInfo: "",
@@ -40,7 +38,8 @@ const SolicitarRegistroTramite = ({
     const srvReq = srvDir.getServer() + "/NewUserApplication";
     axios
       .post(srvReq, {
-        estudiante: User.controlNumber,
+        estudiante_S: User.controlNumber,
+        tramite_S: idTramite,
       })
       .then((response) => {
         switch (response.data.Code) {
@@ -51,7 +50,6 @@ const SolicitarRegistroTramite = ({
               "Su solicitud ha sido procesada exitosamente"
             );
             delay(2000);
-            setSuccessfullApllication(true);
             break;
           default:
             showToast(
@@ -68,50 +66,55 @@ const SolicitarRegistroTramite = ({
   };
 
   const EnviarRequisitos = () => {
-    if (successfullApplication) {
-      showToast(
-        "info",
-        "Espere un momento",
-        "Recibira un correo con la informacion y requisitos, porfavor aguarde"
-      );
-      const srvDir = new ServerConnectionConfig();
-      const srvReq = srvDir.getServer() + "/SendEmail";
-      axios
-        .post(srvReq, {
-          destinatario: User.eMail,
-          tramite: nombre,
-        })
-        .then((response) => {
-          switch (response.data.Code) {
-            case 1:
-              showToast(
-                "success",
-                "Correo enviado con exito",
-                "En poco tiempo recibiras un correo con la informacion y requisitos del tramite"
-              );
-              break;
-            default:
-              showToast(
-                "error",
-                "Error inesperado",
-                "Porfavor intentelo mas tarde"
-              );
-              break;
-          }
-        })
-        .catch(() => {
-          showToast(
-            "error",
-            "Error inesperado",
-            "Porfavor intentelo mas tarde"
-          );
-        });
-    }
+    showToast(
+      "info",
+      "Espere un momento",
+      "Recibira un correo con la informacion y requisitos, porfavor aguarde"
+    );
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/SendEmail";
+    axios
+      .post(srvReq, {
+        destinatario: User.eMail,
+        tramite: nombre,
+      })
+      .then((response) => {
+        switch (response.data.Code) {
+          case 1:
+            showToast(
+              "success",
+              "Correo enviado con exito",
+              "En poco tiempo recibiras un correo con la informacion y requisitos del tramite"
+            );
+            break;
+          default:
+            showToast(
+              "error",
+              "Error inesperado",
+              "Porfavor intentelo mas tarde"
+            );
+            break;
+        }
+      })
+      .catch(() => {
+        showToast("error", "Error inesperado", "Porfavor intentelo mas tarde");
+      });
   };
 
-  const handleRequestSubmit = (event) => {
+  const handleRequestSubmit = async (event) => {
     event.preventDefault();
-    if (!activeRequest) {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/UserHasApplication";
+    let check = false;
+    await axios
+      .post(srvReq, { matriculaUsuario: User.controlNumber })
+      .then((result) => {
+        check = result.data.hasApplication;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    if (!check) {
       showToast(
         "info",
         "Solicitud en proceso",
@@ -128,8 +131,6 @@ const SolicitarRegistroTramite = ({
       delay(1000);
       EnviarRequisitos();
       delay(1000);
-      setSuccessfullApllication(false);
-      setActiveRequest(true);
     } else {
       showToast(
         "error",
@@ -138,6 +139,14 @@ const SolicitarRegistroTramite = ({
       );
     }
   };
+
+  useEffect(() => {
+    setTransactionMetadata({
+      trInfo: informacion,
+      trReq: requisitos,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="nombreTramite">

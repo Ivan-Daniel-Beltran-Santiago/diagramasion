@@ -1,4 +1,4 @@
-function RegistroSolicitud({ registro, usuario, tramite }) {
+function RegistroSolicitud({ registro, usuario, tramite, singleApp }) {
   const estatusLexico = {
     1: "Solicitud iniciada",
     2: "Documentos subidos en formato digital",
@@ -13,7 +13,6 @@ function RegistroSolicitud({ registro, usuario, tramite }) {
     11: "Finiquito en espera de firma en persona",
     12: "Solicitud terminada",
   };
-  const handleOnClick = (event) => {};
 
   return (
     <tr>

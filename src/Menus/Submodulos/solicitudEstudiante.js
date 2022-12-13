@@ -2,6 +2,8 @@ import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 import { Toast } from "primereact/toast";
+import ListaDocumentos from "../../View/Secondary/listaDocumentos";
+import { act } from "react-dom/test-utils";
 
 function SolicitudEstudiante({ currentUserInformation }) {
   const [requestData, setRequestData] = useState({
@@ -11,10 +13,11 @@ function SolicitudEstudiante({ currentUserInformation }) {
     estatus: "",
     retroalim: "",
   });
+  const [filesToVerify, setFilesToVerify] = useState(null);
   const [filesToUpload, setFilesToUpload] = useState(null);
-  const [uploadedFiles, setUploadedFiles] = useState(false);
 
   const estatusLexico = {
+    0: "No se encontro ninguna solicitud",
     1: "Solicitud iniciada",
     2: "Documentos subidos en formato digital",
     3: "Documentos rechazados en formato digital",
@@ -68,7 +71,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
   }
 
   const onChangeHandler = (event) => {
-    setFilesToUpload(event.target.files);
+    setFilesToVerify(event.target.files);
   };
 
   const SubirDocumentos = async (event) => {
@@ -77,55 +80,17 @@ function SolicitudEstudiante({ currentUserInformation }) {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/UploadDocuments";
 
-    const data = new FormData();
-    let validDocuments = true;
-    for (var x = 0; x < filesToUpload.length; x++) {
-      const pdfNameValidator = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
-      const isPdfNameValid = pdfNameValidator.test(filesToUpload[x].name);
-      delay(1000);
-      showToast(
-        "info",
-        "Analizando documento",
-        "Verificaremos la validez de: " + filesToUpload[x].name
-      );
-      delay(1000);
-      if (filesToUpload[x].size >= 2000000) {
-        delay(1000);
-        showToast(
-          "error",
-          "Tamaño de archivo",
-          "El documento: " + filesToUpload[x].name + " excede el peso de 2MB"
-        );
-        delay(1000);
-        validDocuments = false;
-      }
-      if (!isPdfNameValid) {
-        delay(1000);
-        showToast(
-          "error",
-          "Formato de nombre",
-          "El documento: " +
-            filesToUpload[x].name +
-            " tiene un formato de nombre no permitido."
-        );
-        delay(1000);
-        validDocuments = false;
-      }
-      if (validDocuments) data.append("file", filesToUpload[x]);
-    }
-    for (var doc of data.entries()) {
-      var buffer = await doc[1].arrayBuffer();
+    for (var documento of filesToUpload.entries()) {
+      var buffer = await documento[1].arrayBuffer();
       var bytes = new Uint8Array(buffer);
-      delay(1000);
       showToast(
         "info",
         "Subiendo documento",
-        "Estamos preparando para subir el documento: " + doc[1].name
+        "Estamos preparando para subir el documento: " + documento[1].name
       );
-      delay(1000);
       axios
         .post(srvReq, {
-          documentoName: doc[1].name,
+          documentoName: documento[1].name,
           idSolicitud: requestData.id,
           bytes,
         })
@@ -136,18 +101,18 @@ function SolicitudEstudiante({ currentUserInformation }) {
             showToast(
               "success",
               "Documento subido",
-              "El documento: " + doc[1].name + " ha sido subido con exito"
+              "El documento: " + documento[1].name + " ha sido subido con exito"
             );
             delay(1000);
             document.getElementById("subirArchivos").value = null;
-            setUploadedFiles(true);
+            //setUploadedFiles(true);
           } else {
             delay(1000);
             showToast(
               "error",
               "Error al subir el documento",
               "El documento: " +
-                doc[1].name +
+                documento[1].name +
                 " no se ha podido subir, intente mas tarde"
             );
             delay(1000);
@@ -166,6 +131,36 @@ function SolicitudEstudiante({ currentUserInformation }) {
           document.getElementById("subirArchivos").value = null;
         });
     }
+    actualizarSolicitud();
+  };
+
+  const validarDocumentos = async (event) => {
+    event.preventDefault();
+
+    var data = new FormData();
+
+    for (var x = 0; x < filesToVerify.length; x++) {
+      const pdfNameValidator = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
+      const isPdfNameValid = pdfNameValidator.test(filesToVerify[x].name);
+      if (filesToVerify[x].size >= 2000000) {
+        showToast(
+          "error",
+          "Tamaño de archivo",
+          "El documento: " + filesToVerify[x].name + " excede el peso de 2MB"
+        );
+      } else if (!isPdfNameValid) {
+        showToast(
+          "error",
+          "Formato de nombre",
+          "El documento: " +
+            filesToVerify[x].name +
+            " tiene un formato de nombre no permitido."
+        );
+      } else {
+        data.append("file", filesToVerify[x]);
+        setFilesToUpload(data);
+      }
+    }
   };
 
   const obtenerSolicitud = useCallback(() => {
@@ -177,11 +172,19 @@ function SolicitudEstudiante({ currentUserInformation }) {
       })
       .then((result) => {
         setRequestData({
-          id: result.data[0].id,
-          fecha_inicio: result.data[0].fecha_Sol,
-          tramite: result.data[0].Tramite.nombre_T ?? "No disponible",
-          estatus: result.data[0].estatus,
-          retroalim: result.data[0].retroalimentacion,
+          id: result.data[0]
+            ? result.data[0].id_Solicitud
+            : "No se encontro ninguna solicitud ",
+          fecha_inicio: result.data[0]
+            ? result.data[0].fecha_Solicitud
+            : "No se encontro ninguna solicitud ",
+          tramite: result.data[0]
+            ? result.data[0].Tramite.nombre_Tramite
+            : "No se encontro ninguna solicitud ",
+          estatus: result.data[0] ? result.data[0].estatus_Actual : 0,
+          retroalim: result.data[0]
+            ? result.data[0].retroalimentacion
+            : "No se encontro ninguna solicitud ",
         });
       })
       .catch((error) => {
@@ -219,30 +222,20 @@ function SolicitudEstudiante({ currentUserInformation }) {
       <div className="contenedorSolicitud">
         <p>
           <label>Fecha en la que se solicitó: </label>
-          {requestData.fecha_inicio === ""
-            ? "No se encontro ninguna solicitud "
-            : requestData.fecha_inicio}
+          {requestData.fecha_inicio}
         </p>
         <p>
           <label>Trámite solicitado: </label>
-          {requestData.tramite === ""
-            ? "No se encontro ninguna solicitud "
-            : requestData.tramite}
+          {requestData.tramite}
         </p>
         <p>
           <label>Estatus: </label>
-          {requestData.estatus > 0
-            ? estatusLexico[requestData.estatus]
-            : "No se encontro ninguna solicitud "}
+          {estatusLexico[requestData.estatus]}
         </p>
         <p>
           <label>Retroalimentación disponible</label>
         </p>
-        <pre>
-          {requestData.retroalim === ""
-            ? "No se encontro ninguna solicitud "
-            : requestData.retroalim}
-        </pre>
+        <pre>{requestData.retroalim}</pre>
         {(requestData.estatus === 1 ||
           requestData.estatus === 3 ||
           requestData.estatus === 7) && (
@@ -264,7 +257,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
                 type="submit"
                 className="confirmDocumentUpload"
                 value="Confirmar subida de documentos"
-                onClick={SubirDocumentos}
+                onClick={validarDocumentos}
               ></input>
             </p>
             <p>
@@ -272,11 +265,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
                 type="submit"
                 className="confirmDocumentUpload"
                 value="Terminar de subir documentos"
-                onClick={() => {
-                  if (uploadedFiles) {
-                    actualizarSolicitud();
-                  }
-                }}
+                onClick={SubirDocumentos}
               ></input>
             </p>
           </div>

@@ -2,7 +2,6 @@ import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 import { Toast } from "primereact/toast";
-import { act } from "react-dom/test-utils";
 
 function SolicitudEstudiante({ currentUserInformation }) {
   const [requestData, setRequestData] = useState({

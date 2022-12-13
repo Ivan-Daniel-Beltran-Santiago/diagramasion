@@ -16,14 +16,28 @@ function RegistroSolicitud({ registro, usuario, tramite, singleApp }) {
 
   return (
     <tr>
-      <th>{registro.id}</th>
-      <th>{usuario.nombre_C ?? "No Disponible"}</th>
-      <th>{tramite.nombre_T ?? "NoDisponible"}</th>
-      <th>{registro.fecha_Sol}</th>
-      <th>{estatusLexico[registro.estatus]}</th>
-      <th>{registro.fecha_Act}</th>
+      <th>{registro.id_Solicitud}</th>
+      <th>{usuario.nombre_Completo ?? "No Disponible"}</th>
+      <th>{tramite.nombre_Tramite ?? "NoDisponible"}</th>
+      <th>{registro.fecha_Solicitud}</th>
+      <th>{estatusLexico[registro.estatus_Actual]}</th>
+      <th>{registro.fecha_Actualizacion}</th>
       <th>
-        <button className="w3-button w3-green">Cargar</button>
+        <button
+          className="w3-button w3-green"
+          onClick={(event) => {
+            singleApp({
+              nombreSolicitante: usuario.nombre_Completo,
+              tramiteSolicitado: tramite.nombre_Tramite,
+              estatusAlMomento: registro.estatus_Actual,
+              fechaSolicitacion: registro.fecha_Solicitud,
+              fechaUltimaActualizacion: registro.fecha_Actualizacion,
+              documentosAsociados: [],
+            });
+          }}
+        >
+          Cargar
+        </button>
       </th>
     </tr>
   );

@@ -29,6 +29,17 @@ function MenuEncargada() {
     documentosAsociados: [],
   });
 
+  function setinfoSolicitud({ InformacionSolicitud }) {
+    setInformacionSolicitud({
+      nombreSolicitante: InformacionSolicitud.nombre,
+      tramiteSolicitado: InformacionSolicitud.tramite,
+      estatusAlMomento: InformacionSolicitud.estatus,
+      fechaSolicitacion: InformacionSolicitud.fechaS,
+      fechaUltimaActualizacion: InformacionSolicitud.fechaA,
+      documentosAsociados: InformacionSolicitud.Documentos,
+    });
+  }
+
   const retrieveUserInfo = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/AdminInfo";
@@ -115,7 +126,7 @@ function MenuEncargada() {
                 <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
-                  openSingleApplication={setInformacionSolicitud}
+                  openSingleApplication={setinfoSolicitud}
                 />
                 <RegresarMenu />
               </div>

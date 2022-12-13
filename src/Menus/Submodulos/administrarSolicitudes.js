@@ -17,7 +17,7 @@ const estatusLexico = {
   12: "Solicitud terminada",
 };
 
-function AdmnistrarSolicitudes() {
+function AdmnistrarSolicitudes({ openSingleApp }) {
   const [filtroEstatus, setFiltroEstatus] = useState(3);
 
   return (
@@ -29,15 +29,39 @@ function AdmnistrarSolicitudes() {
         <button className="button" onClick={() => setFiltroEstatus(2)}>
           {estatusLexico[2]}
         </button>
+        <button className="button" onClick={() => setFiltroEstatus(3)}>
+          {estatusLexico[3]}
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(4)}>
+          {estatusLexico[4]}
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(5)}>
+          {estatusLexico[5]}
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(6)}>
+          {estatusLexico[6]}
+        </button>
         <button className="button" onClick={() => setFiltroEstatus(7)}>
           {estatusLexico[7]}
         </button>
         <button className="button" onClick={() => setFiltroEstatus(8)}>
           {estatusLexico[8]}
         </button>
+        <button className="button" onClick={() => setFiltroEstatus(9)}>
+          {estatusLexico[9]}
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(10)}>
+          {estatusLexico[10]}
+        </button>
+        <button className="button" onClick={() => setFiltroEstatus(11)}>
+          {estatusLexico[11]}
+        </button>
       </div>
       <section className="listContainer">
-        <RegistrosSolicitud estatusSolicitado={{ filtroEstatus }} />
+        <RegistrosSolicitud
+          estatusSolicitado={{ filtroEstatus }}
+          singleApplication={{ openSingleApp }}
+        />
       </section>
     </div>
   );

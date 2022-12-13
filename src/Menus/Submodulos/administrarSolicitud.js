@@ -31,7 +31,7 @@ function AdministrarSolicitud() {
     11: "Finiquito en espera de firma en persona",
     12: "Solicitud terminada",
   };
-  const [documentList, setDocumentList] = useState();
+  const [documentList, setDocumentList] = useState([]);
   const [datosSolicitud, setDatosSolicitud] = useState({
     nombreSolicitante: "",
     tramiteSolicitado: "",
@@ -39,15 +39,16 @@ function AdministrarSolicitud() {
     fechaSolicitacion: "",
     fechaUltimaActualizacion: "",
   });
-  const [files, setFiles] = useState();
 
   const conseguirDocumentos = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/retrieveDocuments";
     axios
-      .post(srvReq, { solicitudID: "" })
+      .post(srvReq, { solicitudID: "1" })
       .then((result) => {
-        console.log(result);
+        console.log(result.data);
+        setDocumentList(result.data);
+        console.log(documentList);
       })
       .catch((error) => {
         console.log(error);
@@ -61,11 +62,11 @@ function AdministrarSolicitud() {
       .post(srvReq, { matriculaUsuario: "19330538" })
       .then((result) => {
         setDatosSolicitud({
-          nombreSolicitante: result.data[0].Usuario.nombre_C,
-          tramiteSolicitado: result.data[0].Tramite.nombre_T,
-          estatusAlMomento: result.data[0].estatus,
-          fechaSolicitacion: result.data[0].fecha_Sol,
-          fechaUltimaActualizacion: result.data[0].fecha_Act,
+          nombreSolicitante: result.data[0].Usuario.nombre_Completo,
+          tramiteSolicitado: result.data[0].Tramite.nombre_Tramite,
+          estatusAlMomento: result.data[0].estatus_Actual,
+          fechaSolicitacion: result.data[0].fecha_Solicitud,
+          fechaUltimaActualizacion: result.data[0].fecha_Actualizacion,
         });
         setDocumentList(result.data[0].Documentos);
       })
@@ -74,13 +75,20 @@ function AdministrarSolicitud() {
       });
   };
 
+  const downloadDocument = (event) => {
+    var idArchivo = event.target.id - 1;
+    var archivo = documentList.at(idArchivo);
+    console.log(archivo);
+  };
+
   useEffect(() => {
     conseguirSolicitudDebug();
+    //conseguirDocumentos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div id="NuevaInterfaz" className="modules">
-      <form class="w3-container">
+      <form className="w3-container">
         <label>Nombre del solicitante: </label>
         <label>
           {datosSolicitud.nombreSolicitante ??
@@ -97,8 +105,9 @@ function AdministrarSolicitud() {
         <br />
         <label>Estatus actual: </label>
         <label>
-          {datosSolicitud.estatusAlMomento ??
-            "No se ha cargado ninguna solicitud"}
+          {datosSolicitud.estatusAlMomento
+            ? estatusLexico[datosSolicitud.estatusAlMomento]
+            : "No se ha cargado ninguna solicitud"}
         </label>
         <br />
         <br />
@@ -138,12 +147,11 @@ function AdministrarSolicitud() {
         <label>Lista de documentos: </label>
         {documentList &&
           documentList.map(function (item) {
-            //documento_Data
-            var archivo = new File(item.documento_Data);
-            console.log(archivo);
             return (
               <div>
-                <label>{item.nombre_D}</label>
+                <label id={item.id_Doc} onClick={downloadDocument}>
+                  {item.nombre_Doc}
+                </label>
                 <br />
               </div>
             );

@@ -3,7 +3,7 @@ import axios from "axios";
 import RegistroSolicitud from "./registroSolicitud";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function RegistrosSolicitud({ estatusSolicitado }) {
+function RegistrosSolicitud({ estatusSolicitado, singleApplication }) {
   const srvDir = new ServerConnectionConfig();
   const srvReq = srvDir.getServer() + "/RequestApplicationList";
 
@@ -43,6 +43,7 @@ function RegistrosSolicitud({ estatusSolicitado }) {
               registro={item}
               usuario={registroUsuario}
               tramite={registroTramite}
+              singleApp={singleApplication}
             />
           );
         })}

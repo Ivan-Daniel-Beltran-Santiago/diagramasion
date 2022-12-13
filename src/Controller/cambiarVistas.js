@@ -10,7 +10,6 @@ import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 const CambiarVistaController = ({
   VistaIndex,
   currentUser,
-  userHasApp,
   openSingleApplication,
 }) => {
   switch (VistaIndex) {

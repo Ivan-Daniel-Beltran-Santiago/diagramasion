@@ -1,8 +1,21 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Toast } from "primereact/toast";
+import { useEffect, useState, useRef } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
 function AdministrarSolicitud() {
+
+  const toast = useRef(null);
+  const showToast = (severityValue, summaryValue, detailValue) => {
+    toast.current.show({
+      closable: false,
+      life: 5000,
+      severity: severityValue,
+      summary: summaryValue,
+      detail: detailValue,
+    });
+  };
+
   const barraProgresoEstatus = {
     1: 0,
     2: 20,
@@ -59,7 +72,7 @@ function AdministrarSolicitud() {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/RequestUserApplication";
     axios
-      .post(srvReq, { matriculaUsuario: "19330538" })
+      .post(srvReq, { matriculaUsuario: "19330593" })
       .then((result) => {
         setDatosSolicitud({
           nombreSolicitante: result.data[0].Usuario.nombre_Completo,
@@ -67,6 +80,8 @@ function AdministrarSolicitud() {
           estatusAlMomento: result.data[0].estatus_Actual,
           fechaSolicitacion: result.data[0].fecha_Solicitud,
           fechaUltimaActualizacion: result.data[0].fecha_Actualizacion,
+          retroalimentacion: result.data[0].retroalimentacion,
+          id_solicitud: result.data[0].id_Solicitud
         });
         setDocumentList(result.data[0].Documentos);
       })
@@ -81,6 +96,37 @@ function AdministrarSolicitud() {
     console.log(archivo);
   };
 
+  const actualizarSolicitud = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/updateApplication";
+    axios
+      .post(srvReq, {estatusAnterior: datosSolicitud.estatusAlMomento, 
+        retroAnterior: datosSolicitud.retroalimentacion, 
+        id: datosSolicitud.id_solicitud, nuevoEstatus: 5})  //configurar el id y el estatus a dinamico
+      .then((response) => {
+        console.log(response.data)
+        switch (response.data.Code) {
+          case 1:
+            showToast(
+              "success",
+              "Solicitud actualizada",
+              "La actualizacion a sido exitosa"
+            );
+            break;
+          case -1:
+            showToast(
+              "error",
+              "Actualizacion incorrecta",
+              "Porfavor cheque los datos"
+            );
+            break;
+          default:
+            showToast("warn", "Error inesperado", "Intentelo mas tarde");
+            break;
+        }
+      })
+  }
+
   useEffect(() => {
     conseguirSolicitudDebug();
     //conseguirDocumentos();
@@ -88,6 +134,7 @@ function AdministrarSolicitud() {
   }, []);
   return (
     <div id="NuevaInterfaz" className="modules">
+    <Toast ref={toast} position="top-right" />
       <form className="w3-container">
         <label>Nombre del solicitante: </label>
         <label>
@@ -179,7 +226,7 @@ function AdministrarSolicitud() {
         <textarea name="retroalimentacion" cols="120" rows="8"></textarea>
       </form>
       <br />
-      <button class="w3-button w3-green">Confirmar cambio de estatus</button>
+      <button class="w3-button w3-green" onClick={actualizarSolicitud}>Confirmar cambio de estatus</button>
       <br />
       <br />
       <button class="w3-button w3-green">Solicitar seguimiento</button>

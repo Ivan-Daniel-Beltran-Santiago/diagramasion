@@ -55,13 +55,13 @@ function AdministracionGeneral() {
         <br />
         {!validDataRange && (
           <label>
-            La fecha de finalización no puede ser menor a la fecha de
-            inicio.
+            La fecha de finalización no puede ser menor a la fecha de inicio.
           </label>
         )}
         <button>Generar Informe Estadístico</button>
       </div>
       <div>
+        <br />
         <label>Subida de archivo de usuarios: </label>
         <br />
         <form>

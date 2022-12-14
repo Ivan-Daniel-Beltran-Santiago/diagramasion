@@ -24,13 +24,15 @@
   }
   
   .content-section{
-    height: 60px;
+    min-height: 60px;
     background: #e7e7e7;
+    max-height: 180px;
   }
   
   .contentSelector{
-    height: 48px;
-    display:block;
+    min-height: 48px;
+    display:flexbox;
+    max-height: 144px;
   }
   
   .modules{

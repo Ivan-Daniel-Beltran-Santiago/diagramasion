@@ -102,7 +102,7 @@ function AdministrarSolicitud() {
     axios
       .post(srvReq, {estatusAnterior: datosSolicitud.estatusAlMomento, 
         retroAnterior: datosSolicitud.retroalimentacion, 
-        id: datosSolicitud.id_solicitud, nuevoEstatus: 5})  //configurar el id y el estatus a dinamico
+        id: datosSolicitud.id_solicitud, nuevoEstatus: 3})  //configurar el id y el estatus a dinamico
       .then((response) => {
         console.log(response.data)
         switch (response.data.Code) {

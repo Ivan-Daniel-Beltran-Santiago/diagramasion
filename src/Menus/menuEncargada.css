@@ -23,13 +23,14 @@
   color: #61dafb;
 }
 
-.content-section{
-  height: 60px;
-  background: #e7e7e7;
+.buttonContainer_menu{
+  display:flexbox;
+  background-color: #e7e7e7;
 }
 
-.contentSelector{
-  height: 48px;
+.buttonContainer_menu button{
+  background-color: #0ba4e1;
+  color: white;
 }
 
 .buttonContainer button{
@@ -40,6 +41,43 @@
 .buttonContainer button:hover{
   background-color: #0ba4e1;
   color: white;
+}
+
+.buttonContainer{
+  display: flexbox;
+}
+
+.row_1{
+  flex: 33%;
+  padding: 10px;
+}
+
+.row_2{
+  flex: 33%;
+  padding: 10px;
+}
+
+.row_3{
+  flex: 33%;
+  padding: 10px;
+}
+
+.newInterface_container{
+  display: flex;
+}
+
+.row_1_administrarSolicitud{
+  flex: 50%;
+  padding: 10px;
+}
+
+.row_2_administrarSolicitud{
+  flex: 50%;
+  padding: 10px;
+}
+
+.row_2_administrarSolicitud button{
+  height: 36px;
 }
 
 .modules{

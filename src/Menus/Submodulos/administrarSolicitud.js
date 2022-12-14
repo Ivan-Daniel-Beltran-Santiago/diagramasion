@@ -88,101 +88,111 @@ function AdministrarSolicitud() {
   }, []);
   return (
     <div id="NuevaInterfaz" className="modules">
-      <form className="w3-container">
-        <label>Nombre del solicitante: </label>
-        <label>
-          {datosSolicitud.nombreSolicitante ??
-            "No se ha cargado ninguna solicitud"}
-        </label>
-        <br />
-        <br />
-        <label>Trámite que solicita: </label>
-        <label>
-          {datosSolicitud.tramiteSolicitado ??
-            "No se ha cargado ninguna solicitud"}
-        </label>
-        <br />
-        <br />
-        <label>Estatus actual: </label>
-        <label>
-          {datosSolicitud.estatusAlMomento
-            ? estatusLexico[datosSolicitud.estatusAlMomento]
-            : "No se ha cargado ninguna solicitud"}
-        </label>
-        <br />
-        <br />
-        <label>Fecha en que se solicitó: </label>
-        <label>
-          {datosSolicitud.fechaSolicitacion ??
-            "No se ha cargado ninguna solicitud"}
-        </label>
-        <br />
-        <br />
-        <div>
-          <label>Progreso de la solicitud: </label>
+      <div className="newInterface_container">
+        <div className="row_1_administrarSolicitud">
+          <form className="w3-container">
+            <label>Nombre del solicitante: </label>
+            <label>
+              {datosSolicitud.nombreSolicitante ??
+                "No se ha cargado ninguna solicitud"}
+            </label>
+            <br />
+            <br />
+            <label>Trámite que solicita: </label>
+            <label>
+              {datosSolicitud.tramiteSolicitado ??
+                "No se ha cargado ninguna solicitud"}
+            </label>
+            <br />
+            <br />
+            <label>Estatus actual: </label>
+            <label>
+              {datosSolicitud.estatusAlMomento
+                ? estatusLexico[datosSolicitud.estatusAlMomento]
+                : "No se ha cargado ninguna solicitud"}
+            </label>
+            <br />
+            <br />
+            <label>Fecha en que se solicitó: </label>
+            <label>
+              {datosSolicitud.fechaSolicitacion ??
+                "No se ha cargado ninguna solicitud"}
+            </label>
+            <br />
+            <br />
+            <div>
+              <label>Progreso de la solicitud: </label>
 
-          <div className="progressBar">
-            <div
-              id="progreso"
-              className="progresando"
-              style={{
-                width:
-                  barraProgresoEstatus[datosSolicitud.estatusAlMomento ?? 0] +
-                  "%",
-              }}
-            >
-              {barraProgresoEstatus[datosSolicitud.estatusAlMomento ?? 0] + "%"}
-            </div>
-          </div>
-        </div>
-        <br />
-        <br />
-        <label>Fecha del último estatus: </label>
-        <label>
-          {datosSolicitud.fechaUltimaActualizacion ??
-            "No se ha cargado ninguna solicitud"}
-        </label>
-        <br />
-        <br />
-        <label>Lista de documentos: </label>
-        {documentList &&
-          documentList.map(function (item) {
-            return (
-              <div>
-                <label id={item.id_Doc} onClick={downloadDocument}>
-                  {item.nombre_Doc}
-                </label>
-                <br />
+              <div className="progressBar">
+                <div
+                  id="progreso"
+                  className="progresando"
+                  style={{
+                    width:
+                      barraProgresoEstatus[
+                        datosSolicitud.estatusAlMomento ?? 0
+                      ] + "%",
+                  }}
+                >
+                  {barraProgresoEstatus[datosSolicitud.estatusAlMomento ?? 0] +
+                    "%"}
+                </div>
               </div>
-            );
-          })}
-        <br />
-      </form>
-      <form className="w3-container">
-        <label>Cambiar estatus: </label>
-        <form className="w3-container">
-          <select name="lenguajes" id="lang">
-            <option value="estatus3">{estatusLexico[3]}</option>
-            <option value="estatus4">{estatusLexico[4]}</option>
-            <option value="estatus5">{estatusLexico[5]}</option>
-            <option value="estatus6">{estatusLexico[6]}</option>
-            <option value="estatus7">{estatusLexico[7]}</option>
-            <option value="estatus9">{estatusLexico[9]}</option>
-            <option value="estatus10">{estatusLexico[10]}</option>
-            <option value="estatus11">{estatusLexico[11]}</option>
-            <option value="estatus12">{estatusLexico[12]}</option>
-          </select>
-        </form>
-        <br />
-        <label>Retroalimentación: </label>
-        <br />
-        <textarea name="retroalimentacion" cols="120" rows="8"></textarea>
-      </form>
-      <br />
-      <button class="w3-button w3-green">Confirmar cambio de estatus</button>
-      <br />
-      <br />
-      <button class="w3-button w3-green">Solicitar seguimiento</button>
+            </div>
+            <br />
+            <br />
+            <label>Fecha del último estatus: </label>
+            <label>
+              {datosSolicitud.fechaUltimaActualizacion ??
+                "No se ha cargado ninguna solicitud"}
+            </label>
+            <br />
+            <br />
+            <label>Lista de documentos: </label>
+            {documentList &&
+              documentList.map(function (item) {
+                return (
+                  <div>
+                    <label id={item.id_Doc} onClick={downloadDocument}>
+                      {item.nombre_Doc}
+                    </label>
+                    <br />
+                  </div>
+                );
+              })}
+            <br />
+          </form>
+        </div>
+        <div className="row_2_administrarSolicitud">
+          <form className="w3-container">
+            <label>Cambiar estatus: </label>
+            <form className="w3-container">
+              <select name="lenguajes" id="lang">
+                <option value="estatus3">{estatusLexico[3]}</option>
+                <option value="estatus4">{estatusLexico[4]}</option>
+                <option value="estatus5">{estatusLexico[5]}</option>
+                <option value="estatus6">{estatusLexico[6]}</option>
+                <option value="estatus7">{estatusLexico[7]}</option>
+                <option value="estatus9">{estatusLexico[9]}</option>
+                <option value="estatus10">{estatusLexico[10]}</option>
+                <option value="estatus11">{estatusLexico[11]}</option>
+                <option value="estatus12">{estatusLexico[12]}</option>
+              </select>
+            </form>
+            <br />
+            <label>Retroalimentación: </label>
+            <br />
+            <textarea name="retroalimentacion" cols="48" rows="8"></textarea>
+          </form>
+          <br />
+          <button className="button">
+            Confirmar cambio de estatus
+          </button>
+          <br />
+          <br />
+          <button className="button">Solicitar seguimiento</button>
+        </div>
+      </div>
     </div>
   );
 }

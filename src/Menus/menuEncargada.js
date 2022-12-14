@@ -73,63 +73,61 @@ function MenuEncargada() {
       <LogoHeader />
       <div>
         <div>
-          <div className="content-section">
-            <div className="contentSelector">
-              <button
-                id="bienvenidaEncargada"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(1);
-                }}
-              >
-                Bienvenida
-              </button>
-              <button
-                id="administrarSolicitudes"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(2);
-                }}
-              >
-                Administración de Solicitudes
-              </button>
-              <button
-                id="administrarSolicitud"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(3);
-                }}
-              >
-                Administrar Solicitud Individual
-              </button>
-              <button
-                id="administracionGeneral"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(5);
-                }}
-              >
-                Administración General
-              </button>
-              <button
-                id="informacionUsuario"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(6);
-                }}
-              >
-                Información de Usuario
-              </button>
-            </div>
-            <div>
-              <div className="content">
-                <CambiarVistaController
-                  VistaIndex={indexVisible}
-                  currentUser={currentUser}
-                  openSingleApplication={setinfoSolicitud}
-                />
-                <RegresarMenu />
-              </div>
+          <div className="buttonContainer_menu">
+            <button
+              id="bienvenidaEncargada"
+              className="button"
+              onClick={() => {
+                setIndexVisible(1);
+              }}
+            >
+              Bienvenida
+            </button>
+            <button
+              id="administrarSolicitudes"
+              className="button"
+              onClick={() => {
+                setIndexVisible(2);
+              }}
+            >
+              Administración de Solicitudes
+            </button>
+            <button
+              id="administrarSolicitud"
+              className="button"
+              onClick={() => {
+                setIndexVisible(3);
+              }}
+            >
+              Administrar Solicitud Individual
+            </button>
+            <button
+              id="administracionGeneral"
+              className="button"
+              onClick={() => {
+                setIndexVisible(5);
+              }}
+            >
+              Administración General
+            </button>
+            <button
+              id="informacionUsuario"
+              className="button"
+              onClick={() => {
+                setIndexVisible(6);
+              }}
+            >
+              Información de Usuario
+            </button>
+          </div>
+          <div>
+            <div className="content">
+              <CambiarVistaController
+                VistaIndex={indexVisible}
+                currentUser={currentUser}
+                openSingleApplication={setinfoSolicitud}
+              />
+              <RegresarMenu />
             </div>
           </div>
         </div>

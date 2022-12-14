@@ -23,39 +23,45 @@ function AdmnistrarSolicitudes({ openSingleApp }) {
   return (
     <div id="administrarSolicitudes">
       <div className="buttonContainer">
-        <button className="button" onClick={() => setFiltroEstatus(1)}>
-          {estatusLexico[1]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(2)}>
-          {estatusLexico[2]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(3)}>
-          {estatusLexico[3]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(4)}>
-          {estatusLexico[4]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(5)}>
-          {estatusLexico[5]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(6)}>
-          {estatusLexico[6]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(7)}>
-          {estatusLexico[7]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(8)}>
-          {estatusLexico[8]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(9)}>
-          {estatusLexico[9]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(10)}>
-          {estatusLexico[10]}
-        </button>
-        <button className="button" onClick={() => setFiltroEstatus(11)}>
-          {estatusLexico[11]}
-        </button>
+        <div className="row_1">
+          <button className="button" onClick={() => setFiltroEstatus(1)}>
+            {estatusLexico[1]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(2)}>
+            {estatusLexico[2]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(3)}>
+            {estatusLexico[3]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(4)}>
+            {estatusLexico[4]}
+          </button>
+        </div>
+        <div className="row_2">
+          <button className="button" onClick={() => setFiltroEstatus(5)}>
+            {estatusLexico[5]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(6)}>
+            {estatusLexico[6]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(7)}>
+            {estatusLexico[7]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(8)}>
+            {estatusLexico[8]}
+          </button>
+        </div>
+        <div className="row_3">
+          <button className="button" onClick={() => setFiltroEstatus(9)}>
+            {estatusLexico[9]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(10)}>
+            {estatusLexico[10]}
+          </button>
+          <button className="button" onClick={() => setFiltroEstatus(11)}>
+            {estatusLexico[11]}
+          </button>
+        </div>
       </div>
       <section className="listContainer">
         <RegistrosSolicitud

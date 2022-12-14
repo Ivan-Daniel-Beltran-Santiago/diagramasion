@@ -1,4 +1,4 @@
-function RegistroSolicitud({ registro, usuario, tramite, singleApp }) {
+function RegistroSolicitud({ registro, usuario, tramite, Cargar_matricula }) {
   const estatusLexico = {
     1: "Solicitud iniciada",
     2: "Documentos subidos en formato digital",
@@ -13,7 +13,6 @@ function RegistroSolicitud({ registro, usuario, tramite, singleApp }) {
     11: "Finiquito en espera de firma en persona",
     12: "Solicitud terminada",
   };
-
   return (
     <tr>
       <th>{registro.id_Solicitud}</th>
@@ -25,16 +24,7 @@ function RegistroSolicitud({ registro, usuario, tramite, singleApp }) {
       <th>
         <button
           className="w3-button w3-green"
-          onClick={(event) => {
-            singleApp({
-              nombreSolicitante: usuario.nombre_Completo,
-              tramiteSolicitado: tramite.nombre_Tramite,
-              estatusAlMomento: registro.estatus_Actual,
-              fechaSolicitacion: registro.fecha_Solicitud,
-              fechaUltimaActualizacion: registro.fecha_Actualizacion,
-              documentosAsociados: [],
-            });
-          }}
+          onClick={() => Cargar_matricula(usuario.matricula)}
         >
           Cargar
         </button>

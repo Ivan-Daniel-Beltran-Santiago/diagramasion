@@ -17,8 +17,12 @@ const estatusLexico = {
   12: "Solicitud terminada",
 };
 
-function AdmnistrarSolicitudes({ openSingleApp }) {
+function AdmnistrarSolicitudes({ cargarMatricula }) {
   const [filtroEstatus, setFiltroEstatus] = useState(3);
+
+  const handlecargarMatricula = (matriculaCargarSol) => {
+    cargarMatricula(matriculaCargarSol);
+  };
 
   return (
     <div id="administrarSolicitudes">
@@ -66,7 +70,7 @@ function AdmnistrarSolicitudes({ openSingleApp }) {
       <section className="listContainer">
         <RegistrosSolicitud
           estatusSolicitado={{ filtroEstatus }}
-          singleApplication={{ openSingleApp }}
+          Cargar_Matricula={{ handlecargarMatricula }}
         />
       </section>
     </div>

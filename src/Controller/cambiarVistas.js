@@ -10,13 +10,18 @@ import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 const CambiarVistaController = ({
   VistaIndex,
   currentUser,
-  openSingleApplication,
+  CargarMatricula,
+  MatriculaCargada,
 }) => {
+  const handleCargarMatricula = (matriculaCargarS) => {
+    CargarMatricula(matriculaCargarS);
+  };
+
   switch (VistaIndex) {
     case 2:
-      return <AdmnistrarSolicitudes openSingleApp={openSingleApplication} />;
+      return <AdmnistrarSolicitudes cargarMatricula={handleCargarMatricula} />;
     case 3:
-      return <AdministrarSolicitud />;
+      return <AdministrarSolicitud matriculaSolicitud={MatriculaCargada} />;
     case 5:
       return <AdministracionGeneral />;
     case 6:

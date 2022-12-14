@@ -3,11 +3,15 @@ import axios from "axios";
 import RegistroSolicitud from "./registroSolicitud";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function RegistrosSolicitud({ estatusSolicitado, singleApplication }) {
+function RegistrosSolicitud({ estatusSolicitado, Cargar_Matricula }) {
   const srvDir = new ServerConnectionConfig();
   const srvReq = srvDir.getServer() + "/RequestApplicationList";
 
   const [listaSolicitudes, setListaSolicitudes] = useState([{}]);
+
+  const handleCargar_Matricula = (matriculaCargarSolic) => {
+    Cargar_Matricula.handlecargarMatricula(matriculaCargarSolic);
+  };
 
   const retrieveRequests = useCallback(() => {
     axios
@@ -43,7 +47,7 @@ function RegistrosSolicitud({ estatusSolicitado, singleApplication }) {
               registro={item}
               usuario={registroUsuario}
               tramite={registroTramite}
-              singleApp={singleApplication}
+              Cargar_matricula={handleCargar_Matricula}
             />
           );
         })}

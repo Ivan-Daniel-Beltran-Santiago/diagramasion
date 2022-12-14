@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./menuEncargada.css";
+import { Toast } from "primereact/toast";
 
 import LogoHeader from "../View/Auxiliary/Logo_Header";
 import CambiarVistaController from "../Controller/cambiarVistas";
@@ -11,6 +12,7 @@ import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas
   const [indexVisible, setIndexVisible] = useState({ index: 1 });
+  const [matriculaSolicitudCargar, setMatriculaSolicitudCargar] = useState(0);
 
   const location = useLocation();
 
@@ -20,25 +22,26 @@ function MenuEncargada() {
     eMail: "",
   });
 
-  const [informacionSolicitud, setInformacionSolicitud] = useState({
-    nombreSolicitante: "",
-    tramiteSolicitado: "",
-    estatusAlMomento: "",
-    fechaSolicitacion: "",
-    fechaUltimaActualizacion: "",
-    documentosAsociados: [],
-  });
+  const toast = useRef(null);
 
-  function setinfoSolicitud({ InformacionSolicitud }) {
-    setInformacionSolicitud({
-      nombreSolicitante: InformacionSolicitud.nombre,
-      tramiteSolicitado: InformacionSolicitud.tramite,
-      estatusAlMomento: InformacionSolicitud.estatus,
-      fechaSolicitacion: InformacionSolicitud.fechaS,
-      fechaUltimaActualizacion: InformacionSolicitud.fechaA,
-      documentosAsociados: InformacionSolicitud.Documentos,
+  const showToast = (severityValue, summaryValue, detailValue) => {
+    toast.current.show({
+      closable: false,
+      life: 5000,
+      severity: severityValue,
+      summary: summaryValue,
+      detail: detailValue,
     });
-  }
+  };
+
+  const cargarMatriculaSolicitud = (matriculaCargar) => {
+    setMatriculaSolicitudCargar(matriculaCargar);
+    if (matriculaSolicitudCargar) {
+      showToast("success", "Solicitud cargada", "La solicitud ha sido cargada");
+    } else {
+      showToast("error", "Solicitud no cargada", "intente de nuevo");
+    }
+  };
 
   const retrieveUserInfo = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
@@ -74,6 +77,7 @@ function MenuEncargada() {
       <div>
         <div>
           <div className="buttonContainer_menu">
+            <Toast ref={toast} position="top-right" />
             <button
               id="bienvenidaEncargada"
               className="button"
@@ -125,7 +129,8 @@ function MenuEncargada() {
               <CambiarVistaController
                 VistaIndex={indexVisible}
                 currentUser={currentUser}
-                openSingleApplication={setinfoSolicitud}
+                CargarMatricula={cargarMatriculaSolicitud}
+                MatriculaCargada={matriculaSolicitudCargar}
               />
               <RegresarMenu />
             </div>

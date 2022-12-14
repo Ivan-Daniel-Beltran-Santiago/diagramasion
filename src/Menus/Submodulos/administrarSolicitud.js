@@ -3,8 +3,7 @@ import { Toast } from "primereact/toast";
 import { useEffect, useState, useRef } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function AdministrarSolicitud() {
-
+function AdministrarSolicitud({ matriculaSolicitud }) {
   const toast = useRef(null);
   const showToast = (severityValue, summaryValue, detailValue) => {
     toast.current.show({
@@ -57,7 +56,7 @@ function AdministrarSolicitud() {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/retrieveDocuments";
     axios
-      .post(srvReq, { solicitudID: "1" })
+      .post(srvReq, { solicitudID: matriculaSolicitud })
       .then((result) => {
         console.log(result.data);
         setDocumentList(result.data);
@@ -68,11 +67,12 @@ function AdministrarSolicitud() {
       });
   };
 
-  const conseguirSolicitudDebug = () => {
+  const conseguirSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/RequestUserApplication";
+    console.log(matriculaSolicitud);
     axios
-      .post(srvReq, { matriculaUsuario: "19330593" })
+      .post(srvReq, { matriculaUsuario: matriculaSolicitud })
       .then((result) => {
         setDatosSolicitud({
           nombreSolicitante: result.data[0].Usuario.nombre_Completo,
@@ -81,7 +81,7 @@ function AdministrarSolicitud() {
           fechaSolicitacion: result.data[0].fecha_Solicitud,
           fechaUltimaActualizacion: result.data[0].fecha_Actualizacion,
           retroalimentacion: result.data[0].retroalimentacion,
-          id_solicitud: result.data[0].id_Solicitud
+          id_solicitud: result.data[0].id_Solicitud,
         });
         setDocumentList(result.data[0].Documentos);
       })
@@ -91,20 +91,35 @@ function AdministrarSolicitud() {
   };
 
   const downloadDocument = (event) => {
-    var idArchivo = event.target.id - 1;
-    var archivo = documentList.at(idArchivo);
-    console.log(archivo);
+    var idArchivo = event.target.id;
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/ObtainDocument";
+
+    axios.post(srvReq, { documentoID: idArchivo }).then((result) => {
+      console.log(result.data.archivo_Documento);
+      /*
+      const url = window.URL.createObjectURL(
+        new Blob([result.data.archivo_Documento], { type: "application/pdf" })
+      );
+      var element = document.getElementById(idArchivo);
+      element.href = url;
+      element.setAttribute("download", result.data.nombre_Documento);
+      */
+    });
   };
 
   const actualizarSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/updateApplication";
     axios
-      .post(srvReq, {estatusAnterior: datosSolicitud.estatusAlMomento, 
-        retroAnterior: datosSolicitud.retroalimentacion, 
-        id: datosSolicitud.id_solicitud, nuevoEstatus: 3})  //configurar el id y el estatus a dinamico
+      .post(srvReq, {
+        estatusAnterior: datosSolicitud.estatusAlMomento,
+        retroAnterior: datosSolicitud.retroalimentacion,
+        id: datosSolicitud.id_solicitud,
+        nuevoEstatus: 3,
+      }) //configurar el id y el estatus a dinamico
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         switch (response.data.Code) {
           case 1:
             showToast(
@@ -124,17 +139,20 @@ function AdministrarSolicitud() {
             showToast("warn", "Error inesperado", "Intentelo mas tarde");
             break;
         }
-      })
-  }
+      });
+  };
 
   const solicitarSeguimiento = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/SendSeguimientoEmail";
     axios
-      .post(srvReq, {destinatario: "l19330593@hermosillo.tecnm.mx", 
-      folio:  datosSolicitud.id_solicitud, nombre: datosSolicitud.nombreSolicitante})  
+      .post(srvReq, {
+        destinatario: "l19330593@hermosillo.tecnm.mx",
+        folio: datosSolicitud.id_solicitud,
+        nombre: datosSolicitud.nombreSolicitante,
+      })
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         switch (response.data.Code) {
           case 1:
             showToast(
@@ -154,17 +172,17 @@ function AdministrarSolicitud() {
             showToast("warn", "Error inesperado", "Intentelo mas tarde");
             break;
         }
-      })
-  }
+      });
+  };
 
   useEffect(() => {
-    conseguirSolicitudDebug();
+    conseguirSolicitud();
     //conseguirDocumentos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div id="NuevaInterfaz" className="modules">
-    <Toast ref={toast} position="top-right" />
+      <Toast ref={toast} position="top-right" />
       <form className="w3-container">
         <label>Nombre del solicitante: </label>
         <label>
@@ -222,13 +240,14 @@ function AdministrarSolicitud() {
         <br />
         <br />
         <label>Lista de documentos: </label>
-        {documentList &&
+        {documentList !== undefined &&
           documentList.map(function (item) {
             return (
               <div>
-                <label id={item.id_Doc} onClick={downloadDocument}>
-                  {item.nombre_Doc}
-                </label>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
+                <a id={item.id_Documento} onClick={downloadDocument}>
+                  {item.nombre_Documento}
+                </a>
                 <br />
               </div>
             );
@@ -256,10 +275,14 @@ function AdministrarSolicitud() {
         <textarea name="retroalimentacion" cols="120" rows="8"></textarea>
       </form>
       <br />
-      <button class="w3-button w3-green" onClick={actualizarSolicitud}>Confirmar cambio de estatus</button>
+      <button class="w3-button w3-green" onClick={actualizarSolicitud}>
+        Confirmar cambio de estatus
+      </button>
       <br />
       <br />
-      <button class="w3-button w3-green" onClick={solicitarSeguimiento}>Solicitar seguimiento</button>
+      <button class="w3-button w3-green" onClick={solicitarSeguimiento}>
+        Solicitar seguimiento
+      </button>
     </div>
   );
 }

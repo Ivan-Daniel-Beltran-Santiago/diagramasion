@@ -13,6 +13,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
   });
   const [filesToVerify, setFilesToVerify] = useState(null);
   const [filesToUpload, setFilesToUpload] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   const estatusLexico = {
     0: "No se encontro ninguna solicitud",
@@ -79,6 +80,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
     const srvReq = srvDir.getServer() + "/UploadDocuments";
 
     for (var documento of filesToUpload.entries()) {
+      console.log(documento[1]);
       var buffer = await documento[1].arrayBuffer();
       var bytes = new Uint8Array(buffer);
       showToast(
@@ -159,6 +161,21 @@ function SolicitudEstudiante({ currentUserInformation }) {
         setFilesToUpload(data);
       }
     }
+    var arrayFile = [];
+    var elementoArrayFile = {
+      nombreDocumento: "",
+      indexDocumento: "",
+    };
+    var elementos = 0;
+    for (var documento of data.entries()) {
+      elementoArrayFile = {
+        nombreDocumento: documento[1].name,
+        indexDocumento: elementos,
+      };
+      arrayFile.push(elementoArrayFile);
+      elementos++;
+    }
+    setFileList(arrayFile);
   };
 
   const obtenerSolicitud = useCallback(() => {
@@ -181,7 +198,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
             : "No se encontro ninguna solicitud ",
           estatus: result.data[0] ? result.data[0].estatus_Actual : 0,
           retroalim: result.data[0]
-            ? result.data[0].retroalimentacion
+            ? result.data[0].retroalimentacion_Actual
             : "No se encontro ninguna solicitud ",
         });
       })
@@ -250,6 +267,21 @@ function SolicitudEstudiante({ currentUserInformation }) {
               onChange={onChangeHandler}
             ></input>
             <br />
+            <p>
+              <label>Documentos preparados para subir: </label>
+              <br />
+              <br />
+              {fileList !== undefined &&
+                fileList.length > 0 &&
+                fileList.map(function (item) {
+                  return (
+                    <div>
+                      <label>{item.nombreDocumento}</label>
+                      <br />
+                    </div>
+                  );
+                })}
+            </p>
             <p>
               <input
                 type="submit"

@@ -127,6 +127,36 @@ function AdministrarSolicitud() {
       })
   }
 
+  const solicitarSeguimiento = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/SendSeguimientoEmail";
+    axios
+      .post(srvReq, {destinatario: "l19330593@hermosillo.tecnm.mx", 
+      folio:  datosSolicitud.id_solicitud, nombre: datosSolicitud.nombreSolicitante})  
+      .then((response) => {
+        console.log(response.data)
+        switch (response.data.Code) {
+          case 1:
+            showToast(
+              "success",
+              "Correo enviado",
+              "La solicitud de seguimiento a sido enviada."
+            );
+            break;
+          case -1:
+            showToast(
+              "error",
+              "Correo no enviado",
+              "Porfavor confirme los datos"
+            );
+            break;
+          default:
+            showToast("warn", "Error inesperado", "Intentelo mas tarde");
+            break;
+        }
+      })
+  }
+
   useEffect(() => {
     conseguirSolicitudDebug();
     //conseguirDocumentos();
@@ -229,7 +259,7 @@ function AdministrarSolicitud() {
       <button class="w3-button w3-green" onClick={actualizarSolicitud}>Confirmar cambio de estatus</button>
       <br />
       <br />
-      <button class="w3-button w3-green">Solicitar seguimiento</button>
+      <button class="w3-button w3-green" onClick={solicitarSeguimiento}>Solicitar seguimiento</button>
     </div>
   );
 }

@@ -111,8 +111,8 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
   const actualizarSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/updateApplication";
-    let textoRetro = document.getElementById("retro").value
-    let idEvento = document.getElementById("lang").value
+    let textoRetro = document.getElementById("retro").value;
+    let idEvento = document.getElementById("lang").value;
     //console.log(idEvento)
     axios
       .post(srvReq, {
@@ -120,7 +120,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         retroAnterior: datosSolicitud.retroalimentacion,
         id: datosSolicitud.id_solicitud,
         nuevoEstatus: idEvento,
-        retroNueva: textoRetro
+        retroNueva: textoRetro,
       })
       .then((response) => {
         switch (response.data.Code) {
@@ -247,10 +247,12 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             <br />
             <br />
             <label>Lista de documentos: </label>
+            <br />
+            <br />
             {documentList !== undefined &&
               documentList.map(function (item) {
                 return (
-                  <div>
+                  <div className="documentList">
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
                     <a id={item.id_Documento} onClick={downloadDocument}>
                       {item.nombre_Documento}
@@ -265,6 +267,8 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         <div className="row_2_administrarSolicitud">
           <form className="w3-container">
             <label>Cambiar estatus: </label>
+            <br />
+            <br />
             <form className="w3-container">
               <select name="lenguajes" id="lang">
                 <option value="3">{estatusLexico[3]}</option>
@@ -281,7 +285,12 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             <br />
             <label>Retroalimentación: </label>
             <br />
-            <textarea name="retroalimentacion" cols="48" rows="8" id="retro"></textarea>
+            <textarea
+              name="retroalimentacion"
+              cols="48"
+              rows="8"
+              id="retro"
+            ></textarea>
           </form>
           <br />
           <button class="w3-button w3-green" onClick={actualizarSolicitud}>
@@ -293,6 +302,17 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             Solicitar seguimiento
           </button>
         </div>
+      </div>
+      <div className="requestInvoice">
+        <label>Folio de solicitud: </label>
+        <br />
+        <br />
+        <textarea
+          name="retroalimentacion"
+          cols="80"
+          rows="1"
+          id="retro"
+        ></textarea>
       </div>
     </div>
   );

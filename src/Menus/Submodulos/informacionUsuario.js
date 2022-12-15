@@ -118,20 +118,24 @@ function InformacionUsuario({ currentUser }) {
     <div id="informacionUsuario" className="modules">
       <Toast ref={toast} position="top-right" />
       <form className="info_usuario">
-        <label>Matricula:</label>
-        <p>{currentUser.controlNumber}</p>
-        <label>Nombre: </label>
-        <p>{currentUser.fullName}</p>
+        <label>Matricula:    </label>
+        <label>    {currentUser.controlNumber}</label>
+        <br />
+        <br />
+        <label>Nombre:    </label>
+        <label>    {currentUser.fullName}</label>
+        <br />
+        <br />
         {currentUser.currentCarrer !== undefined && (
           <div>
-            <label>Carrera: </label>
-            <p>{currentUser.currentCarrer}</p>
+            <label>Carrera:    </label>
+            <label>    {currentUser.currentCarrer}</label>
           </div>
         )}
         {currentUser.currentSemester !== undefined && (
           <div>
-            <label>Semestre: </label>
-            <p>{currentUser.currentSemester}</p>
+            <label>Semestre:    </label>
+            <label>    {currentUser.currentSemester}</label>
           </div>
         )}
       </form>

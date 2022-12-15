@@ -2,6 +2,7 @@ import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 import { Toast } from "primereact/toast";
+import { FaTrash } from "react-icons/fa";
 
 function SolicitudEstudiante({ currentUserInformation }) {
   const [requestData, setRequestData] = useState({
@@ -11,9 +12,9 @@ function SolicitudEstudiante({ currentUserInformation }) {
     estatus: "",
     retroalim: "",
   });
-  const [filesToVerify, setFilesToVerify] = useState(null);
-  const [filesToUpload, setFilesToUpload] = useState(null);
-  const [fileList, setFileList] = useState([]);
+
+  const [loadedFiles, setLoadedFiles] = useState([]);
+  const [validatedFiles, setValidatedFiles] = useState([]);
 
   const estatusLexico = {
     0: "No se encontro ninguna solicitud",
@@ -69,113 +70,90 @@ function SolicitudEstudiante({ currentUserInformation }) {
     return new Promise((resolve) => setTimeout(resolve, time));
   }
 
-  const onChangeHandler = (event) => {
-    setFilesToVerify(event.target.files);
+  const handleRemoveFile = (archivo) => {
+    const loaded = [...loadedFiles];
+    const index = loaded.indexOf(archivo);
+    loaded.splice(index, 1);
+    document.getElementById(index).style.color = "";
+    setLoadedFiles(loaded);
   };
 
-  const SubirDocumentos = async (event) => {
-    event.preventDefault();
-
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/UploadDocuments";
-
-    for (var documento of filesToUpload.entries()) {
-      console.log(documento[1]);
-      var buffer = await documento[1].arrayBuffer();
-      var bytes = new Uint8Array(buffer);
-      showToast(
-        "info",
-        "Subiendo documento",
-        "Estamos preparando para subir el documento: " + documento[1].name
-      );
-      axios
-        .post(srvReq, {
-          documentoName: documento[1].name,
-          idSolicitud: requestData.id,
-          bytes,
-        })
-        // eslint-disable-next-line no-loop-func
-        .then((result) => {
-          if (result.data.Code > 0) {
-            delay(1000);
-            showToast(
-              "success",
-              "Documento subido",
-              "El documento: " + documento[1].name + " ha sido subido con exito"
-            );
-            delay(1000);
-            document.getElementById("subirArchivos").value = null;
-            //setUploadedFiles(true);
-          } else {
-            delay(1000);
-            showToast(
-              "error",
-              "Error al subir el documento",
-              "El documento: " +
-                documento[1].name +
-                " no se ha podido subir, intente mas tarde"
-            );
-            delay(1000);
-            document.getElementById("subirArchivos").value = null;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          delay(1000);
-          showToast(
-            "error",
-            "Error al subir el documento",
-            "Intente mas tarde"
-          );
-          delay(1000);
-          document.getElementById("subirArchivos").value = null;
-        });
-    }
-    actualizarSolicitud();
+  const handleLoadedFiles = (files) => {
+    const loaded = [...loadedFiles];
+    // eslint-disable-next-line array-callback-return
+    files.some((file) => {
+      if (loaded.findIndex((f) => f.name === file.name) === -1) {
+        loaded.push(file);
+      }
+    });
+    setLoadedFiles(loaded);
   };
 
-  const validarDocumentos = async (event) => {
-    event.preventDefault();
+  const handleFileEvent = (event) => {
+    const chosenFiles = Array.prototype.slice.call(event.target.files);
+    setValidatedFiles([]);
+    handleLoadedFiles(chosenFiles);
+  };
 
-    var data = new FormData();
+  const handleValidatedFiles = (files) => {
+    const validFiles = [...validatedFiles];
+    // eslint-disable-next-line array-callback-return
+    files.some((file) => {
+      if (validFiles.findIndex((f) => f.name === file.name) === -1) {
+        validFiles.push(file);
+      }
+    });
+    setValidatedFiles(validFiles);
+  };
 
-    for (var x = 0; x < filesToVerify.length; x++) {
-      const pdfNameValidator = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
-      const isPdfNameValid = pdfNameValidator.test(filesToVerify[x].name);
-      if (filesToVerify[x].size >= 2000000) {
-        showToast(
-          "error",
-          "Tamaño de archivo",
-          "El documento: " + filesToVerify[x].name + " excede el peso de 2MB"
-        );
-      } else if (!isPdfNameValid) {
-        showToast(
-          "error",
-          "Formato de nombre",
-          "El documento: " +
-            filesToVerify[x].name +
-            " tiene un formato de nombre no permitido."
-        );
+  const validateDocuments = () => {
+    setValidatedFiles([]);
+    var validated = [];
+    for (var indice = 0; indice < loadedFiles.length; indice++) {
+      delay(1000);
+      if (loadedFiles[indice].size > 2000000) {
+        document.getElementById(
+          loadedFiles.indexOf(loadedFiles[indice])
+        ).style.color = "#ff0000";
       } else {
-        data.append("file", filesToVerify[x]);
-        setFilesToUpload(data);
+        const pdfNameValidator = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
+        const isPdfNameValid = pdfNameValidator.test(loadedFiles[indice].name);
+        if (isPdfNameValid) {
+          // eslint-disable-next-line no-loop-func
+          validated.push(loadedFiles[indice]);
+          document.getElementById(
+            loadedFiles.indexOf(loadedFiles[indice])
+          ).style.color = "";
+        } else {
+          document.getElementById(
+            loadedFiles.indexOf(loadedFiles[indice])
+          ).style.color = "#ff0000";
+        }
       }
     }
-    var arrayFile = [];
-    var elementoArrayFile = {
-      nombreDocumento: "",
-      indexDocumento: "",
-    };
-    var elementos = 0;
-    for (var documento of data.entries()) {
-      elementoArrayFile = {
-        nombreDocumento: documento[1].name,
-        indexDocumento: elementos,
-      };
-      arrayFile.push(elementoArrayFile);
-      elementos++;
+    handleValidatedFiles(validated);
+  };
+
+  const uploadDocuments = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/UploadDocuments";
+    const formData = new FormData();
+    for (var indice = 0; indice < validatedFiles.length; indice++) {
+      formData.append(
+        "pdf",
+        validatedFiles[indice],
+        validatedFiles[indice].name
+      );
     }
-    setFileList(arrayFile);
+    formData.append("text", requestData.id);
+    axios
+      .post(srvReq, formData, { idSolicitud: requestData.id })
+      .then((result) => {
+        console.log("A mimir");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const obtenerSolicitud = useCallback(() => {
@@ -256,46 +234,62 @@ function SolicitudEstudiante({ currentUserInformation }) {
           requestData.estatus === 7) && (
           <div>
             <br />
-            <label>Para subir documentos, seleccionelos aqui: </label>
-            <br />
             <input
               type="file"
               id="subirArchivos"
               name="Elegir archivos"
               accept=".pdf"
               multiple
-              onChange={onChangeHandler}
+              onChange={handleFileEvent}
+              style={{ display: "none" }}
             ></input>
+            <label htmlFor="subirArchivos">
+              <a className="w3-btn w3-light-blue">
+                Seleccionar documentos para subir
+              </a>
+            </label>
             <br />
+            <p>Los documentos deben tener un peso maximo de 2MB.</p>
+            <p>
+              El nombre de los documentos solo puede tener letras, digitos,
+              espacios, -, _ , /, \ y sin espacio antes del .pdf
+            </p>
             <p>
               <label>Documentos preparados para subir: </label>
               <br />
-              <br />
-              {fileList !== undefined &&
-                fileList.length > 0 &&
-                fileList.map(function (item) {
-                  return (
-                    <div>
-                      <label>{item.nombreDocumento}</label>
-                      <br />
-                    </div>
-                  );
-                })}
+              {loadedFiles !== undefined &&
+                loadedFiles.length > 0 &&
+                loadedFiles.map((file) => (
+                  <div>
+                    <FaTrash onClick={() => handleRemoveFile(file)} />
+                    <label id={loadedFiles.indexOf(file)}>{file.name}</label>
+                    <br />
+                  </div>
+                ))}
             </p>
             <p>
               <input
                 type="submit"
                 className="confirmDocumentUpload"
-                value="Confirmar subida de documentos"
-                onClick={validarDocumentos}
+                value="Validar documentos"
+                id="cargarDocumentosBtn"
+                onClick={validateDocuments}
+                style={{ display: loadedFiles.length > 0 ? "block" : "none" }}
               ></input>
             </p>
             <p>
               <input
                 type="submit"
                 className="confirmDocumentUpload"
-                value="Terminar de subir documentos"
-                onClick={SubirDocumentos}
+                value="Subir documentos"
+                id="subirDocumentosBtn"
+                onClick={uploadDocuments}
+                style={{
+                  display:
+                    loadedFiles.length > 0 && validatedFiles.length > 0
+                      ? "block"
+                      : "none",
+                }}
               ></input>
             </p>
           </div>

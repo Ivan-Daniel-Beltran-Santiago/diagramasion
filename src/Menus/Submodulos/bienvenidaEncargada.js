@@ -1,35 +1,40 @@
 import axios from "axios";
+import { useEffect } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
 function BienvenidaEncargada() {
-
-  let nuevas = 0
-  let documentos = 0
-  let finiquitos = 0
-  let finalizados = 0
+  let nuevas = 0;
+  let documentos = 0;
+  let finiquitos = 0;
+  let finalizados = 0;
 
   const conseguirNumeros = (estado) => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
     axios
       .post(srvReq, {
-        estatus: estado
+        estatus: estado,
       })
       .then((response) => {
-        //console.log(typeof(response.data.count))
-        return response.data.count
+        console.log(response.data);
+        return response.data.count;
       });
-  }
+  };
 
   //Falta hacer que se ejecute esta funcion bien y que a las variables no las convierta en "undefied"
   function establecer() {
-    nuevas = conseguirNumeros(1)
-    documentos = conseguirNumeros(4)
-    finiquitos = conseguirNumeros(11)
-    finalizados = conseguirNumeros(12)
+    nuevas = conseguirNumeros(1);
+    documentos = conseguirNumeros(4);
+    finiquitos = conseguirNumeros(11);
+    finalizados = conseguirNumeros(12);
 
     //console.log(documentos)
   }
+
+  useEffect(() => {
+    establecer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div id="bienvenidaEncargada" className="modules">
@@ -40,7 +45,8 @@ function BienvenidaEncargada() {
       </p>
       <p>
         <span id="documentos_fisicos">
-          Numero de solicitudes con los documentos digitales revisados actualmente: {documentos}
+          Numero de solicitudes con los documentos digitales revisados
+          actualmente: {documentos}
         </span>
       </p>
       <p>

@@ -96,7 +96,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     const srvReq = srvDir.getServer() + "/ObtainDocument";
 
     axios.post(srvReq, { documentoID: idArchivo }).then((result) => {
-      console.log(result.data.archivo_Documento);
+      console.log(result.data);
       /*
       const url = window.URL.createObjectURL(
         new Blob([result.data.archivo_Documento], { type: "application/pdf" })

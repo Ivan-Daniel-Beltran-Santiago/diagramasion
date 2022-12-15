@@ -70,7 +70,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
   const conseguirSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/RequestUserApplication";
-    console.log(matriculaSolicitud);
+    //console.log(matriculaSolicitud);
     axios
       .post(srvReq, { matriculaUsuario: matriculaSolicitud })
       .then((result) => {
@@ -111,15 +111,18 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
   const actualizarSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/updateApplication";
+    let textoRetro = document.getElementById("retro").value
+    let idEvento = document.getElementById("lang").value
+    //console.log(idEvento)
     axios
       .post(srvReq, {
         estatusAnterior: datosSolicitud.estatusAlMomento,
         retroAnterior: datosSolicitud.retroalimentacion,
         id: datosSolicitud.id_solicitud,
-        nuevoEstatus: 3,
-      }) //configurar el id y el estatus a dinamico
+        nuevoEstatus: idEvento,
+        retroNueva: textoRetro
+      })
       .then((response) => {
-        console.log(response.data);
         switch (response.data.Code) {
           case 1:
             showToast(
@@ -264,21 +267,21 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             <label>Cambiar estatus: </label>
             <form className="w3-container">
               <select name="lenguajes" id="lang">
-                <option value="estatus3">{estatusLexico[3]}</option>
-                <option value="estatus4">{estatusLexico[4]}</option>
-                <option value="estatus5">{estatusLexico[5]}</option>
-                <option value="estatus6">{estatusLexico[6]}</option>
-                <option value="estatus7">{estatusLexico[7]}</option>
-                <option value="estatus9">{estatusLexico[9]}</option>
-                <option value="estatus10">{estatusLexico[10]}</option>
-                <option value="estatus11">{estatusLexico[11]}</option>
-                <option value="estatus12">{estatusLexico[12]}</option>
+                <option value="3">{estatusLexico[3]}</option>
+                <option value="4">{estatusLexico[4]}</option>
+                <option value="5">{estatusLexico[5]}</option>
+                <option value="6">{estatusLexico[6]}</option>
+                <option value="7">{estatusLexico[7]}</option>
+                <option value="9">{estatusLexico[9]}</option>
+                <option value="10">{estatusLexico[10]}</option>
+                <option value="11">{estatusLexico[11]}</option>
+                <option value="12">{estatusLexico[12]}</option>
               </select>
             </form>
             <br />
             <label>Retroalimentación: </label>
             <br />
-            <textarea name="retroalimentacion" cols="48" rows="8"></textarea>
+            <textarea name="retroalimentacion" cols="48" rows="8" id="retro"></textarea>
           </form>
           <br />
           <button class="w3-button w3-green" onClick={actualizarSolicitud}>

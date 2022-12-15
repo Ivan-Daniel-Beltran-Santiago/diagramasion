@@ -198,7 +198,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
             : "No se encontro ninguna solicitud ",
           estatus: result.data[0] ? result.data[0].estatus_Actual : 0,
           retroalim: result.data[0]
-            ? result.data[0].retroalimentacion_Actual
+            ? result.data[0].retroalimentacion
             : "No se encontro ninguna solicitud ",
         });
       })

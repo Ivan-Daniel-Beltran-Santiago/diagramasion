@@ -50,6 +50,8 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     estatusAlMomento: "",
     fechaSolicitacion: "",
     fechaUltimaActualizacion: "",
+    retroalimentacion: "",
+    folio_Solicitud: ""
   });
 
   const conseguirDocumentos = () => {
@@ -80,8 +82,9 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
           estatusAlMomento: result.data[0].estatus_Actual,
           fechaSolicitacion: result.data[0].fecha_Solicitud,
           fechaUltimaActualizacion: result.data[0].fecha_Actualizacion,
-          retroalimentacion: result.data[0].retroalimentacion,
+          retroalimentacion: result.data[0].retroalimentacion_Actual,
           id_solicitud: result.data[0].id_Solicitud,
+          folio_Solicitud: result.data[0].folio_Solicitud
         });
         setDocumentList(result.data[0].Documentos);
       })
@@ -112,37 +115,64 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/updateApplication";
     let textoRetro = document.getElementById("retro").value;
+    let numfolio = 0;
     let idEvento = document.getElementById("lang").value;
-    //console.log(idEvento)
-    axios
-      .post(srvReq, {
-        estatusAnterior: datosSolicitud.estatusAlMomento,
-        retroAnterior: datosSolicitud.retroalimentacion,
-        id: datosSolicitud.id_solicitud,
-        nuevoEstatus: idEvento,
-        retroNueva: textoRetro,
-      })
-      .then((response) => {
-        switch (response.data.Code) {
-          case 1:
-            showToast(
-              "success",
-              "Solicitud actualizada",
-              "La actualizacion a sido exitosa"
-            );
-            break;
-          case -1:
-            showToast(
-              "error",
-              "Actualizacion incorrecta",
-              "Porfavor cheque los datos"
-            );
-            break;
-          default:
-            showToast("warn", "Error inesperado", "Intentelo mas tarde");
-            break;
-        }
-      });
+
+    //console.log(numfolio)
+
+    if (isNaN(Number(document.getElementById("Folio").value)) || (Number(document.getElementById("Folio").value)) < 0) {
+      showToast(
+        "error",
+        "Folio invalido",
+        "Debe de ser un folio Numerico"
+      );
+    }
+    else {
+
+      if (Number(document.getElementById("Folio").value) != 0) {
+        numfolio = Number(document.getElementById("Folio").value);
+        //console.log(true)
+      }
+      else {
+        numfolio = datosSolicitud.folio_Solicitud;
+        console.log(false)
+      }
+      //console.log(Number(document.getElementById("Folio").value))
+
+      axios
+        .post(srvReq, {
+          estatusAnterior: datosSolicitud.estatusAlMomento,
+          retroAnterior: datosSolicitud.retroalimentacion,
+          id: datosSolicitud.id_solicitud,
+          nuevoEstatus: idEvento,
+          retroNueva: textoRetro,
+          folio: numfolio
+        })
+        .then((response) => {
+          switch (response.data.Code) {
+            case 1:
+              document.getElementById("Folio").value = ""
+              document.getElementById("retro").value = ""
+              conseguirSolicitud();
+              showToast(
+                "success",
+                "Solicitud actualizada",
+                "La actualizacion a sido exitosa al estado: " + idEvento
+              );
+              break;
+            case -1:
+              showToast(
+                "error",
+                "Actualizacion incorrecta",
+                "Porfavor cheque los datos"
+              );
+              break;
+            default:
+              showToast("warn", "Error inesperado", "Intentelo mas tarde");
+              break;
+          }
+        });
+    }
   };
 
   const solicitarSeguimiento = () => {
@@ -151,7 +181,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     axios
       .post(srvReq, {
         destinatario: "l19330593@hermosillo.tecnm.mx",
-        folio: datosSolicitud.id_solicitud,
+        folio: datosSolicitud.folio_Solicitud,
         nombre: datosSolicitud.nombreSolicitante,
       })
       .then((response) => {
@@ -228,7 +258,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
                   style={{
                     width:
                       barraProgresoEstatus[
-                        datosSolicitud.estatusAlMomento ?? 0
+                      datosSolicitud.estatusAlMomento ?? 0
                       ] + "%",
                   }}
                 >
@@ -308,10 +338,12 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         <br />
         <br />
         <textarea
-          name="retroalimentacion"
+          name="Num_folio"
           cols="80"
           rows="1"
-          id="retro"
+          id="Folio"
+          placeholder={datosSolicitud.folio_Solicitud ??
+            "No se tiene asignado algun folio"}
         ></textarea>
       </div>
     </div>

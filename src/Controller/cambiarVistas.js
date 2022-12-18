@@ -35,7 +35,7 @@ const CambiarVistaController = ({
       if (VistaIndex < 7) {
         return <BienvenidaEncargada />;
       } else {
-        return <BienvenidaEstudiante />;
+        return <BienvenidaEstudiante currentUser={currentUser} />;
       }
   }
 };

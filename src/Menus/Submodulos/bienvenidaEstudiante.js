@@ -28,8 +28,8 @@ function BienvenidaEstudiante({ currentUser }) {
             :  "No se encontro ninguna solicitud ",
           fecha_actu: result.data[0]
             ? result.data[0].fecha_Actualizacion
-            : " No se encontro ninguna solicitud ",
-          estatus: result.data[0] ? result.data[0].estatus_Actual : 0,
+            : " No hay fecha establecida ",
+          estatus: result.data[0] ? result.data[0].estatus_Actual : "No hay una solicitud activa",
           retroalim: result.data[0]
             ? result.data[0].retroalimentacion_Actual
             : " No se encontro ninguna solicitud ",
@@ -54,7 +54,7 @@ function BienvenidaEstudiante({ currentUser }) {
       </p>
       <p>
         <span className="impedimentos_en_Solicitud">
-          La ultima modificacion a sido a fecha de {requestData.fecha_actu}, favor de estar atento a actualizaciones.
+          La ultima modificacion a sido a fecha de "{requestData.fecha_actu}", favor de estar atento a actualizaciones.
         </span>
       </p>
       <p>

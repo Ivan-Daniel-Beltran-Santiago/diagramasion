@@ -11,26 +11,111 @@ function BienvenidaEncargada() {
     finalizados: 0
   });
 
-  const conseguirNumeros = (estado) => {
+  const conseguirNuevos = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
+    let n = 0
+    let d = 0
+    let f = 0
+    let fn = 0
+    axios
+      .post(srvReq, {
+        estatus: 1,
+      })
+      .then((response) => {
+        n = response.data
+      });
+    axios
+      .post(srvReq, {
+        estatus: 2,
+      })
+      .then((response) => {
+        d= response.data
+      });
+    axios
+      .post(srvReq, {
+        estatus: 11,
+      })
+      .then((response) => {
+        f= response.data
+      });
+    axios
+      .post(srvReq, {
+        estatus: 12,
+      })
+      .then((response) => {
+        fn= response.data
+        //console.log(n, d, f, fn)
+        setConteo({
+          nuevas: n,
+          documentos: d,
+          finiquitos: f,
+          finalizados: fn
+        })
+      });
+    //console.log(n, d, f, fn)
+  };
+
+  const conseguirDocu = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
     axios
       .post(srvReq, {
-        estatus: estado,
+        estatus: 2,
       })
       .then((response) => {
-        if(estado == 11)
         setConteo({
-          finiquitos: response.data
+          nuevas: conteo.nuevas,
+          documentos: 2,
+          finiquitos: conteo.finiquitos,
+          finalizados: conteo.finalizados
         })
       });
-    console.log(conteo)
+    //console.log(conteo.documentos)
+  };
+
+  const conseguirFini = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
+    axios
+      .post(srvReq, {
+        estatus: 11,
+      })
+      .then((response) => {
+        return 3
+        console.log("Finiquitos " + response.data)
+      });
+    //console.log(conteo.finiquitos)
+  };
+
+  const conseguirFinal = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
+    axios
+      .post(srvReq, {
+        estatus: 12,
+      })
+      .then((response) => {
+        setConteo({
+          nuevas: conteo.nuevas,
+          documentos: conteo.documentos,
+          finiquitos: conteo.finiquitos,
+          finalizados: response.data
+        })
+      });
+    //console.log(conteo.documentos)
   };
 
 
   useEffect(() => {
-    conseguirNumeros(11)
-    console.log(conteo)
+    conseguirNuevos()
+    //console.log(conteo)
+    //conseguirDocu()
+    //console.log(conteo)
+    //conseguirFini()
+    //console.log(conteo)
+    //conseguirFinal()
+    //console.log(conteo)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

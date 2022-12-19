@@ -73,9 +73,10 @@ function SolicitudEstudiante({ currentUserInformation }) {
   const handleRemoveFile = (archivo) => {
     const loaded = [...loadedFiles];
     const index = loaded.indexOf(archivo);
-    loaded.splice(index, 1);
     document.getElementById(index).style.color = "";
+    loaded.splice(index, 1);
     setLoadedFiles(loaded);
+    setValidatedFiles([]);
   };
 
   const handleLoadedFiles = (files) => {
@@ -132,9 +133,19 @@ function SolicitudEstudiante({ currentUserInformation }) {
       }
     }
     handleValidatedFiles(validated);
+    showToast(
+      "info",
+      "Archivos validados",
+      "Aquellos archivos en rojo no serán procesados por el sistema"
+    );
   };
 
   const uploadDocuments = () => {
+    showToast(
+      "info",
+      "Subiendo archivos",
+      "Subiendo archivos a la base de datos"
+    );
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/UploadDocuments";
     const formData = new FormData();
@@ -149,10 +160,24 @@ function SolicitudEstudiante({ currentUserInformation }) {
     axios
       .post(srvReq, formData, { idSolicitud: requestData.id })
       .then((result) => {
-        console.log("A mimir");
+        if (result.data.successUpload) {
+          showToast(
+            "success",
+            "Archivos subidos correctamente",
+            "Los archivos han sido subidos exitosamente"
+          );
+          actualizarSolicitud();
+        } else {
+          showToast(
+            "error",
+            "Error al subir los archivos",
+            "Intente mas tarde"
+          );
+        }
       })
       .catch((error) => {
         console.log(error);
+        showToast("error", "Error al subir los archivos", "Intente mas tarde");
       });
   };
 
@@ -196,7 +221,6 @@ function SolicitudEstudiante({ currentUserInformation }) {
         retroAnterior: requestData.retroalim,
       })
       .then((result) => {
-        console.log(result);
         obtenerSolicitud();
       })
       .catch((error) => {
@@ -244,9 +268,12 @@ function SolicitudEstudiante({ currentUserInformation }) {
               style={{ display: "none" }}
             ></input>
             <label htmlFor="subirArchivos">
-              <a className="w3-btn w3-light-blue">
-                Seleccionar documentos para subir
-              </a>
+              {
+                // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                <a className="w3-btn w3-light-blue">
+                  Seleccionar documentos para subir
+                </a>
+              }
             </label>
             <br />
             <p>Los documentos deben tener un peso maximo de 2MB.</p>

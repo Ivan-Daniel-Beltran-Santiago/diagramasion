@@ -51,23 +51,8 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     fechaSolicitacion: "",
     fechaUltimaActualizacion: "",
     retroalimentacion: "",
-    folio_Solicitud: ""
+    folio_Solicitud: "",
   });
-
-  const conseguirDocumentos = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/retrieveDocuments";
-    axios
-      .post(srvReq, { solicitudID: matriculaSolicitud })
-      .then((result) => {
-        console.log(result.data);
-        setDocumentList(result.data);
-        console.log(documentList);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   const conseguirSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
@@ -84,7 +69,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
           fechaUltimaActualizacion: result.data[0].fecha_Actualizacion,
           retroalimentacion: result.data[0].retroalimentacion_Actual,
           id_solicitud: result.data[0].id_Solicitud,
-          folio_Solicitud: result.data[0].folio_Solicitud
+          folio_Solicitud: result.data[0].folio_Solicitud,
         });
         setDocumentList(result.data[0].Documentos);
       })
@@ -98,16 +83,21 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/ObtainDocument";
 
-    axios.post(srvReq, { documentoID: idArchivo }).then((result) => {
-      console.log(result.data);
-      /*
-      const url = window.URL.createObjectURL(
-        new Blob([result.data.archivo_Documento], { type: "application/pdf" })
-      );
-      var element = document.getElementById(idArchivo);
-      element.href = url;
-      element.setAttribute("download", result.data.nombre_Documento);
-      */
+    axios({
+      url: srvReq,
+      method: "GET",
+      responseType: "blob",
+      params: { documentoID: idArchivo },
+    }).then((response) => {
+      console.log(response.data);
+      const href = URL.createObjectURL(response.data);
+      const link = document.createElement("a");
+      link.href = href;
+      link.setAttribute("download", "Documento.pdf");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
     });
   };
 
@@ -120,22 +110,18 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
 
     //console.log(numfolio)
 
-    if (isNaN(Number(document.getElementById("Folio").value)) || (Number(document.getElementById("Folio").value)) < 0) {
-      showToast(
-        "error",
-        "Folio invalido",
-        "Debe de ser un folio Numerico"
-      );
-    }
-    else {
-
+    if (
+      isNaN(Number(document.getElementById("Folio").value)) ||
+      Number(document.getElementById("Folio").value) < 0
+    ) {
+      showToast("error", "Folio invalido", "Debe de ser un folio Numerico");
+    } else {
       if (Number(document.getElementById("Folio").value) != 0) {
         numfolio = Number(document.getElementById("Folio").value);
         //console.log(true)
-      }
-      else {
+      } else {
         numfolio = datosSolicitud.folio_Solicitud;
-        console.log(false)
+        console.log(false);
       }
       //console.log(Number(document.getElementById("Folio").value))
 
@@ -146,13 +132,13 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
           id: datosSolicitud.id_solicitud,
           nuevoEstatus: idEvento,
           retroNueva: textoRetro,
-          folio: numfolio
+          folio: numfolio,
         })
         .then((response) => {
           switch (response.data.Code) {
             case 1:
-              document.getElementById("Folio").value = ""
-              document.getElementById("retro").value = ""
+              document.getElementById("Folio").value = "";
+              document.getElementById("retro").value = "";
               conseguirSolicitud();
               showToast(
                 "success",
@@ -258,7 +244,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
                   style={{
                     width:
                       barraProgresoEstatus[
-                      datosSolicitud.estatusAlMomento ?? 0
+                        datosSolicitud.estatusAlMomento ?? 0
                       ] + "%",
                   }}
                 >
@@ -342,8 +328,9 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
           cols="80"
           rows="1"
           id="Folio"
-          placeholder={datosSolicitud.folio_Solicitud ??
-            "No se tiene asignado algun folio"}
+          placeholder={
+            datosSolicitud.folio_Solicitud ?? "No se tiene asignado algun folio"
+          }
         ></textarea>
       </div>
     </div>

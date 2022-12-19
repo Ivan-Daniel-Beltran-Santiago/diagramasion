@@ -116,7 +116,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     ) {
       showToast("error", "Folio invalido", "Debe de ser un folio Numerico");
     } else {
-      if (Number(document.getElementById("Folio").value) != 0) {
+      if (Number(document.getElementById("Folio").value) !== 0) {
         numfolio = Number(document.getElementById("Folio").value);
         //console.log(true)
       } else {

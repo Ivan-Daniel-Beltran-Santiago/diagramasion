@@ -3,55 +3,54 @@ import { useEffect, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
 function BienvenidaEncargada() {
-
   const [conteo, setConteo] = useState({
     nuevas: 0,
     documentos: 0,
     finiquitos: 0,
-    finalizados: 0
+    finalizados: 0,
   });
 
   const conseguirNuevos = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
-    let n = 0
-    let d = 0
-    let f = 0
-    let fn = 0
+    let n = 0;
+    let d = 0;
+    let f = 0;
+    let fn = 0;
     axios
       .post(srvReq, {
         estatus: 1,
       })
       .then((response) => {
-        n = response.data
+        n = response.data;
       });
     axios
       .post(srvReq, {
         estatus: 2,
       })
       .then((response) => {
-        d= response.data
+        d = response.data;
       });
     axios
       .post(srvReq, {
         estatus: 11,
       })
       .then((response) => {
-        f= response.data
+        f = response.data;
       });
     axios
       .post(srvReq, {
         estatus: 12,
       })
       .then((response) => {
-        fn= response.data
+        fn = response.data;
         //console.log(n, d, f, fn)
         setConteo({
           nuevas: n,
           documentos: d,
           finiquitos: f,
-          finalizados: fn
-        })
+          finalizados: fn,
+        });
       });
     //console.log(n, d, f, fn)
   };
@@ -68,8 +67,8 @@ function BienvenidaEncargada() {
           nuevas: conteo.nuevas,
           documentos: 2,
           finiquitos: conteo.finiquitos,
-          finalizados: conteo.finalizados
-        })
+          finalizados: conteo.finalizados,
+        });
       });
     //console.log(conteo.documentos)
   };
@@ -82,8 +81,8 @@ function BienvenidaEncargada() {
         estatus: 11,
       })
       .then((response) => {
-        return 3
-        console.log("Finiquitos " + response.data)
+        console.log("Finiquitos " + response.data);
+        return 3;
       });
     //console.log(conteo.finiquitos)
   };
@@ -100,15 +99,14 @@ function BienvenidaEncargada() {
           nuevas: conteo.nuevas,
           documentos: conteo.documentos,
           finiquitos: conteo.finiquitos,
-          finalizados: response.data
-        })
+          finalizados: response.data,
+        });
       });
     //console.log(conteo.documentos)
   };
 
-
   useEffect(() => {
-    conseguirNuevos()
+    conseguirNuevos();
     //console.log(conteo)
     //conseguirDocu()
     //console.log(conteo)
@@ -134,7 +132,8 @@ function BienvenidaEncargada() {
       </p>
       <p>
         <span id="finiquito_espera">
-          Numero de solicitudes esperando el finiquito actualmente: {conteo.finiquitos}
+          Numero de solicitudes esperando el finiquito actualmente:{" "}
+          {conteo.finiquitos}
         </span>
       </p>
       <p>

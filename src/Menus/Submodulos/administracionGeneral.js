@@ -11,6 +11,7 @@ function AdministracionGeneral() {
   });
   const [validDataRange, setValidDataRange] = useState(false);
   const [newUsers, setNewUsers] = useState([]);
+  const [exitos, setExitos] = useState(0);
 
   const toast = useRef(null);
 
@@ -79,6 +80,7 @@ function AdministracionGeneral() {
   const uploadNewUsers = (event) => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/SubirUsuarios";
+    setExitos(0);
 
     for (var indice = 0; indice < newUsers.length; indice++) {
       let matricula = newUsers[indice][0];
@@ -100,12 +102,17 @@ function AdministracionGeneral() {
           semestreUser: semestre,
         })
         .then((result) => {
-          console.log(result.data);
+          console.log(result.data.Code);
         })
         .catch((error) => {
           console.log(error);
         });
     }
+    showToast(
+      "success",
+      "Inicios de sesión",
+      "Todos los inicios de sesión han sido cargados con exito."
+    );
   };
 
   const obtenerEstadisticas = (event) => {

@@ -89,7 +89,6 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
       responseType: "blob",
       params: { documentoID: idArchivo },
     }).then((response) => {
-      console.log(response.data);
       const href = URL.createObjectURL(response.data);
       const link = document.createElement("a");
       link.href = href;

@@ -119,10 +119,38 @@ function AdministracionGeneral() {
     event.preventDefault();
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/ObtenerConteoEstadistico";
+    /*
     axios
       .get(srvReq, { params: dateRanges })
       .then((result) => {
         console.log(result.data);
+        const href = URL.createObjectURL(result.data);
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", "Documento.pdf");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      */
+    axios({
+      url: srvReq,
+      method: "GET",
+      responseType: "blob",
+    })
+      .then((response) => {
+        const href = URL.createObjectURL(response.data);
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", "Documento.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(href);
       })
       .catch((error) => {
         console.log(error);

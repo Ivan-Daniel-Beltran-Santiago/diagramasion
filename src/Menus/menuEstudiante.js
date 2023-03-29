@@ -3,9 +3,10 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 import "./menuEstudiante.css";
-import VistaMenuActual from "./cambiarVistas";
-import Header from "../header";
-import RegresarMenu from "./regresarMenu";
+import LogoHeader from "../View/Auxiliary/Logo_Header";
+import CambiarVistaController from "../Controller/cambiarVistas";
+import RegresarMenu from "../View/Auxiliary/regresarMenu";
+import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 
 function MenuEstudiante() {
   //Uso del State para cambiarse entre ventanas
@@ -22,17 +23,20 @@ function MenuEstudiante() {
   });
 
   const retrieveUserInfo = useCallback(() => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/StudentInfo";
+
     axios
-      .post("http://localhost:3001/StudentInfo", {
+      .post(srvReq, {
         loginID: location.state[0].loginID,
       })
       .then((response) => {
         setCurrentUser({
-          controlNumber: response.data[0].matricula,
-          fullName: response.data[0].nombre_C,
-          eMail: response.data[0].correo_e,
-          currentCarrer: response.data[0].carrera,
-          currentSemester: response.data[0].semestre,
+          controlNumber: response.data.matricula,
+          fullName: response.data.nombre_Completo,
+          eMail: response.data.correo_e,
+          currentCarrer: response.data.Estudiante.carrera,
+          currentSemester: response.data.Estudiante.semestre,
         });
       })
       .catch((err) => {
@@ -48,7 +52,7 @@ function MenuEstudiante() {
 
   return (
     <div className="App">
-      <Header />
+      <LogoHeader />
       <div>
         <div>
           <div className="content-section">
@@ -84,7 +88,7 @@ function MenuEstudiante() {
             </div>
             <div>
               <div className="content">
-                <VistaMenuActual
+                <CambiarVistaController
                   VistaIndex={indexVisible}
                   currentUser={currentUser}
                 />

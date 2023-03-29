@@ -1,40 +1,43 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+import SolicitarRegistroTramite from "../../View/Secondary/solicitarTramiteReg";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function SolicitarTramite() {
-  const accordionData = {
-    title: "Nombre del trámite",
-  };
+function SolicitarTramite({ CurretActiveUser }) {
+  const [transactionList, setTransactionList] = useState([{}]);
 
-  const { title } = accordionData;
+  const retrieveTransactions = useCallback(() => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/RequestTransactionList";
 
-  const [isActive, setIsActive] = useState(false);
+    axios
+      .post(srvReq)
+      .then((response) => {
+        setTransactionList(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    retrieveTransactions();
+  }, [retrieveTransactions]);
 
   return (
     <div id="administrarSolicitudes" className="modules">
-      <React.Fragment>
-        <div className="nombreTramite">
-          <div className="accordion-item">
-            <div
-              className="tituloAcordeon"
-              onClick={() => setIsActive(!isActive)}
-            >
-              <div>{title}</div>
-              <div>{isActive ? "-" : "+"}</div>
-            </div>
-            {isActive && (
-              <div className="contenidoAcordeon">
-                <p>
-                  <label>Información:</label>
-                </p>
-                <p>
-                  <label>Requisitos:</label>
-                </p>
-                <button className="solicitarTramite">Solicitar</button>
-              </div>
-            )}
-          </div>
-        </div>
-      </React.Fragment>
+      {transactionList.map(function (item) {
+        const metadata = item.Tramite_Ms;
+        return (
+          <SolicitarRegistroTramite
+            nombre={item.nombre_Tramite}
+            idTramite={item.id_Tramite}
+            informacion={metadata ? metadata[0] : ""}
+            requisitos={metadata ? metadata[1] : ""}
+            User={CurretActiveUser}
+          />
+        );
+      })}
     </div>
   );
 }

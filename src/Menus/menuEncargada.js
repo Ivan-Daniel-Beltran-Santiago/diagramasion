@@ -1,15 +1,18 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./menuEncargada.css";
+import { Toast } from "primereact/toast";
 
-import Header from "../header";
-import VistaMenuActual from "./cambiarVistas";
-import RegresarMenu from "./regresarMenu";
+import LogoHeader from "../View/Auxiliary/Logo_Header";
+import CambiarVistaController from "../Controller/cambiarVistas";
+import RegresarMenu from "../View/Auxiliary/regresarMenu";
+import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas
   const [indexVisible, setIndexVisible] = useState({ index: 1 });
+  const [matriculaSolicitudCargar, setMatriculaSolicitudCargar] = useState(0);
 
   const location = useLocation();
 
@@ -19,16 +22,40 @@ function MenuEncargada() {
     eMail: "",
   });
 
+  const toast = useRef(null);
+
+  const showToast = (severityValue, summaryValue, detailValue) => {
+    toast.current.show({
+      closable: false,
+      life: 5000,
+      severity: severityValue,
+      summary: summaryValue,
+      detail: detailValue,
+    });
+  };
+
+  const cargarMatriculaSolicitud = (matriculaCargar) => {
+    setMatriculaSolicitudCargar(matriculaCargar);
+    if (matriculaSolicitudCargar) {
+      showToast("success", "Solicitud cargada", "La solicitud ha sido cargada");
+    } else {
+      showToast("error", "Solicitud no cargada", "intente de nuevo");
+    }
+  };
+
   const retrieveUserInfo = useCallback(() => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/AdminInfo";
+
     axios
-      .post("http://localhost:3001/AdminInfo", {
+      .post(srvReq, {
         loginID: location.state[0].loginID,
       })
       .then((response) => {
         setCurrentUser({
-          controlNumber: response.data[0].matricula,
-          fullName: response.data[0].nombre_C,
-          eMail: response.data[0].correo_e,
+          controlNumber: response.data.matricula,
+          fullName: response.data.nombre_C,
+          eMail: response.data.correo_e,
         });
       })
       .catch((err) => {
@@ -46,56 +73,66 @@ function MenuEncargada() {
   //El menú de vistas
   return (
     <div className="App">
-      <Header />
+      <LogoHeader />
       <div>
         <div>
-          <div className="content-section">
-            <div className="contentSelector">
-              <button
-                id="bienvenidaEncargada"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(1);
-                }}
-              >
-                Bienvenida
-              </button>
-              <button
-                id="administrarSolicitudes"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(2);
-                }}
-              >
-                Administración de Solicitudes
-              </button>
-              <button
-                id="administracionGeneral"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(5);
-                }}
-              >
-                Administración General
-              </button>
-              <button
-                id="informacionUsuario"
-                className="button"
-                onClick={() => {
-                  setIndexVisible(6);
-                }}
-              >
-                Información de Usuario
-              </button>
-            </div>
-            <div>
-              <div className="content">
-                <VistaMenuActual
-                  VistaIndex={indexVisible}
-                  currentUser={currentUser}
-                />
-                <RegresarMenu />
-              </div>
+          <div className="buttonContainer_menu">
+            <Toast ref={toast} position="top-right" />
+            <button
+              id="bienvenidaEncargada"
+              className="button"
+              onClick={() => {
+                setIndexVisible(1);
+              }}
+            >
+              Bienvenida
+            </button>
+            <button
+              id="administrarSolicitudes"
+              className="button"
+              onClick={() => {
+                setIndexVisible(2);
+              }}
+            >
+              Administración de Solicitudes
+            </button>
+            <button
+              id="administrarSolicitud"
+              className="button"
+              onClick={() => {
+                setIndexVisible(3);
+              }}
+            >
+              Administrar Solicitud Individual
+            </button>
+            <button
+              id="administracionGeneral"
+              className="button"
+              onClick={() => {
+                setIndexVisible(5);
+              }}
+            >
+              Administración General
+            </button>
+            <button
+              id="informacionUsuario"
+              className="button"
+              onClick={() => {
+                setIndexVisible(6);
+              }}
+            >
+              Información de Usuario
+            </button>
+          </div>
+          <div>
+            <div className="content">
+              <CambiarVistaController
+                VistaIndex={indexVisible}
+                currentUser={currentUser}
+                CargarMatricula={cargarMatriculaSolicitud}
+                MatriculaCargada={matriculaSolicitudCargar}
+              />
+              <RegresarMenu />
             </div>
           </div>
         </div>

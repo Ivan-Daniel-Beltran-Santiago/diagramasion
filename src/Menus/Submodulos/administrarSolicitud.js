@@ -120,7 +120,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         //console.log(true)
       } else {
         numfolio = datosSolicitud.folio_Solicitud;
-        console.log(false);
+        //console.log(false);
       }
       //console.log(Number(document.getElementById("Folio").value))
 

@@ -6,6 +6,7 @@ import SolicitarTramite from "../Menus/Submodulos/solicitarTramite";
 import SolicitudEstudiante from "../Menus/Submodulos/solicitudEstudiante";
 import InformacionUsuario from "../Menus/Submodulos/informacionUsuario";
 import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
+import AdministracionUsuarios from "../Menus/Submodulos/AdministracionUsuarios";
 
 const CambiarVistaController = ({
   VistaIndex,
@@ -31,6 +32,8 @@ const CambiarVistaController = ({
       return <SolicitarTramite CurretActiveUser={currentUser} />;
     case 9:
       return <SolicitudEstudiante currentUserInformation={currentUser} />;
+    case 15:
+      return <AdministracionUsuarios />;
     default:
       if (VistaIndex < 7) {
         return <BienvenidaEncargada />;

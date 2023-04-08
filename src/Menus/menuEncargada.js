@@ -123,6 +123,15 @@ function MenuEncargada() {
             >
               Información de Usuario
             </button>
+            <button
+              id="administracionUsuarios"
+              className="button"
+              onClick={() => {
+                setIndexVisible(15);
+              }}
+            >
+              Administración de Usuarios
+            </button>
           </div>
           <div>
             <div className="content">

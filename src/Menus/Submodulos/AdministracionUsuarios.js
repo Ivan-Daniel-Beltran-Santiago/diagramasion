@@ -1,0 +1,284 @@
+import { useState, useRef } from "react";
+import * as XLSX from "xlsx";
+import axios from "axios";
+import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
+import { Toast } from "primereact/toast";
+
+function AdministracionUsuarios() {
+  const [registroUsuarios, setRegistroUsuarios] = useState([]);
+  const [permitirExcel, setPermitirExcel] = useState(false);
+  const [esEncargado, setEsEncargado] = useState(false);
+
+  //Alertas
+  const toast = useRef(null);
+  const showToast = (severityValue, summaryValue, detailValue) => {
+    toast.current.show({
+      closable: false,
+      life: 7000,
+      severity: severityValue,
+      summary: summaryValue,
+      detail: detailValue,
+    });
+  };
+
+  //Registra a todos los usuarios y los prepara para ser dados de alta en la base de datos, tomando el cuenta solo los valores unicos
+  const handleNewUsers = (array) => {
+    const nuevoRegistroUsuarios = [...registroUsuarios];
+    showToast(
+      "info",
+      "Registros de Usuarios",
+      "Se esta procesando el archivo, por favor espere un momento."
+    );
+    try {
+      // eslint-disable-next-line array-callback-return
+      array.some((file) => {
+        if (nuevoRegistroUsuarios.findIndex((f) => (f[0] === file[0]) === -1)) {
+          nuevoRegistroUsuarios.push(file);
+        }
+      });
+      setRegistroUsuarios(nuevoRegistroUsuarios);
+    } catch (exception) {
+      showToast(
+        "error",
+        "Registros de Usuarios",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    } finally {
+      showToast(
+        "success",
+        "Registros de Usuarios",
+        "Archivo procesado con exito."
+      );
+      setPermitirExcel(true);
+    }
+  };
+
+  //Lee el archivo y mantiene los registros en memoria
+  const handleFileChange = async (event) => {
+    event.preventDefault();
+
+    setRegistroUsuarios([{}]);
+
+    const file = event.target.files[0];
+    const data = await file.arrayBuffer();
+    const workbook = XLSX.read(data);
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+      header: 1,
+      defval: "",
+    });
+
+    handleNewUsers(jsonData);
+  };
+
+  //Toma todos los nuevos registros y los sube a la base de datos de uno en uno
+  const uploadNewUsers = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/SubirUsuarios";
+
+    showToast(
+      "info",
+      "Inicios de sesión",
+      "Se estan procesando los registros, por favor espere un momento."
+    );
+    try {
+      for (var indice = 0; indice < registroUsuarios.length; indice++) {
+        let matricula = registroUsuarios[indice][0];
+        let nombre_Completo =
+          registroUsuarios[indice][1] + //Apellido Paterno
+          registroUsuarios[indice][2] + //Apellido Materno
+          registroUsuarios[indice][3]; //Nombres
+        let contraseña = matricula;
+        let correo_e = registroUsuarios[indice][4];
+        if (correo_e.equals(""))
+          correo_e =
+            (matricula.tolowercase().startsWith("m")
+              ? matricula
+              : "l" + matricula) + "@hermosillo.tecnm.mx";
+        let carrera = registroUsuarios[indice][5];
+        let semestre = registroUsuarios[indice][6];
+        if (matricula === "Matricula") {
+          continue;
+        }
+        axios
+          .post(srvReq, {
+            matriculaUser: matricula,
+            nombreUser: nombre_Completo,
+            contraseñaUser: contraseña,
+            correoUser: correo_e,
+            carreraUser: carrera,
+            semestreUser: semestre,
+          })
+          .then((result) => {
+            console.log(result.data.Code);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } catch (exception) {
+      showToast(
+        "error",
+        "Inicios de sesión",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    } finally {
+      showToast(
+        "success",
+        "Inicios de sesión",
+        "Todos los inicios de sesión han sido cargados con exito."
+      );
+      setPermitirExcel(false);
+      document.getElementById("subirArchivos").value = "";
+    }
+  };
+
+  return (
+    <div className="AdministracionUsuarios modules">
+      <Toast ref={toast} position="top-right" />
+      <div className="InsertarExcel modules">
+        <label>Subir inicios de sesión (Excel)</label>
+        <p
+          title="Subir inicios de sesión (Excel)"
+          style={{ textAlign: "justify" }}
+        >
+          Este apartado se encarga de subir los inicios de sesión para los
+          estudiantes activos de la institución, por medio de un archivo
+          previamente solicitado al departamento encargado de las altas y bajas
+          estudiantiles.
+        </p>
+        <br />
+        <label>Estructura y contenidos del archivo Excel</label>
+        <p title="Formato Excel" style={{ textAlign: "justify" }}>
+          El archivo tiene ciertos requerimientos para que funcione con el resto
+          del sistema, los cuales se presentan a continuación
+        </p>
+        <ul>
+          <li>
+            El archivo debe ser del tipo xls (Excel 1987-2007) o xlsx (2007 -
+            Actualidad).
+          </li>
+          <li>Solo se permite procesar un archivo a la vez.</li>
+          <li>Solo una fila por estudiante.</li>
+          <li>Solo una celda por dato.</li>
+          <li>El orden de las celdas deberá ser el siguiente:</li>
+          <ol>
+            <li>Matricula.</li>
+            <li>Apellido Paterno.</li>
+            <li>Apellido Materno.</li>
+            <li>Nombre(s).</li>
+            <li>
+              Correo electronico valido (Dejar celda en blanco para utilizar el
+              institucional).
+            </li>
+            <li>Carrera a la que esta inscrito.</li>
+            <li>Semestre que esta cursando.</li>
+          </ol>
+          <li>
+            El archivo debe tener como primera fila los encabezados de las
+            columnas.
+          </li>
+          <li>Los datos del estudiante deberán seguir el siguiente formato</li>
+          <ul>
+            <li>
+              La matricula debe constar de 5 digitos para los encargados, y 8
+              digitos para los estudiantes.{" "}
+            </li>
+            <li>
+              En caso de ser estudiantes de posgrado, la matricula debe empezar
+              con la letra "M", ya sea mayuscula o minuscula.
+            </li>
+            <li>
+              El correo electronico debe ser uno valido y capaz de operar con
+              naturalidad, se puede dejar vacio para utilizar el correo
+              institucional.
+            </li>
+            <li>El semestre debe ser un número entero entre 1 y 14.</li>
+          </ul>
+        </ul>
+        <form>
+          <label>
+            Favor de subir el archivo de inicios de sesión de estudiantes:{" "}
+          </label>
+          <input
+            type="file"
+            id="subirArchivos"
+            name="Subir archivo Excel"
+            accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            onChange={handleFileChange}
+          ></input>
+          <p>
+            {permitirExcel && (
+              <input
+                type="button"
+                className="loadLogin"
+                value="Cargar Inicios de Sesión"
+                onClick={uploadNewUsers}
+              ></input>
+            )}
+          </p>
+        </form>
+      </div>
+      <div className="Insertar modules">
+        <label>Subir/modificar inicio de sesión</label>
+        <p title="Subir inicio de sesión" style={{ textAlign: "justify" }}>
+          Este apartado se encarga de subir o modificar un inicio de sesión a la
+          vez, de manera manual.
+        </p>
+        <br />
+        <label>Formato de datos del estudiante</label>
+        <p title="Formato Excel" style={{ textAlign: "justify" }}>
+          Los datos del estudiante deben seguir cierto formato para ser
+          aceptados en la base de datos, los cuales se describen a continuación.
+        </p>
+        <ul>
+          <li>
+            La matricula debe constar de 5 digitos para los encargados, y 8
+            digitos para los estudiantes.{" "}
+          </li>
+          <li>
+            En caso de ser estudiantes de posgrado, la matricula debe empezar
+            con la letra "M", ya sea mayuscula o minuscula.
+          </li>
+          <li>
+            El correo electronico debe ser uno valido y capaz de operar con
+            naturalidad, se puede dejar vacio para utilizar el correo
+            institucional.
+          </li>
+          <li>El semestre debe ser un número entero entre 1 y 14.</li>
+        </ul>
+        <p>
+          <label>Matricula: </label>
+          <input type="text"></input>
+        </p>
+        <p>
+          <label>Nombre completo: </label>
+          <input type="text"></input>
+        </p>
+        <p>
+          <label>Correo Electronico: </label>
+          <input type="text"></input>
+        </p>
+        {!esEncargado && (
+          <p>
+            <label>Carrera: </label>
+            <input type="text"></input>
+          </p>
+        )}
+        {!esEncargado && (
+          <p>
+            <label>Semestre: </label>
+            <input type="number"></input>
+          </p>
+        )}
+        <div>
+          <button>Buscar por matricula</button>
+          <button>Modificar</button>
+          <button>Dar de alta</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AdministracionUsuarios;

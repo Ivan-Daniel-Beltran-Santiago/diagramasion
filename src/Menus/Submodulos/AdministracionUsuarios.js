@@ -184,6 +184,12 @@ function AdministracionUsuarios() {
             event.target.value
           ),
         });
+        
+        //Para testear mientras el validRegistro.correoElectronico sigue bugueado
+        /*setValidRegistro({
+          ...validRegistro,
+          [event.target.name]: true,
+        });*/
         break;
       case "nombreCompleto":
       case "carrera":
@@ -201,6 +207,128 @@ function AdministracionUsuarios() {
         break;
     }
   };
+
+  //Con los campos de texto, da de alta un nuevo usuario
+  const uploadAlumno = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/AltaEstudiante";
+    if(validRegistro.carrera === true && validRegistro.semestre === true){
+    try {
+        let matricula = registroUsuario.matricula;
+        let nombre_Completo = registroUsuario.nombreCompleto
+        let contraseña = registroUsuario.matricula;
+        let correo_e = registroUsuario.correoElectronico;
+        let carrera = registroUsuario.carrera;
+        let semestre = registroUsuario.semestre;
+        axios
+          .post(srvReq, {
+            matriculaUser: matricula,
+            nombreUser: nombre_Completo,
+            contraseñaUser: contraseña,
+            correoUser: correo_e,
+            carreraUser: carrera,
+            semestreUser: semestre,
+          })
+          .then((result) => {
+            console.log(result.data.Code);
+            if(result.data.Code == 1){
+              showToast(
+                "success",
+                "Finalizado",
+                "Estudiante " + registroUsuario.matricula + " a sido dado de alta."
+              );
+            }
+            else{
+              showToast(
+                "error",
+                "No dado de alta",
+                "Estudiante " + registroUsuario.matricula + " posiblemente ya existe."
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    } catch (exception) {
+      showToast(
+        "error",
+        "Inicios de sesión",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    }
+  }
+  else{
+    console.log(validRegistro)
+    showToast(
+      "error",
+      "Campos Invalidos",
+      "Favor de revisar que los campos sean correctos."
+    )
+  }
+};
+
+  //Con los campos de texto, da de alta un nuevo encargado
+  const uploadEncargado = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/AltaEncargados";
+    try {
+        let matricula = registroUsuario.matricula;
+        let nombre_Completo = registroUsuario.nombreCompleto
+        let contraseña = registroUsuario.matricula;
+        let correo_e = registroUsuario.correoElectronico;
+        axios
+          .post(srvReq, {
+            matriculaUser: matricula,
+            nombreUser: nombre_Completo,
+            contraseñaUser: contraseña,
+            correoUser: correo_e,
+          })
+          .then((result) => {
+            console.log(result.data.Code);
+            if(result.data.Code == 1){
+              showToast(
+                "success",
+                "Finalizado",
+                "Encargado " + registroUsuario.matricula + " a sido dado de alta."
+              );
+            }
+            else{
+              showToast(
+                "error",
+                "No dado de alta",
+                "Encargado " + registroUsuario.matricula + " posiblemente ya existe."
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    } catch (exception) {
+      showToast(
+        "error",
+        "Inicios de sesión",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    }
+};
+
+  const uploadOneUser = () => {
+    if(validRegistro.matricula === true && validRegistro.nombreCompleto === true && validRegistro.correoElectronico === true){
+      if(esEncargado){
+        uploadEncargado();
+      }
+      else{
+        uploadAlumno();
+      }
+    }
+    else{
+      showToast(
+        "error",
+        "Campos Invalidos",
+        "Favor de revisar que los campos sean correctos."
+      )
+    }
+  }
 
   return (
     <div className="AdministracionUsuarios modules">
@@ -369,7 +497,9 @@ function AdministracionUsuarios() {
         <div>
           <button>Buscar por matricula</button>
           <button>Modificar</button>
-          <button>Dar de alta</button>
+          <button
+          onClick={uploadOneUser}
+          >Dar de alta</button>
         </div>
       </div>
     </div>

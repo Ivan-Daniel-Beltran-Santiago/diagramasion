@@ -5,9 +5,28 @@ import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 import { Toast } from "primereact/toast";
 
 function AdministracionUsuarios() {
-  const [registroUsuarios, setRegistroUsuarios] = useState([]);
+  //Los registros de todos los estudiantes obtenidos del excel
+  const [registroUsuarios, setRegistroUsuarios] = useState([{}]);
+  //Permitir el procesamiento del excel
   const [permitirExcel, setPermitirExcel] = useState(false);
+  //Determinar si se trata de un Encargado o un estudiante
   const [esEncargado, setEsEncargado] = useState(false);
+  //Registro de un solo estudiante
+  const [registroUsuario, setRegistroUsuario] = useState({
+    matricula: "",
+    nombreCompleto: "",
+    correoElectronico: "",
+    carrera: "",
+    semestre: "",
+  });
+  //Validar a un solo estudiante
+  const [validRegistro, setValidRegistro] = useState({
+    matricula: false,
+    nombreCompleto: false,
+    correoElectronico: false,
+    carrera: false,
+    semestre: false,
+  });
 
   //Alertas
   const toast = useRef(null);
@@ -133,6 +152,56 @@ function AdministracionUsuarios() {
     }
   };
 
+  //Capta los cambios a los campos de entrada para modificación o alta.
+  const handleInputChange = (event) => {
+    setRegistroUsuario({
+      ...registroUsuario,
+      [event.target.name]: event.target.value,
+    });
+    validateInputChange(event);
+  };
+
+  //Se encarga de validar los campos pertinentes.
+  const validateInputChange = (event) => {
+    switch (event.target.name) {
+      case "matricula":
+        let ValidadorStudent = new RegExp("^(M|m)?[0-9]{8}$");
+        let ValidadorAdmin = new RegExp("^[0-9]{5}$");
+        setValidRegistro({
+          ...validRegistro,
+          [event.target.name]:
+            ValidadorStudent.test(event.target.value) ||
+            ValidadorAdmin.test(event.target.value),
+        });
+        break;
+      case "correoElectronico":
+        let ValidadorCorreoElectronico = new RegExp(
+          '/^(([^<>()[].,;:s@"]+(.[^<>()[].,;:s@"]+)*)|(".+"))@(([^<>()[].,;:s@"]+.)+[^<>()[].,;:s@"]{2,})$/i'
+        );
+        setValidRegistro({
+          ...validRegistro,
+          [event.target.name]: ValidadorCorreoElectronico.test(
+            event.target.value
+          ),
+        });
+        break;
+      case "nombreCompleto":
+      case "carrera":
+        setValidRegistro({
+          ...validRegistro,
+          [event.target.name]: true,
+        });
+        break;
+      default:
+        setValidRegistro({
+          ...validRegistro,
+          [event.target.name]:
+            event.target.value >= 1 && event.target.value <= 14,
+        });
+        break;
+    }
+  };
+
   return (
     <div className="AdministracionUsuarios modules">
       <Toast ref={toast} position="top-right" />
@@ -249,26 +318,52 @@ function AdministracionUsuarios() {
         </ul>
         <p>
           <label>Matricula: </label>
-          <input type="text"></input>
+          <input
+            type="text"
+            name="matricula"
+            onChange={handleInputChange}
+          ></input>
+          {!validRegistro.matricula && registroUsuario.matricula.length > 0 && (
+            <label className="LoginWarning">
+              Debe contener 8 digitos, puede tener una m o M al principio si se
+              trata de un estudiante de posgrado
+            </label>
+          )}
         </p>
         <p>
           <label>Nombre completo: </label>
-          <input type="text"></input>
+          <input
+            type="text"
+            name="nombreCompleto"
+            onChange={handleInputChange}
+          ></input>
         </p>
         <p>
           <label>Correo Electronico: </label>
-          <input type="text"></input>
+          <input
+            type="text"
+            name="correoElectronico"
+            onChange={handleInputChange}
+          ></input>
         </p>
         {!esEncargado && (
           <p>
             <label>Carrera: </label>
-            <input type="text"></input>
+            <input
+              type="text"
+              name="carrera"
+              onChange={handleInputChange}
+            ></input>
           </p>
         )}
         {!esEncargado && (
           <p>
             <label>Semestre: </label>
-            <input type="number"></input>
+            <input
+              type="number"
+              name="semestre"
+              onChange={handleInputChange}
+            ></input>
           </p>
         )}
         <div>

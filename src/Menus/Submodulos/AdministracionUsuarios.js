@@ -163,7 +163,7 @@ function AdministracionUsuarios() {
 
   const handleCheckChange = (event) => {
     setEsEncargado(event.target.checked);
-    console.log(esEncargado)
+    //console.log(esEncargado)
   };
 
   //Se encarga de validar los campos pertinentes.
@@ -235,7 +235,7 @@ function AdministracionUsuarios() {
             semestreUser: semestre,
           })
           .then((result) => {
-            console.log(result.data.Code);
+            //console.log(result.data.Code);
             if(result.data.Code === 1){
               showToast(
                 "success",
@@ -263,7 +263,7 @@ function AdministracionUsuarios() {
     }
   }
   else{
-    console.log(validRegistro)
+    //console.log(validRegistro)
     showToast(
       "error",
       "Campos Invalidos",
@@ -466,7 +466,7 @@ function AdministracionUsuarios() {
             semestreUser: semestre,
           })
           .then((result) => {
-            console.log(result.data.Code);
+            //(result.data.Code);
             if(result.data.Code === 1){
               showToast(
                 "success",
@@ -494,7 +494,7 @@ function AdministracionUsuarios() {
     }
   }
   else{
-    console.log(validRegistro)
+    //console.log(validRegistro)
     showToast(
       "error",
       "Campos Invalidos",
@@ -606,7 +606,7 @@ function AdministracionUsuarios() {
   }
 
   const updateUser = () => {
-    console.log(validRegistro)
+    //console.log(validRegistro)
     if(validRegistro.matricula === true && validRegistro.nombreCompleto === true && validRegistro.correoElectronico === true){
       if(esEncargado){
         editEncargado();

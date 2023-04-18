@@ -25,7 +25,6 @@ function App() {
         <Route path="/Menu-Estudiante" element={<MenuEstudiante />} />
         <Route path="/Menu/Solicitud" />
       </Routes>
-      <Spacer />
       <Footer/>
     </BrowserRouter>
   );

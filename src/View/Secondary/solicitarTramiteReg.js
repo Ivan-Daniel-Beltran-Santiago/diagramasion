@@ -147,7 +147,7 @@ const SolicitarRegistroTramite = ({
       .post(srvReq, {
       })
       .then((response) => {
-        console.log(response.data)
+        //console.log(response.data)
         let requisitos = "";
         let cantidadR = response.data.result.count - 1;
         for (let i=1; i <= cantidadR; i++){
@@ -155,7 +155,7 @@ const SolicitarRegistroTramite = ({
           requisitos = requisitos.replace("\\n"," ")
           requisitos = requisitos.replace("\\"," ")
         }
-        console.log(requisitos)
+        //console.log(requisitos)
         if(response.data.Code === 1){
           setTransactionMetadata({
             trInfo: response.data.result.rows[0].texto,

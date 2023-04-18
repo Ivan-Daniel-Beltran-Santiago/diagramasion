@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const FooterContainer = styled.div`
-margin-top: 1em;
+margin-top: 62em;
 padding: 3em;
 padding-top: 2em;
 background-color: #425273

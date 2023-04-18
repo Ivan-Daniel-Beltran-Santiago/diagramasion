@@ -112,7 +112,7 @@ function MenuEncargada() {
                 setIndexVisible(5);
               }}
             >
-              Administración General
+              Informe Estadistico
             </button>
             <button
               id="informacionUsuario"

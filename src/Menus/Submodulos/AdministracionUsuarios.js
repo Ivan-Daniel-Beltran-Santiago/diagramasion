@@ -161,6 +161,11 @@ function AdministracionUsuarios() {
     validateInputChange(event);
   };
 
+  const handleCheckChange = (event) => {
+    setEsEncargado(event.target.checked);
+    console.log(esEncargado)
+  };
+
   //Se encarga de validar los campos pertinentes.
   const validateInputChange = (event) => {
     switch (event.target.name) {
@@ -565,6 +570,12 @@ function AdministracionUsuarios() {
           </li>
           <li>El semestre debe ser un número entero entre 1 y 14.</li>
         </ul>
+        <label>Encargada</label>
+        <input 
+        type="checkbox" 
+        id="checkEncargada"
+        onChange={handleCheckChange}
+        ></input>
         <p>
           <label>Matricula: </label>
           <input
@@ -628,6 +639,7 @@ function AdministracionUsuarios() {
           <button
           onClick={uploadOneUser}
           >Dar de alta</button>
+          <button>Restablecer Contraseña</button>
         </div>
       </div>
     </div>

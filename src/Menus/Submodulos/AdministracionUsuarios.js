@@ -183,18 +183,18 @@ function AdministracionUsuarios() {
         let ValidadorCorreoElectronico = new RegExp(
           '/^(([^<>()[].,;:s@"]+(.[^<>()[].,;:s@"]+)*)|(".+"))@(([^<>()[].,;:s@"]+.)+[^<>()[].,;:s@"]{2,})$/i'
         );
-        setValidRegistro({
+        /*setValidRegistro({
           ...validRegistro,
           [event.target.name]: ValidadorCorreoElectronico.test(
             event.target.value
           ),
-        });
+        });*/
         
         //Para testear mientras el validRegistro.correoElectronico sigue bugueado
-        /*setValidRegistro({
+        setValidRegistro({
           ...validRegistro,
           [event.target.name]: true,
-        });*/
+        });
         break;
       case "nombreCompleto":
       case "carrera":
@@ -236,7 +236,7 @@ function AdministracionUsuarios() {
           })
           .then((result) => {
             console.log(result.data.Code);
-            if(result.data.Code == 1){
+            if(result.data.Code === 1){
               showToast(
                 "success",
                 "Finalizado",
@@ -290,7 +290,7 @@ function AdministracionUsuarios() {
           })
           .then((result) => {
             //console.log(result.data.Code);
-            if(result.data.Code == 1){
+            if(result.data.Code === 1){
               showToast(
                 "success",
                 "Finalizado",
@@ -335,7 +335,7 @@ function AdministracionUsuarios() {
     }
   }
 
-  //Funcion de busqueda por matricula
+  //Funcion de busqueda por matricula de Encargada
   const searchEncargada = () => {
     if(validRegistro.matricula === true){
       const srvDir = new ServerConnectionConfig();
@@ -347,7 +347,7 @@ function AdministracionUsuarios() {
             matriculaUser: matricula
           })
           .then((result) => {
-            if(result.data.Code == 1){
+            if(result.data.Code === 1){
               //console.log(result.data.result[0].nombre_Completo)
               document.getElementById('nom').value = result.data.result[0].nombre_Completo
               document.getElementById('cor').value = result.data.result[0].correo_e
@@ -356,7 +356,7 @@ function AdministracionUsuarios() {
                 "Datos encontrados",
                 "Se encontraron los datos de " + registroUsuario.matricula)
             }
-            if(result.data.Code == -1){
+            if(result.data.Code === -1){
               showToast(
                 "error",
                 "Finalizado",
@@ -399,7 +399,7 @@ function AdministracionUsuarios() {
           })
           .then((result) => {
             //console.log(result.data.Code)
-            if(result.data.Code == 1){
+            if(result.data.Code === 1){
               //console.log(result.data.datos[0].semestre)
               //console.log(result.data.result[0].nombre_Completo)
               document.getElementById('nom').value = result.data.result[0].nombre_Completo
@@ -411,7 +411,7 @@ function AdministracionUsuarios() {
                 "Datos encontrados",
                 "Se encontraron los datos de " + registroUsuario.matricula)
             }
-            if(result.data.Code == -1){
+            if(result.data.Code === -1){
               showToast(
                 "error",
                 "Finalizado",
@@ -447,6 +447,155 @@ function AdministracionUsuarios() {
     }
   }
 
+  const editAlumno = () =>{
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/EditEstudiante";
+    if(validRegistro.carrera === true && validRegistro.semestre === true){
+    try {
+        let matricula = registroUsuario.matricula;
+        let nombre_Completo = registroUsuario.nombreCompleto
+        let correo_e = registroUsuario.correoElectronico;
+        let carrera = registroUsuario.carrera;
+        let semestre = registroUsuario.semestre;
+        axios
+          .post(srvReq, {
+            matriculaUser: matricula,
+            nombreUser: nombre_Completo,
+            correoUser: correo_e,
+            carreraUser: carrera,
+            semestreUser: semestre,
+          })
+          .then((result) => {
+            console.log(result.data.Code);
+            if(result.data.Code === 1){
+              showToast(
+                "success",
+                "Finalizado",
+                "Estudiante " + registroUsuario.matricula + " a sido modificado."
+              );
+            }
+            else{
+              showToast(
+                "error",
+                "No dado de alta",
+                "Estudiante " + registroUsuario.matricula + " no existe."
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    } catch (exception) {
+      showToast(
+        "error",
+        "Inicios de sesión",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    }
+  }
+  else{
+    console.log(validRegistro)
+    showToast(
+      "error",
+      "Campos Invalidos",
+      "Favor de revisar que los campos sean correctos."
+    )
+  }
+  }
+
+    //Con los campos de texto, da de alta un nuevo encargado
+  const editEncargado = () => {
+      const srvDir = new ServerConnectionConfig();
+      const srvReq = srvDir.getServer() + "/EditEncargados";
+      try {
+          let matricula = registroUsuario.matricula;
+          let nombre_Completo = registroUsuario.nombreCompleto
+          let contraseña = registroUsuario.matricula;
+          let correo_e = registroUsuario.correoElectronico;
+          axios
+            .post(srvReq, {
+              matriculaUser: matricula,
+              nombreUser: nombre_Completo,
+              contraseñaUser: contraseña,
+              correoUser: correo_e,
+            })
+            .then((result) => {
+              //console.log(result.data.Code);
+              if(result.data.Code === 1){
+                showToast(
+                  "success",
+                  "Finalizado",
+                  "Encargado " + registroUsuario.matricula + " a sido modificado."
+                );
+              }
+              else{
+                showToast(
+                  "error",
+                  "No dado de alta",
+                  "Encargado " + registroUsuario.matricula + " no existe."
+                );
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+      } catch (exception) {
+        showToast(
+          "error",
+          "Inicios de sesión",
+          "Ha ocurrido un error inesperado." + exception
+        );
+      }
+  };
+
+  const restartContraseña = () => {
+    if(validRegistro.matricula)
+    {const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/RestorePassword";
+    try {
+        let matricula = registroUsuario.matricula;
+        //let correo_e = registroUsuario.correoElectronico;
+        axios
+          .post(srvReq, {
+            matriculaUser: matricula,
+            //correoUser: correo_e,
+          })
+          .then((result) => {
+            //console.log(result.data.Code);
+            if(result.data.Code === 1){
+              showToast(
+                "success",
+                "Restablecido",
+                "Usuario " + registroUsuario.matricula + " se le a restablecido su contraseña."
+              );
+            }
+            else{
+              showToast(
+                "error",
+                "No restablecido",
+                "Usuario " + registroUsuario.matricula + " no pudo ser modificado o no existe."
+              );
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    } catch (exception) {
+      showToast(
+        "error",
+        "Inicios de sesión",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    }}
+    else{
+      showToast(
+        "error",
+        "Error de matricula",
+        "Favor de ingresar una matricula"
+      )
+    }
+};
+
   const searchUser = () => {
     if(esEncargado){
         searchEncargada();
@@ -454,6 +603,25 @@ function AdministracionUsuarios() {
       else{
         searchAlumno();
       }
+  }
+
+  const updateUser = () => {
+    console.log(validRegistro)
+    if(validRegistro.matricula === true && validRegistro.nombreCompleto === true && validRegistro.correoElectronico === true){
+      if(esEncargado){
+        editEncargado();
+      }
+      else{
+        editAlumno();
+      }
+    }
+    else{
+      showToast(
+        "error",
+        "Campos Invalidos",
+        "Favor de revisar que los campos sean correctos."
+      )
+    }
   }
 
   return (
@@ -635,11 +803,15 @@ function AdministracionUsuarios() {
           <button 
           onClick={searchUser}
           >Buscar por matricula</button>
-          <button>Modificar</button>
+          <button
+          onClick={updateUser}
+          >Modificar</button>
           <button
           onClick={uploadOneUser}
           >Dar de alta</button>
-          <button>Restablecer Contraseña</button>
+          <button
+          onClick={restartContraseña}
+          >Restablecer Contraseña</button>
         </div>
       </div>
     </div>

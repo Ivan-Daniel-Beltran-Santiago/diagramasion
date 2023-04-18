@@ -152,8 +152,8 @@ const SolicitarRegistroTramite = ({
         let cantidadR = response.data.result.count - 1;
         for (let i=1; i <= cantidadR; i++){
           requisitos= requisitos + response.data.result.rows[i].texto
-          requisitos = requisitos.replace("\\n","")
-          requisitos = requisitos.replace("\\","")
+          requisitos = requisitos.replace("\\n"," ")
+          requisitos = requisitos.replace("\\"," ")
         }
         console.log(requisitos)
         if(response.data.Code === 1){

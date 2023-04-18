@@ -5,6 +5,8 @@ import Login from "./View/Login";
 import MenuUsuario from "./View/menuUsuario";
 import MenuEncargada from "./Menus/menuEncargada";
 import MenuEstudiante from "./Menus/menuEstudiante";
+import Footer from "./View/Auxiliary/footer";
+import Spacer from "./View/Auxiliary/spacer";
 
 import "primereact/resources/themes/saga-green/theme.css";
 import "primereact/resources/themes/saga-orange/theme.css";
@@ -23,6 +25,8 @@ function App() {
         <Route path="/Menu-Estudiante" element={<MenuEstudiante />} />
         <Route path="/Menu/Solicitud" />
       </Routes>
+      <Spacer />
+      <Footer/>
     </BrowserRouter>
   );
 }

@@ -183,7 +183,7 @@ function AdministracionUsuarios() {
         let ValidadorCorreoElectronico = new RegExp(
           /^([A-Za-z0-9]{2,64})(\.[A-Za-z0-9]{2,64})*@([A-Za-z0-9]{2,64})(\.[A-Za-z0-9]{2,64})+$/
         );
-        /*setValidRegistro({
+        setValidRegistro({
           ...validRegistro,
           [event.target.name]: ValidadorCorreoElectronico.test(
             event.target.value

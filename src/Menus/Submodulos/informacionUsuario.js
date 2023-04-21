@@ -12,7 +12,7 @@ function InformacionUsuario({ currentUser }) {
     contraseñaUsuario: "",
     newPassword: "",
     confirmPassword: "",
-    newEmail: "",
+    newEmail: currentUser.eMail,
   });
   const [validEmail, setValidEmail] = useState(false);
   const [validPass, setValidPass] = useState(false);
@@ -72,6 +72,10 @@ function InformacionUsuario({ currentUser }) {
           "Cambios en proceso",
           "Los cambios se estan procesando"
         );
+
+        if (userInfo.newPassword == ""){
+          userInfo.newPassword = CurrentPass.current.value;
+        }
 
         const srvDir = new ServerConnectionConfig();
         const srvReq = srvDir.getServer() + "/UpdateUserInfo";

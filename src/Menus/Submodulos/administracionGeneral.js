@@ -191,28 +191,6 @@ function AdministracionGeneral() {
           Generar Informe Estadístico
         </button>
       </div>
-      <div>
-        <br />
-        <label>Subida de archivo de usuarios: </label>
-        <br />
-        <form>
-          <input
-            type="file"
-            id="subirArchivos"
-            name="Subir archivo Excel"
-            accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            onChange={handleFileChange}
-          ></input>
-          <p>
-            <input
-              type="button"
-              className="loadLogin"
-              value="Cargar Inicios de Sesión"
-              onClick={uploadNewUsers}
-            ></input>
-          </p>
-        </form>
-      </div>
     </div>
   );
 }

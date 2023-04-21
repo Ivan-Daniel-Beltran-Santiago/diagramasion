@@ -54,7 +54,7 @@ function MenuEncargada() {
       .then((response) => {
         setCurrentUser({
           controlNumber: response.data.matricula,
-          fullName: response.data.nombre_C,
+          fullName: response.data.nombre_Completo,
           eMail: response.data.correo_e,
         });
       })
@@ -112,7 +112,7 @@ function MenuEncargada() {
                 setIndexVisible(5);
               }}
             >
-              Administración General
+              Informe Estadistico
             </button>
             <button
               id="informacionUsuario"
@@ -122,6 +122,15 @@ function MenuEncargada() {
               }}
             >
               Información de Usuario
+            </button>
+            <button
+              id="administracionUsuarios"
+              className="button"
+              onClick={() => {
+                setIndexVisible(15);
+              }}
+            >
+              Administración de Usuarios
             </button>
           </div>
           <div>

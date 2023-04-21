@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 import axios from "axios";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 import { Toast } from "primereact/toast";
+import { clear } from "@testing-library/user-event/dist/clear";
 
 function AdministracionUsuarios() {
   //Los registros de todos los estudiantes obtenidos del excel
@@ -321,9 +322,25 @@ function AdministracionUsuarios() {
       validRegistro.correoElectronico === true
     ) {
       if (esEncargado) {
-        uploadEncargado();
+        if(registroUsuario.matricula.length === 5){
+          uploadEncargado();
+        }else{
+          showToast(
+            "error",
+            "Matricula Erronea",
+            "Esta utilizando una matricula de estudiante."
+          );
+        }
       } else {
-        uploadAlumno();
+        if(registroUsuario.matricula.length !=5){
+          uploadAlumno();
+        }else{
+          showToast(
+            "error",
+            "Matricula Erronea",
+            "Esta utilizando una matricula de encargado."
+          );
+        }
       }
     } else {
       showToast(
@@ -431,6 +448,7 @@ function AdministracionUsuarios() {
               document.getElementById("cor").value = "";
               document.getElementById("car").value = "";
               document.getElementById("semest").value = "";
+              clearAll();
             }
           })
           .catch((error) => {
@@ -610,11 +628,30 @@ function AdministracionUsuarios() {
 
   const searchUser = () => {
     if(esEncargado){
-        searchEncargada();
+        if(registroUsuario.matricula.length == 5){
+          searchEncargada();
+        }
+        else{
+          showToast(
+            "error",
+            "Finalizado",
+            "El usuario con matricula " +
+              registroUsuario.matricula +
+              "no es un estudiante."
+          );
+          clearAll();
+        }
       }
       else{
         searchAlumno();
       }
+  }
+
+  const clearAll = () => {
+    document.getElementById("nom").value = "";
+    document.getElementById("cor").value = "";
+    document.getElementById("car").value = "";
+    document.getElementById("semest").value = "";
   }
 
   const updateUser = () => {

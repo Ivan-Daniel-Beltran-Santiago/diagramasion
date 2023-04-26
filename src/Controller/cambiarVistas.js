@@ -7,39 +7,60 @@ import SolicitudEstudiante from "../Menus/Submodulos/solicitudEstudiante";
 import InformacionUsuario from "../Menus/Submodulos/informacionUsuario";
 import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 import AdministracionUsuarios from "../Menus/Submodulos/AdministracionUsuarios";
+import AdministracionTramites from "../Menus/Submodulos/AdministracionTramites";
 
-const CambiarVistaController = ({
+const CambiarVistaController = ( {
   VistaIndex,
   currentUser,
   CargarMatricula,
   MatriculaCargada,
-}) => {
-  const handleCargarMatricula = (matriculaCargarS) => {
-    CargarMatricula(matriculaCargarS);
+} ) => {
+  const handleCargarMatricula = ( matriculaCargarS ) => {
+    CargarMatricula( matriculaCargarS );
   };
 
-  switch (VistaIndex) {
-    case 2:
-      return <AdmnistrarSolicitudes cargarMatricula={handleCargarMatricula} />;
-    case 3:
-      return <AdministrarSolicitud matriculaSolicitud={MatriculaCargada} />;
-    case 5:
-      return <AdministracionGeneral />;
-    case 6:
-    case 10:
-      return <InformacionUsuario currentUser={currentUser} />;
-    case 8:
-      return <SolicitarTramite CurretActiveUser={currentUser} />;
-    case 9:
-      return <SolicitudEstudiante currentUserInformation={currentUser} />;
-    case 15:
-      return <AdministracionUsuarios />;
-    default:
-      if (VistaIndex < 7) {
-        return <BienvenidaEncargada />;
-      } else {
-        return <BienvenidaEstudiante currentUser={currentUser} />;
+  switch ( VistaIndex ) {
+  case 2:
+    return <AdmnistrarSolicitudes cargarMatricula = {
+      handleCargarMatricula
+    }
+    />;
+  case 3:
+    return <AdministrarSolicitud matriculaSolicitud = {
+      MatriculaCargada
+    }
+    />;
+  case 5:
+    return <AdministracionGeneral / > ;
+  case 6:
+  case 10:
+    return <InformacionUsuario currentUser = {
+      currentUser
+    }
+    />;
+  case 8:
+    return <SolicitarTramite CurretActiveUser = {
+      currentUser
+    }
+    />;
+  case 9:
+    return <SolicitudEstudiante currentUserInformation = {
+      currentUser
+    }
+    />;
+  case 15:
+    return <AdministracionUsuarios / > ;
+  case 16:
+    return <AdministracionTramites / > ;
+  default:
+    if ( VistaIndex < 7 ) {
+      return <BienvenidaEncargada / > ;
+    } else {
+      return <BienvenidaEstudiante currentUser = {
+        currentUser
       }
+      />;
+    }
   }
 };
 

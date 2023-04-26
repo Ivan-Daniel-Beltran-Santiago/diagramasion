@@ -3,33 +3,33 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const FooterContainer = styled.div`
-margin-top: 62em;
+margin-top: 20em;
 padding: 3em;
 padding-top: 2em;
-background-color: #425273
+background-color: #E6E6E6
 `;
 
-const FText = styled.p`color: #F3F3F3;`;
-const FSstrong = styled.strong`color: #F3F3F3;`;
-const FSmall = styled.small`color: #F3F3F3;`;
+const FText = styled.p`color: #454545;`;
+const FSstrong = styled.strong`color: #212529;`;
+const FSmall = styled.small`color: #454545;`;
 
-const FTitle2 = styled.h2` color: #E2F2F2; font-weight: bold;`;
-const FTitle3 = styled.h3`color: #E2F2F2;`;
+const FTitle2 = styled.h2` color: #212529; font-weight: bold;`;
+const FTitle3 = styled.h3`color: #212529;`;
 
 const FooterList = styled.li`
 list-style: none;
 padding: 0;
-color: white;
+color: #454545;
 `;
 
 const FooterLink = styled.a`
-color: #F3F3F3;
+color: #454545;
 text-decoration: none;
-&.FooterLink:hover { color: skyblue;}
+&.FooterLink:hover { color: blue;}
 `;
 
 const Line = styled.hr`
-  border: 2px solid #fff;
+  border: 2px solid #454545;
 `;
 
 const FooterEnd = styled.div`text-align: center;`;
@@ -37,7 +37,7 @@ const FooterEnd = styled.div`text-align: center;`;
 const Footer = () => {
     return (
         <FooterContainer>
-            <FTitle2>Acerca de STD-ITH-DSE</FTitle2>
+            <FTitle2>Acerca de SDT-ITH-DSE</FTitle2>
             <FText>Este portal tiene como proposito el facilitar la interacción entre estudiante, 
                 encargada y la aseguradora, con el fin de proveer la mejor experiencia para todas 
                 las partes involucradas en el proceso para solicitar un pago unico por el concepto de 
@@ -55,7 +55,7 @@ const Footer = () => {
                 <div className="col-sm-6">
                     <FTitle3>¿Necesitas ayuda?</FTitle3>
                     <FText>Manda un correo al Departamento de Servicios Escolares para atenderte:</FText>
-                    <FSstrong>serviciosescolares@hermosillo.tecnm.mx</FSstrong>
+                    <FSstrong>ventanillaith@hermosillo.tecnm.mx</FSstrong>
                 </div>
             </div>
             <Line/>

@@ -3,6 +3,9 @@ import { Toast } from "primereact/toast";
 import axios from "axios";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
+import styled from 'styled-components';
+const Container = styled.div`padding: 1em;`;
+
 function InformacionUsuario({ currentUser }) {
   const CurrentPass = useRef(null);
   const toast = useRef(null);
@@ -119,7 +122,8 @@ function InformacionUsuario({ currentUser }) {
   };
 
   return (
-    <div id="informacionUsuario" className="modules">
+    <Container>
+	    <div id="informacionUsuario" className="modules">
       <Toast ref={toast} position="top-right" />
       <form className="info_usuario">
         <label>Matricula:    </label>
@@ -225,7 +229,8 @@ function InformacionUsuario({ currentUser }) {
       <button className="confirmarCambios" onClick={updateChanges}>
         Confirmar cambios
       </button>
-    </div>
+      </div>
+    </Container>
   );
 }
 

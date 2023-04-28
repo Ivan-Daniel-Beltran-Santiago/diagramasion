@@ -11,28 +11,13 @@ function SolicitudEstudiante({ currentUserInformation }) {
     tramite: "",
     estatus: "",
     retroalim: "",
+    guiaPaq: "",
   });
 
   const [loadedFiles, setLoadedFiles] = useState([]);
   const [validatedFiles, setValidatedFiles] = useState([]);
 
-  const estatusLexico = {
-    0: "No se encontro ninguna solicitud",
-    1: "Solicitud iniciada",
-    2: "Documentos subidos en formato digital",
-    3: "Documentos rechazados en formato digital",
-    4: "Documentos aceptados en formato digital",
-    5: "Documentos recibidos en persona",
-    6: "Solicitud enviada a la aseguradora",
-    7: "Solicitud rechazada por la aseguradora",
-    8: "Nuevos documentos recibidos en formato digital",
-    9: "Nuevos documentos rechazados",
-    10: "Solicitud reenviada a la aseguradora",
-    11: "Finiquito en espera de firma en persona",
-    12: "Solicitud terminada",
-  };
-
-  const barraProgresoEstatus = {
+  const [barraProgresoEstatus, setbarraProgresoEstatus] = useState ({
     1: 0,
     2: 20,
     3: 15,
@@ -45,7 +30,22 @@ function SolicitudEstudiante({ currentUserInformation }) {
     10: 75,
     11: 80,
     12: 100,
-  };
+  });
+
+  const [estatusLexico, setEstatusLexico] = useState({
+    1: "Solicitud iniciado",
+    2: "Documentos subidos en formato digital",
+    3: "Documentos rechazados en formato digital",
+    4: "Documentos aceptados en formato digital",
+    5: "Documentos recibidos en persona",
+    6: "Solicitud enviada a la aseguradora por FEDEX",
+    7: "Solicitud rechazada por la aseguradora",
+    8: "Nuevos documentos recibidos en formato digital",
+    9: "Nuevos documentos rechazados",
+    10: "Solicitud reenviada a la aseguradora por FEDEX",
+    11: "Finiquito en espera de firma en persona",
+    12: "Solicitud terminado",
+  });
 
   const progresionEstatus = {
     1: 2,
@@ -105,6 +105,48 @@ function SolicitudEstudiante({ currentUserInformation }) {
       }
     });
     setValidatedFiles(validFiles);
+  };
+
+  const informacionMenus = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/infoDescripcionesMenus";
+    //console.log(matriculaSolicitud);
+    axios
+      .post(srvReq)
+      .then((result) => {
+        //console.log(result.data[0])
+        setEstatusLexico({
+          1: result.data[0].texto,
+          2: result.data[1].texto,
+          3: result.data[2].texto,
+          4: result.data[3].texto,
+          5: result.data[4].texto,
+          6: result.data[5].texto,
+          7: result.data[6].texto,
+          8: result.data[7].texto,
+          9: result.data[8].texto,
+          10: result.data[9].texto,
+          11: result.data[10].texto,
+          12: result.data[11].texto
+        })
+        setbarraProgresoEstatus({
+          1: result.data[0].barraEstatus,
+          2: result.data[1].barraEstatus,
+          3: result.data[2].barraEstatus,
+          4: result.data[3].barraEstatus,
+          5: result.data[4].barraEstatus,
+          6: result.data[5].barraEstatus,
+          7: result.data[6].barraEstatus,
+          8: result.data[7].barraEstatus,
+          9: result.data[8].barraEstatus,
+          10: result.data[9].barraEstatus,
+          11: result.data[10].barraEstatus,
+          12: result.data[11].barraEstatus
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const validateDocuments = () => {
@@ -203,6 +245,9 @@ function SolicitudEstudiante({ currentUserInformation }) {
           retroalim: result.data[0]
             ? result.data[0].retroalimentacion_Actual
             : "No se encontro ninguna solicitud ",
+          guiaPaq: result.data[0]
+            ? result.data[0].folio_Solicitud
+            : "No se encontro ninguna guia de paqueteria ",
         });
       })
       .catch((error) => {
@@ -230,6 +275,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
 
   useEffect(() => {
     obtenerSolicitud();
+    informacionMenus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -248,6 +294,10 @@ function SolicitudEstudiante({ currentUserInformation }) {
         <p>
           <label>Estatus: </label>
           {estatusLexico[requestData.estatus]}
+        </p>
+        <p>
+          <label>Guia de paqueteria: </label>
+          {requestData.guiaPaq}
         </p>
         <p>
           <label>Retroalimentación disponible</label>

@@ -7,7 +7,7 @@ import SolicitudEstudiante from "../Menus/Submodulos/solicitudEstudiante";
 import InformacionUsuario from "../Menus/Submodulos/informacionUsuario";
 import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 import AdministracionUsuarios from "../Menus/Submodulos/AdministracionUsuarios";
-import AdministracionTramites from "../Menus/Submodulos/AdministracionTramites";
+import AdministracionTramites from "../Menus/Submodulos/administracionTramites";
 
 const CambiarVistaController = ( {
   VistaIndex,

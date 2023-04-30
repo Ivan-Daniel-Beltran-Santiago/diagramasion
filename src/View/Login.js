@@ -37,7 +37,7 @@ export default function Login() {
             idValidatorAdmin.test(inputChange)
         );
       } else {
-        let passwordValidator = new RegExp("^[0-9]{4,8}$");
+        let passwordValidator = new RegExp("^[0-9]{3,8}$");
         setValidPass(passwordValidator.test(inputChange));
       }
     }
@@ -162,7 +162,7 @@ export default function Login() {
           />
           {!validPass && loginData.password.length > 0 && (
             <label className="LoginWarning">
-              Debe contener entre 4 y 8 digitos{" "}
+              Debe contener entre 3 y 8 digitos{" "}
             </label>
           )}
           <br />

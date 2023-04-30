@@ -30,8 +30,8 @@ export default function Login() {
     let inputChange = event.target.value;
     if (inputChange.length > 0) {
       if (event.target.name === "id_number") {
-        let idValidatorStudent = new RegExp("^(M|m)?[0-9]{8}$");
-        let idValidatorAdmin = new RegExp("^[0-9]{5}$");
+        let idValidatorStudent = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
+        let idValidatorAdmin = new RegExp("^[0-9]{3}$");
         setValidID(
           idValidatorStudent.test(inputChange) ||
             idValidatorAdmin.test(inputChange)
@@ -81,25 +81,13 @@ export default function Login() {
     }
 
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/Login";
-
-    /*
-    navigate("/Menu-Encargada", {
-      state: [{ loginID: loginData.id_number }],
-    });
-    */
-
-    /*
-    navigate("/Menu-Estudiante", {
-      state: [{ loginID: loginData.id_number }],
-    });
-    */
+    const srvReq = srvDir.getServer() + "/GestionUsuarios/Login";
 
     //Patron GOF - Bridge
     axios
       .post(srvReq, loginAttempt)
-      .then((response) => {
-        switch (response.data.Code) {
+      .then((respuesta) => {
+        switch (respuesta.data.Code) {
           case 1:
             showToast(
               "success",
@@ -107,16 +95,6 @@ export default function Login() {
               "En un momento sera redirigido"
             );
             delay(1000).then(() => {
-              /*
-            navigate("/Menu", {
-              state: [
-                {
-                  loginID: loginData.id_number,
-                  loginType: loginData.id_number.length > 7 ? 7 : 1,
-                },
-              ],
-            });
-            */
               if (loginData.id_number.length > 7) {
                 navigate("/Menu-Estudiante", {
                   //Patron GOF - Proxy - Stage
@@ -170,8 +148,8 @@ export default function Login() {
           />
           {!validID && loginData.id_number.length > 0 && (
             <label className="LoginWarning">
-              Debe contener 8 digitos, puede tener una m o M al principio si se
-              trata de un estudiante de posgrado{" "}
+              Debe contener 8 digitos, puede tener una de las siguientes letras
+              si es que su matricula ya cuenta con ellas: B, b, C, c, D, d, M, m{" "}
             </label>
           )}
           <h4>Contraseña</h4>
@@ -183,7 +161,9 @@ export default function Login() {
             autoComplete="off"
           />
           {!validPass && loginData.password.length > 0 && (
-            <label className="LoginWarning">Debe contener entre 4 y 8 digitos </label>
+            <label className="LoginWarning">
+              Debe contener entre 4 y 8 digitos{" "}
+            </label>
           )}
           <br />
           <br />

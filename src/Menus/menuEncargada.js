@@ -143,6 +143,15 @@ function MenuEncargada() {
             >
               Administración de Tramites{" "}
             </button>{" "}
+            <button
+              id="edicionCorreos"
+              className="button"
+              onClick={() => {
+                setIndexVisible(17);
+              }}
+            >
+              Administración de Correos{" "}
+            </button>{" "}
           </div>{" "}
           <div>
             <div className="content">

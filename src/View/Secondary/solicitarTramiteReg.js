@@ -14,7 +14,16 @@ const SolicitarRegistroTramite = ({
 
   const [transactionMetadata, setTransactionMetadata] = useState({
     trInfo: "",
-    trReq: "",
+    trReq1: "a",
+    trReq2: "a",
+    trReq3: "a",
+    trReq4: "a",
+    trReq5: "a",
+    trReq6: "a",
+    trReq7: "a",
+    trReq8: "a",
+    trReq9: "a",
+    trReq10: "a",
   });
 
   const toast = useRef(null);
@@ -148,25 +157,34 @@ const SolicitarRegistroTramite = ({
       })
       .then((response) => {
         //console.log(response.data)
-        let requisitos = "";
         let cantidadR = response.data.result.count - 1;
         for (let i=1; i <= cantidadR; i++){
-          requisitos= requisitos + response.data.result.rows[i].texto
-          requisitos = requisitos.replace("\\n"," ")
-          requisitos = requisitos.replace("\\"," ")
+          requisitos= response.data.result.rows[i].texto
+          requisitos = requisitos.replace("\\n","-")
+          requisitos = requisitos.replace("\\","-")
+          response.data.result.rows[i].texto = requisitos;
         }
-        //console.log(requisitos)
         if(response.data.Code === 1){
           setTransactionMetadata({
             trInfo: response.data.result.rows[0].texto,
-            trReq: requisitos
+            trReq1: response.data.result.rows[1].texto,
+            trReq2: response.data.result.rows[2].texto,
+            trReq3: response.data.result.rows[3].texto,
+            trReq4: response.data.result.rows[4].texto,
+            trReq5: response.data.result.rows[5].texto,
+            trReq6: response.data.result.rows[6].texto,
+            trReq7: response.data.result.rows[7].texto,
+            trReq8: response.data.result.rows[8].texto,
+            trReq9: response.data.result.rows[9].texto,
+            trReq10: response.data.result.rows[10].texto,
           });
         }
       })
       .catch(() => {
-        showToast("error", "Error inesperado", "Porfavor intentelo mas tarde");
+        showToast("error", "Error inesperados", "Porfavor intentelo mas tarde");
       });
-    console.log(requisitos)
+
+    //console.log(requisitos)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -181,16 +199,23 @@ const SolicitarRegistroTramite = ({
         {isActive && (
           <div className="contenidoAcordeon">
             <p>
-              <label>Información: </label>
+              <label>Información:  </label> <br></br>
               {transactionMetadata.trInfo === ""
                 ? "Información no disponible"
                 : transactionMetadata.trInfo}
             </p>
             <p>
-              <label>Requisitos: </label>
-              {transactionMetadata.trReq === ""
-                ? "Requisitos no disponibles"
-                : transactionMetadata.trReq}
+              <label>Requisitos: </label>   <br></br>
+              {transactionMetadata.trReq1}  <br></br>
+              {transactionMetadata.trReq2}  <br></br>
+              {transactionMetadata.trReq3}  <br></br>
+              {transactionMetadata.trReq4}  <br></br>
+              {transactionMetadata.trReq5}  <br></br>
+              {transactionMetadata.trReq6}  <br></br>
+              {transactionMetadata.trReq7}  <br></br>
+              {transactionMetadata.trReq8}  <br></br>
+              {transactionMetadata.trReq9}  <br></br>
+              {transactionMetadata.trReq10} <br></br>
             </p>
             <button className="solicitarTramite" onClick={handleRequestSubmit}>
               Solicitar

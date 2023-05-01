@@ -8,6 +8,7 @@ import InformacionUsuario from "../Menus/Submodulos/informacionUsuario";
 import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 import AdministracionUsuarios from "../Menus/Submodulos/AdministracionUsuarios";
 import AdministracionTramites from "../Menus/Submodulos/administracionTramites";
+import EdicionCorreos from "../Menus/Submodulos/edicionCorreos";
 
 const CambiarVistaController = ( {
   VistaIndex,
@@ -52,6 +53,8 @@ const CambiarVistaController = ( {
     return <AdministracionUsuarios / > ;
   case 16:
     return <AdministracionTramites / > ;
+  case 17:
+    return <EdicionCorreos / > ;
   default:
     if ( VistaIndex < 7 ) {
       return <BienvenidaEncargada / > ;

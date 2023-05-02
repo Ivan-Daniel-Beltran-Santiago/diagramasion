@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from 'styled-components';
 import { Toast } from "primereact/toast";
+
 const Container = styled.div`padding: 1em;`;
+const Requisito = styled.label`color: gray; font-size: 12px`
+
 
 function EdicionCorreos() {
 
@@ -22,6 +25,8 @@ function EdicionCorreos() {
                             <option id="Seleccionar">Seleccionar</option>
                         </select>
                     </span>
+                    <br></br>
+                    <Requisito>Inserte un correo válido</Requisito>
                     <hr></hr>
                     <label>Asunto:ㅤㅤ</label>
                     <input
@@ -30,6 +35,8 @@ function EdicionCorreos() {
                         id="asunto"
                         onChange={null}>
                     </input>
+                    <br></br>
+                    <Requisito>Sólo se permiten caracteres A-Z y números</Requisito>
                     <br></br>
                     <br></br>
                     <label>Correo a enviar:ㅤ</label>
@@ -40,6 +47,8 @@ function EdicionCorreos() {
                         onChange={null}>
                     </input>
                     <br></br>
+                    <Requisito>Inserte un correo válido</Requisito>
+                    <br></br>
                     <br></br>
                     <label>Cuerpo:</label>
                     <textarea
@@ -48,6 +57,9 @@ function EdicionCorreos() {
                         id="cuerpoCorreo"
                         placeholder="Texto del correo">
                     </textarea>
+                    <br></br>
+                    <br></br>
+                    <Requisito>Seleccione un documento en formato PDF</Requisito>
                     <br></br>
                     <label>Documentos:  </label>
                     <input

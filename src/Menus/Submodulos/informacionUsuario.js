@@ -41,7 +41,7 @@ function InformacionUsuario({ currentUser }) {
     let entry = event.target.value;
     switch (event.target.name) {
       case "newPassword":
-        let passwordValidator = new RegExp("^[0-9]{4,8}$");
+        let passwordValidator = new RegExp("^[0-9]{3,8}$");
         setValidPass(passwordValidator.test(entry));
         setEqualPass(
           document.getElementById("newPassword").value ===
@@ -49,7 +49,7 @@ function InformacionUsuario({ currentUser }) {
         );
         break;
       case "confirmPassword":
-        let confirmValidator = new RegExp("^[0-9]{4,8}$");
+        let confirmValidator = new RegExp("^[0-9]{3,8}$");
         setValidConfirm(confirmValidator.test(entry));
         setEqualPass(
           document.getElementById("newPassword").value ===

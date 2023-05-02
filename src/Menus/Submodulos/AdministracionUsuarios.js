@@ -10,6 +10,8 @@ function AdministracionUsuarios() {
   const [registroUsuarios, setRegistroUsuarios] = useState([{}]);
   //Permitir el procesamiento del excel
   const [permitirExcel, setPermitirExcel] = useState(false);
+  //Almancenar ultima matricula
+  const [ultimaMatricula, setUltimaMatricula] = useState("");
   //Determinar si se trata de un Encargado o un estudiante
   const [esEncargado, setEsEncargado] = useState(false);
   //Registro de un solo estudiante
@@ -19,6 +21,7 @@ function AdministracionUsuarios() {
     correoElectronico: "",
     carrera: "",
     semestre: "",
+    newMatricula: ""
   });
   //Validar a un solo estudiante
   const [validRegistro, setValidRegistro] = useState({
@@ -28,6 +31,7 @@ function AdministracionUsuarios() {
     carrera: false,
     semestre: false,
   });
+
 
   //Alertas
   const toast = useRef(null);
@@ -171,8 +175,8 @@ function AdministracionUsuarios() {
   const validateInputChange = (event) => {
     switch (event.target.name) {
       case "matricula":
-        let ValidadorStudent = new RegExp("^(M|m)?[0-9]{8}$");
-        let ValidadorAdmin = new RegExp("^[0-9]{5}$");
+        let ValidadorStudent = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
+        let ValidadorAdmin = new RegExp("^[0-9]{3}$");
         setValidRegistro({
           ...validRegistro,
           [event.target.name]:
@@ -322,7 +326,7 @@ function AdministracionUsuarios() {
       validRegistro.correoElectronico === true
     ) {
       if (esEncargado) {
-        if(registroUsuario.matricula.length === 5){
+        if(registroUsuario.matricula.length === 3){
           uploadEncargado();
         }else{
           showToast(
@@ -332,7 +336,7 @@ function AdministracionUsuarios() {
           );
         }
       } else {
-        if(registroUsuario.matricula.length !=5){
+        if(registroUsuario.matricula.length !=3){
           uploadAlumno();
         }else{
           showToast(
@@ -374,6 +378,13 @@ function AdministracionUsuarios() {
                 "Datos encontrados",
                 "Se encontraron los datos de " + registroUsuario.matricula
               );
+              setValidRegistro({
+                matricula: true,
+                nombreCompleto: true,
+                correoElectronico: true,
+                carrera: true,
+                semestre: true,
+              });
             }
             if (result.data.Code == -1) {
               showToast(
@@ -435,6 +446,13 @@ function AdministracionUsuarios() {
                 "Datos encontrados",
                 "Se encontraron los datos de " + registroUsuario.matricula
               );
+              setValidRegistro({
+                matricula: true,
+                nombreCompleto: true,
+                correoElectronico: true,
+                carrera: true,
+                semestre: true,
+              });
             }
             if (result.data.Code == -1) {
               showToast(
@@ -482,14 +500,19 @@ function AdministracionUsuarios() {
     const srvReq = srvDir.getServer() + "/EditEstudiante";
     if(validRegistro.carrera === true && validRegistro.semestre === true){
     try {
-        let matricula = registroUsuario.matricula;
+        let matricula = ultimaMatricula;
         let nombre_Completo = registroUsuario.nombreCompleto
         let correo_e = registroUsuario.correoElectronico;
         let carrera = registroUsuario.carrera;
         let semestre = registroUsuario.semestre;
+        let newMatricula = registroUsuario.matricula;
+
+        console.log({matricula, newMatricula});
+
         axios
           .post(srvReq, {
             matriculaUser: matricula,
+            nuevaMatricula: newMatricula,
             nombreUser: nombre_Completo,
             correoUser: correo_e,
             carreraUser: carrera,
@@ -515,6 +538,7 @@ function AdministracionUsuarios() {
           .catch((error) => {
             console.log(error);
           });
+        setUltimaMatricula(registroUsuario.matricula);
     } catch (exception) {
       showToast(
         "error",
@@ -538,13 +562,18 @@ function AdministracionUsuarios() {
       const srvDir = new ServerConnectionConfig();
       const srvReq = srvDir.getServer() + "/EditEncargados";
       try {
-          let matricula = registroUsuario.matricula;
-          let nombre_Completo = registroUsuario.nombreCompleto
+          let matricula = ultimaMatricula;
+          let nombre_Completo = registroUsuario.nombreCompleto;
           let contraseña = registroUsuario.matricula;
           let correo_e = registroUsuario.correoElectronico;
+          let newMatricula = registroUsuario.matricula;
+
+          console.log({matricula, newMatricula});
+
           axios
             .post(srvReq, {
               matriculaUser: matricula,
+              nuevaMatricula: newMatricula,
               nombreUser: nombre_Completo,
               contraseñaUser: contraseña,
               correoUser: correo_e,
@@ -569,6 +598,7 @@ function AdministracionUsuarios() {
             .catch((error) => {
               console.log(error);
             });
+          setUltimaMatricula(registroUsuario.matricula);
       } catch (exception) {
         showToast(
           "error",
@@ -628,7 +658,7 @@ function AdministracionUsuarios() {
 
   const searchUser = () => {
     if(esEncargado){
-        if(registroUsuario.matricula.length == 5){
+        if(registroUsuario.matricula.length == 3){
           searchEncargada();
         }
         else{
@@ -637,14 +667,15 @@ function AdministracionUsuarios() {
             "Finalizado",
             "El usuario con matricula " +
               registroUsuario.matricula +
-              "no es un estudiante."
+              " no es un estudiante."
           );
           clearAll();
         }
       }
       else{
         searchAlumno();
-      }
+    }
+    setUltimaMatricula(registroUsuario.matricula);
   }
 
   const clearAll = () => {
@@ -773,12 +804,11 @@ function AdministracionUsuarios() {
         </p>
         <ul>
           <li>
-            La matricula debe constar de 5 digitos para los encargados, y 8
+            La matricula debe constar de 3 digitos para los encargados, y 8
             digitos para los estudiantes.{" "}
           </li>
           <li>
-            En caso de ser estudiantes de posgrado, la matricula debe empezar
-            con la letra "M", ya sea mayuscula o minuscula.
+            En casos especiales, se pueden utilizar las letras B, C, D, y M, ya sea mayuscula o minuscula.
           </li>
           <li>
             El correo electronico debe ser uno valido y capaz de operar con
@@ -794,7 +824,7 @@ function AdministracionUsuarios() {
         onChange={handleCheckChange}
         ></input>
         <p>
-          <label>Matricula: </label>
+          <label>Matricula:ㅤ</label>
           <input
             type="text"
             name="matricula"
@@ -809,7 +839,7 @@ function AdministracionUsuarios() {
           )}
         </p>
         <p>
-          <label>Nombre completo: </label>
+          <label>Nombre completo:ㅤ</label>
           <input
             type="text"
             name="nombreCompleto"
@@ -818,7 +848,7 @@ function AdministracionUsuarios() {
           ></input>
         </p>
         <p>
-          <label>Correo Electronico: </label>
+          <label>Correo Electronico:ㅤ</label>
           <input
             type="text"
             name="correoElectronico"
@@ -833,7 +863,7 @@ function AdministracionUsuarios() {
         </p>
         {!esEncargado && (
           <p>
-            <label>Carrera: </label>
+            <label>Carrera:ㅤ</label>
             <input
               type="text"
               name="carrera"
@@ -844,7 +874,7 @@ function AdministracionUsuarios() {
         )}
         {!esEncargado && (
           <p>
-            <label>Semestre: </label>
+            <label>Semestre:ㅤ</label>
             <input
               type="number"
               name="semestre"

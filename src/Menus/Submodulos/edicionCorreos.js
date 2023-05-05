@@ -5,10 +5,50 @@ import { Toast } from "primereact/toast";
 const Container = styled.div`padding: 1em;`;
 const Requisito = styled.label`color: gray; font-size: 12px`
 
-
 function EdicionCorreos() {
 
     const toast = useRef(null);
+    const [selectedFile] = useState(null);
+    const [isSelected, setIsSelected] = useState(false);
+
+    const [errorMessage, setMessage] = useState("");
+
+    const changeHandler = (event) => {
+        const selectedFile = event.target.files[0];
+
+        if (selectedFile && selectedFile.type !== 'application/pdf') {
+            setMessage('Solo se permiten archivos PDF');
+        }
+        else {
+
+            //Si el archivo pesa más de 2MB
+            if (selectedFile && selectedFile.size > 2000000) {
+                setMessage(`El archivo es demasiado grande (máximo 2 MB).`);
+                event.target.value = null;
+                return;
+            } 
+            else {
+                setIsSelected(true);
+                setMessage("Presione el botón de 'Subr Archivo' para guardar");
+            }
+        }
+    };
+
+    const handleSubmit = async (event) => {
+        try {
+            const formData = new FormData();
+            formData.append('archivo', selectedFile);
+
+            const response = await fetch('', { method: 'POST', body: formData, });
+
+            if (!response.ok) { setMessage('Hubo un problema. Inténtalo más tarde'); }
+
+        }
+        catch (errorMessage) {
+            console.error(errorMessage);
+            setMessage('Hubo un problema al subir el archivo al servidor.');
+        }
+    };
 
     return (
         <Container>
@@ -25,6 +65,7 @@ function EdicionCorreos() {
                             <option id="Seleccionar">Seleccionar</option>
                         </select>
                     </span>
+
                     <br></br>
                     <Requisito>Inserte un correo válido</Requisito>
                     <hr></hr>
@@ -35,10 +76,12 @@ function EdicionCorreos() {
                         id="asunto"
                         onChange={null}>
                     </input>
+
                     <br></br>
                     <Requisito>Sólo se permiten caracteres A-Z y números</Requisito>
                     <br></br>
                     <br></br>
+
                     <label>Correo a enviar:ㅤ</label>
                     <input
                         type="text"
@@ -48,8 +91,10 @@ function EdicionCorreos() {
                     </input>
                     <br></br>
                     <Requisito>Inserte un correo válido</Requisito>
+
                     <br></br>
                     <br></br>
+
                     <label>Cuerpo:</label>
                     <textarea
                         className="form-control"
@@ -57,28 +102,35 @@ function EdicionCorreos() {
                         id="cuerpoCorreo"
                         placeholder="Texto del correo">
                     </textarea>
+
                     <br></br>
                     <br></br>
-                    <Requisito>Seleccione un documento en formato PDF</Requisito>
-                    <br></br>
+
                     <label>Documentos:  </label>
-                    <input
-                        type="file"
-                        id="subirArchivosCorreos"
-                        name="Subir documentos pdf"
-                        onChange={null}>
+                    <input 
+                    type="file" 
+                    id="subirArchivosCorreos" 
+                    name="Subir documentos pdf"
+                    accept="application/pdf"
+                    onChange={changeHandler}>
                     </input>
+                    {errorMessage && <Requisito>{errorMessage}</Requisito>}
+                    {isSelected ? (
+                        <div>
+                        </div>
+                    ) : (
+                        <><br></br><Requisito>Sleccione un archivo en formato PDF, no mayor a 2MB</Requisito></>
+                    )}
                     <br></br>
                     <input
-                        type="button"
+                        type="submit"
                         className="cargarDocsCorreos"
-                        value="Guardar"
-                        onClick={null}>
+                        value="Subir archivo"
+                        onClick={handleSubmit}>
                     </input>
                 </div>
             </div>
         </Container>
     );
 }
-
 export default EdicionCorreos;

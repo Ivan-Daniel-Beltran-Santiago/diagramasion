@@ -18,6 +18,7 @@ function EdicionCorreos() {
 
         if (selectedFile && selectedFile.type !== 'application/pdf') {
             setMessage('Solo se permiten archivos PDF');
+            event.target.value = null;
         }
         else {
 
@@ -29,12 +30,18 @@ function EdicionCorreos() {
             } 
             else {
                 setIsSelected(true);
-                setMessage("Presione el botón de 'Subr Archivo' para guardar");
+                setMessage("Presione el siguiente botón para guardar");
             }
         }
     };
 
     const handleSubmit = async (event) => {
+
+        if (!selectedFile) {
+            setMessage("Por favor, seleccione un archivo.");
+            return;
+          }
+
         try {
             const formData = new FormData();
             formData.append('archivo', selectedFile);
@@ -114,14 +121,12 @@ function EdicionCorreos() {
                     accept="application/pdf"
                     onChange={changeHandler}>
                     </input>
-                    {errorMessage && <Requisito>{errorMessage}</Requisito>}
                     {isSelected ? (
-                        <div>
-                        </div>
+                         <br></br>
                     ) : (
-                        <><br></br><Requisito>Sleccione un archivo en formato PDF, no mayor a 2MB</Requisito></>
+                        <><br></br><Requisito>Seleccione un archivo en formato PDF, no mayor a 2MB</Requisito></>
                     )}
-                    <br></br>
+                    {errorMessage && <Requisito>{errorMessage}</Requisito>}
                     <input
                         type="submit"
                         className="cargarDocsCorreos"

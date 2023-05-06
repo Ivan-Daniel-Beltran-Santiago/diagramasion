@@ -42,10 +42,77 @@ function EdicionCorreos() {
             });
     };
 
+    const guardarCorreo = () => {
+        const srvDir = new ServerConnectionConfig();
+        const srvReq = srvDir.getServer() + "/ModificarJSON";
+        try {
+            var elemento = document.getElementById("seleccionMetadata");
+            var ID_Metadata = elemento.options[elemento.selectedIndex].value;
+            let cuerpo = document.getElementById("cuerpoCorreo").value;
+            let destinatario = document.getElementById("correoDestinatario").value;
+            let asunto = document.getElementById("asunto").value;
+            let adjuntos = "Archivos Adjuntos";
+            let nombre_a = "";
+
+            if (ID_Metadata !== "Seleccionar") {
+                switch (ID_Metadata) {
+                    case "0":
+                        nombre_a = "inicio.json"
+                        break;
+                    case "1":
+                        nombre_a = "seguimiento.json"
+                        break;
+                    default:
+                        break;
+                }
+                axios
+                    .post(srvReq, {
+                        Cuerpo: cuerpo,
+                        Destinatario: destinatario,
+                        Asunto: asunto,
+                        Adjuntos: adjuntos,
+                        nombreArchivo: nombre_a
+                    })
+                    .then((result) => {
+                        if (result.data.Code === 1) {
+                            showToast(
+                                "success",
+                                "Actualizado",
+                                "Los cambios han sido guardados"
+                            );
+                        }
+                        else {
+                            showToast(
+                                "error",
+                                "Error",
+                                "Los cambios no han sido guardados"
+                            );
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+            if (ID_Metadata === "Seleccionar") {
+                showToast(
+                    "error",
+                    "Error",
+                    "Seleccione una opcion"
+                );
+            }
+        } catch (exception) {
+            showToast(
+                "error",
+                "Inicios de sesión",
+                "Ha ocurrido un error inesperado." + exception
+            );
+        }
+    };
+
     //Colocar el valor del campo seleccionado en el area de texto para poder cambiarlo
     const ColocarMetadata = () => {
         var elemento = document.getElementById("seleccionMetadata");
-        //console.log(elemento.options[elemento.selectedIndex].value)
+        console.log(elemento.options[elemento.selectedIndex].value)
         var ID_Metadata = elemento.options[elemento.selectedIndex].value;
         if (ID_Metadata !== "Seleccionar") {
             document.getElementById("asunto").value = listaCorreos[ID_Metadata].asunto;
@@ -79,7 +146,7 @@ function EdicionCorreos() {
                 setMessage(`El archivo es demasiado grande (máximo 2 MB).`);
                 event.target.value = null;
                 return;
-            } 
+            }
             else {
                 setIsSelected(true);
                 setMessage("Presione el siguiente botón para guardar");
@@ -92,7 +159,7 @@ function EdicionCorreos() {
         if (!selectedFile) {
             setMessage("Por favor, seleccione un archivo.");
             return;
-          }
+        }
 
         try {
             const formData = new FormData();
@@ -189,15 +256,15 @@ function EdicionCorreos() {
                     <br></br>
 
                     <label>Documentos:  </label>
-                    <input 
-                    type="file" 
-                    id="subirArchivosCorreos" 
-                    name="Subir documentos pdf"
-                    accept="application/pdf"
-                    onChange={changeHandler}>
+                    <input
+                        type="file"
+                        id="subirArchivosCorreos"
+                        name="Subir documentos pdf"
+                        accept="application/pdf"
+                        onChange={changeHandler}>
                     </input>
                     {isSelected ? (
-                         <br></br>
+                        <br></br>
                     ) : (
                         <><br></br><Requisito>Seleccione un archivo en formato PDF, no mayor a 2MB</Requisito></>
                     )}
@@ -209,6 +276,12 @@ function EdicionCorreos() {
                         onClick={handleSubmit}>
                     </input>
                 </div>
+                <input
+                    type="submit"
+                    className="guardarCorreo"
+                    value="Guardar Cambios"
+                    onClick={guardarCorreo}>
+                </input>
             </div>
         </Container>
     );

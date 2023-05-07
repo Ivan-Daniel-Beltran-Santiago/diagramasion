@@ -105,6 +105,43 @@ function AdministracionTramites() {
     });
   };
 
+  const GuardarCambios = () => {
+    // Obtener el ID de la metadata seleccionada
+    const elementoMetadata = document.getElementById("seleccionMetadata");
+    const ID_Metadata = elementoMetadata.options[elementoMetadata.selectedIndex].value;
+
+    // Obtener el valor del campo de texto
+    const contenidoMetadata = document.getElementById("contenidoMetadata").value;
+
+    if (ID_Metadata !== "Seleccionar" && ID_Metadata !== "Fallo"){
+      const srvDir = new ServerConnectionConfig();
+      const srvReq = srvDir.getServer() + "/GestionTramites/ActualizarMetadata";
+      axios
+        .post(srvReq, {ID_Metadata, contenidoMetadata})
+        .then((respuesta) => {
+          showToast(
+            "success",
+            "Guardar Cambios",
+            "Se ha actualizado el metadata exitosamente."
+          );
+        })
+        .catch((error) => {
+          console.log(error);
+          showToast(
+            "error",
+            "Guardar Cambios",
+            "Ha ocurrido un error al actualizar la metadata, por favor contacte al administrador del sistema."
+          );
+        });
+    } else {
+      showToast(
+        "warn",
+        "Guardar Cambios",
+        "Por favor seleccione una metadata antes de guardar los cambios."
+      )
+    }
+  }
+
   return (
     <Container>
       <Toast ref={toast} position="top-right" />
@@ -162,7 +199,7 @@ function AdministracionTramites() {
           ></textarea>
           <br></br>
         </div>
-        <button type="button" className="btn btn-danger">
+        <button type="button" className="btn btn-danger" onClick={GuardarCambios}>  
           Guardar Cambios
         </button>
       </div>

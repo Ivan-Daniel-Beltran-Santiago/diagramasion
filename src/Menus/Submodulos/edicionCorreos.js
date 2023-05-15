@@ -25,7 +25,7 @@ function EdicionCorreos() {
             .then((response) => {
                 //Se añaden todos los trámites a el arreglo
                 if (response.data.Code == 0) {
-                    console.log("el codigo fue 0")
+                    //console.log("el codigo fue 0")
                 }
                 else {
                     //console.log(response.data)
@@ -112,7 +112,7 @@ function EdicionCorreos() {
     //Colocar el valor del campo seleccionado en el area de texto para poder cambiarlo
     const ColocarMetadata = () => {
         var elemento = document.getElementById("seleccionMetadata");
-        console.log(elemento.options[elemento.selectedIndex].value)
+        //console.log(elemento.options[elemento.selectedIndex].value)
         var ID_Metadata = elemento.options[elemento.selectedIndex].value;
         if (ID_Metadata !== "Seleccionar") {
             document.getElementById("asunto").value = listaCorreos[ID_Metadata].asunto;
@@ -189,8 +189,6 @@ function EdicionCorreos() {
     //Funcion que carga lo interno al renderizar
     useEffect(() => {
         ObtenerCorreos();
-        ObtenerCorreos();
-        console.log(listaCorreos);
     }, []);
 
     return (

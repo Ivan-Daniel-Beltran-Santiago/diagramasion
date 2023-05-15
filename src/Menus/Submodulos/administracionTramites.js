@@ -108,22 +108,37 @@ function AdministracionTramites() {
   const GuardarCambios = () => {
     // Obtener el ID de la metadata seleccionada
     const elementoMetadata = document.getElementById("seleccionMetadata");
-    const ID_Metadata = elementoMetadata.options[elementoMetadata.selectedIndex].value;
+    let ID_Metadata = elementoMetadata.options[elementoMetadata.selectedIndex].value;
+
+    ID_Metadata = (parseInt(ID_Metadata) + 1).toString();
 
     // Obtener el valor del campo de texto
     const contenidoMetadata = document.getElementById("contenidoMetadata").value;
+
+    //console.log(ID_Metadata, contenidoMetadata)
 
     if (ID_Metadata !== "Seleccionar" && ID_Metadata !== "Fallo"){
       const srvDir = new ServerConnectionConfig();
       const srvReq = srvDir.getServer() + "/GestionTramites/ActualizarMetadata";
       axios
-        .post(srvReq, {ID_Metadata, contenidoMetadata})
+        .post(srvReq, {  id_metadata: ID_Metadata, contenido: contenidoMetadata})
         .then((respuesta) => {
-          showToast(
-            "success",
-            "Guardar Cambios",
-            "Se ha actualizado el metadata exitosamente."
-          );
+          if(respuesta.data.Code == 1){
+            showToast(
+              "success",
+              "Guardar Cambios",
+              "Se ha actualizado el metadata exitosamente."
+            );
+            ObtenerTramites();
+            ObtenerMetadataTramites();
+          }
+          else{
+            showToast(
+              "error",
+              "Guardar Cambios",
+              "Ha ocurrido un error al actualizar la metadata, por favor contacte al administrador del sistema."
+            );
+          }
         })
         .catch((error) => {
           console.log(error);

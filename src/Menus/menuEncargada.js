@@ -117,15 +117,6 @@ function MenuEncargada() {
               Informe Estadistico{" "}
             </button>{" "}
             <button
-              id="informacionUsuario"
-              className="button"
-              onClick={() => {
-                setIndexVisible(6);
-              }}
-            >
-              Información de Usuario{" "}
-            </button>{" "}
-            <button
               id="administracionUsuarios"
               className="button"
               onClick={() => {
@@ -151,6 +142,15 @@ function MenuEncargada() {
               }}
             >
               Administración de Correos{" "}
+            </button>{" "}
+            <button
+              id="informacionUsuario"
+              className="button"
+              onClick={() => {
+                setIndexVisible(6);
+              }}
+            >
+              Información de Usuario{" "}
             </button>{" "}
           </div>{" "}
           <div>

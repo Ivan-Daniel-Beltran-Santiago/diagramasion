@@ -85,14 +85,24 @@ function EdicionCorreos() {
         },
       })
       .then((resultado) => {
-        console.log(resultado);
+        console.log(resultado.data.Code);
+        if(resultado.data.Code === 1){
+          showToast(
+                "success",
+                "Actualizado",
+                "Los cambios han sido guardados"
+              );
+        }
+        else{
+          showToast("error", "Error", "Los cambios no han sido guardados");
+        }
       })
       .catch((error) => console.log(error));
   };
 
   const guardarCorreo = () => {
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/ModificarJSON";
+    const srvReq = srvDir.getServer() + "/ModificarCorreo";
     try {
       var elemento = document.getElementById("seleccionMetadata");
       var ID_Metadata = elemento.options[elemento.selectedIndex].value;
@@ -106,9 +116,11 @@ function EdicionCorreos() {
         switch (ID_Metadata) {
           case "0":
             nombre_a = "inicio.json";
+            adjuntos = listaCorreos[0].adjuntos.toString()
             break;
           case "1":
             nombre_a = "seguimiento.json";
+            adjuntos = listaCorreos[1].adjuntos.toString()
             break;
           default:
             break;
@@ -119,7 +131,6 @@ function EdicionCorreos() {
             Destinatario: destinatario,
             Asunto: asunto,
             Adjuntos: adjuntos,
-            nombreArchivo: nombre_a,
           })
           .then((result) => {
             if (result.data.Code === 1) {
@@ -129,6 +140,7 @@ function EdicionCorreos() {
                 "Los cambios han sido guardados"
               );
             } else {
+              console.log(result)
               showToast("error", "Error", "Los cambios no han sido guardados");
             }
           })

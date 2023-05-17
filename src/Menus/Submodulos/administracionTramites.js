@@ -214,7 +214,7 @@ function AdministracionTramites() {
           ></textarea>
           <br></br>
         </div>
-        <button type="button" className="btn btn-danger" onClick={GuardarCambios}>  
+        <button type="button" class="w3-button w3-green" onClick={GuardarCambios}>  
           Guardar Cambios
         </button>
       </div>

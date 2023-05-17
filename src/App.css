@@ -37,9 +37,9 @@
   width: 95%;
   padding: 10px;
   margin: 20px;
-  margin-top:15px;
-  border: 2px;
-  border-style: inset;
+  margin-top: 15px;
+  border: 4px;
+  border-style:ridge;
 }
 
 .content{
@@ -233,4 +233,18 @@ button:hover{
 
 .login h2{
   margin-bottom: 20px;
+}
+
+.Obligatorio{
+  color: rgb(255, 0, 0)
+}
+
+.Indicador{
+  font-weight: bold;
+}
+
+.EncargadaCB{
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
 }

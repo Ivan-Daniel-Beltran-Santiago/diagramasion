@@ -26,10 +26,11 @@ function SolicitarTramite({ CurretActiveUser }) {
 
   return (
     <div id="administrarSolicitudes" className="modules">
+      <span>Clicle el tramite a solicitar, para acceder a su boton y comenzar el tramite. </span>
       {transactionList.map(function (item) {
         const metadata = item.Tramite_Ms;
         return (
-          <SolicitarRegistroTramite
+          <SolicitarRegistroTramite 
             nombre={item.nombre_Tramite}
             idTramite={item.id_Tramite}
             informacion={metadata ? metadata[0] : ""}

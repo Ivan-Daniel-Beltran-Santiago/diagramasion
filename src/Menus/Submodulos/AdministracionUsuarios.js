@@ -723,18 +723,17 @@ function AdministracionUsuarios() {
     <div className="AdministracionUsuarios modules">
       <Toast ref={toast} position="top-right" />
       <div className="InsertarExcel modules">
-        <label>Subir inicios de sesión (Excel)</label>
+      <br /> <label className="Indicador">Subir inicios de sesión (Excel)</label> <br />
         <p
           title="Subir inicios de sesión (Excel)"
           style={{ textAlign: "justify" }}
         >
-          Este apartado se encarga de subir los inicios de sesión para los
+          <u>Este apartado se encarga de subir los inicios de sesión para los
           estudiantes activos de la institución, por medio de un archivo
           previamente solicitado al departamento encargado de las altas y bajas
-          estudiantiles.
+          estudiantiles.</u>
         </p>
-        <br />
-        <label>Estructura y contenidos del archivo Excel</label>u
+        <label className="Indicador">Estructura y contenidos del archivo Excel</label>
         <p title="Formato Excel" style={{ textAlign: "justify" }}>
           El archivo tiene ciertos requerimientos para que funcione con el resto
           del sistema, los cuales se presentan a continuación
@@ -767,7 +766,7 @@ function AdministracionUsuarios() {
           <li>Los datos del estudiante deberán seguir el siguiente formato</li>
           <ul>
             <li>
-              La matricula debe constar de 5 digitos para los encargados, y 8
+              La matricula debe constar de 3 digitos para los encargados, y 8
               digitos para los estudiantes.{" "}
             </li>
             <li>
@@ -806,13 +805,12 @@ function AdministracionUsuarios() {
         </form>
       </div>
       <div className="Insertar modules">
-        <label>Subir/modificar inicio de sesión</label>
+      <br /><label className="Indicador">Subir/modificar inicio de sesión</label>
         <p title="Subir inicio de sesión" style={{ textAlign: "justify" }}>
-          Este apartado se encarga de subir o modificar un inicio de sesión a la
-          vez, de manera manual.
+          <u>Este apartado se encarga de subir o modificar un inicio de sesión a la
+          vez, de manera manual.</u>
         </p>
-        <br />
-        <label>Formato de datos del estudiante</label>
+        <label className="Indicador">Formato de datos del estudiante</label>
         <p title="Formato Excel" style={{ textAlign: "justify" }}>
           Los datos del estudiante deben seguir cierto formato para ser
           aceptados en la base de datos, los cuales se describen a continuación.
@@ -832,14 +830,17 @@ function AdministracionUsuarios() {
           </li>
           <li>El semestre debe ser un número entero entre 1 y 14.</li>
         </ul>
-        <label>Encargada</label>
+        <p>
+        <label>Encargadaㅤ</label>
         <input
           type="checkbox"
           id="checkEncargada"
+          className="EncargadaCB"
           onChange={handleCheckChange}
         ></input>
+        </p>
         <p>
-          <label>Matricula:ㅤ</label>
+          <label>Matricula:</label><label className="Obligatorio">*ㅤ</label>
           <input
             type="text"
             name="matricula"
@@ -854,7 +855,7 @@ function AdministracionUsuarios() {
           )}
         </p>
         <p>
-          <label>Nombre completo:ㅤ</label>
+          <label>Nombre completo:</label><label className="Obligatorio">*ㅤ</label>
           <input
             type="text"
             name="nombreCompleto"
@@ -863,7 +864,7 @@ function AdministracionUsuarios() {
           ></input>
         </p>
         <p>
-          <label>Correo Electronico:ㅤ</label>
+          <label>Correo Electronico:</label><label className="Obligatorio">*ㅤ</label>
           <input
             type="text"
             name="correoElectronico"
@@ -878,7 +879,7 @@ function AdministracionUsuarios() {
         </p>
         {!esEncargado && (
           <p>
-            <label>Carrera:ㅤ</label>
+            <label>Carrera:</label><label className="Obligatorio">*ㅤ</label>
             <input
               type="text"
               name="carrera"
@@ -889,7 +890,7 @@ function AdministracionUsuarios() {
         )}
         {!esEncargado && (
           <p>
-            <label>Semestre:ㅤ</label>
+            <label>Semestre:</label><label className="Obligatorio">*ㅤ</label>
             <input
               type="number"
               name="semestre"

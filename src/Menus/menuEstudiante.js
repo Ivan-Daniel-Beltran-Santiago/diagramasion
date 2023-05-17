@@ -66,17 +66,17 @@ function MenuEstudiante() {
               </button>
               <button
                 id="administrarSolicitudes"
-                className="button"
+                className="botonTramite"
                 onClick={() => setIndexVisible(8)}
               >
-                Tramites
+                Solicitar Tramites
               </button>
               <button
                 id="solicitudEstudiante"
                 className="button"
                 onClick={() => setIndexVisible(9)}
               >
-                Solicitudes
+                Solicitudes Realizadas
               </button>
               <button
                 id="informacionUsuario"

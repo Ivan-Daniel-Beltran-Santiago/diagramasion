@@ -14,16 +14,16 @@ const SolicitarRegistroTramite = ({
 
   const [transactionMetadata, setTransactionMetadata] = useState({
     trInfo: "",
-    trReq1: "a",
-    trReq2: "a",
-    trReq3: "a",
-    trReq4: "a",
-    trReq5: "a",
-    trReq6: "a",
-    trReq7: "a",
-    trReq8: "a",
-    trReq9: "a",
-    trReq10: "a",
+    trReq1: "error",
+    trReq3: "error",
+    trReq4: "error",
+    trReq2: "error",
+    trReq5: "error",
+    trReq6: "error",
+    trReq7: "error",
+    trReq8: "error",
+    trReq9: "error",
+    trReq10: "error",
   });
 
   const toast = useRef(null);
@@ -193,29 +193,30 @@ const SolicitarRegistroTramite = ({
       <Toast ref={toast} position="top-right" />
       <div className="accordion-item">
         <div className="tituloAcordeon" onClick={() => setIsActive(!isActive)}>
-          <div>{nombre}</div>
+          <div className="Indicador">{nombre}</div>
           <div>{isActive ? "-" : "+"}</div>
         </div>
         {isActive && (
           <div className="contenidoAcordeon">
+          <br />
             <p>
-              <label>Información:  </label> <br></br>
+              <label className="Indicador">Información:  </label> <br />
               {transactionMetadata.trInfo === ""
                 ? "Información no disponible"
                 : transactionMetadata.trInfo}
             </p>
             <p>
-              <label>Requisitos: </label>   <br></br>
-              {transactionMetadata.trReq1}  <br></br>
-              {transactionMetadata.trReq2}  <br></br>
-              {transactionMetadata.trReq3}  <br></br>
-              {transactionMetadata.trReq4}  <br></br>
-              {transactionMetadata.trReq5}  <br></br>
-              {transactionMetadata.trReq6}  <br></br>
-              {transactionMetadata.trReq7}  <br></br>
-              {transactionMetadata.trReq8}  <br></br>
-              {transactionMetadata.trReq9}  <br></br>
-              {transactionMetadata.trReq10} <br></br>
+              <label className="Indicador">Requisitos: </label>   <br />
+              {transactionMetadata.trReq1}  <br />
+              {transactionMetadata.trReq2}  <br />
+              {transactionMetadata.trReq3}  <br />
+              {transactionMetadata.trReq4}  <br />
+              {transactionMetadata.trReq5}  <br />
+              {transactionMetadata.trReq6}  <br />
+              {transactionMetadata.trReq7}  <br />
+              {transactionMetadata.trReq8}  <br />
+              {transactionMetadata.trReq9}  <br />
+              {transactionMetadata.trReq10} <br />
             </p>
             <button className="solicitarTramite" onClick={handleRequestSubmit}>
               Solicitar

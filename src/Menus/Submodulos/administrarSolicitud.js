@@ -279,21 +279,21 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
       <div className="newInterface_container">
         <div className="row_1_administrarSolicitud">
           <form className="w3-container">
-            <label>Nombre del solicitante: </label>
+            <label className="Indicador">Nombre del solicitante:⠀ </label>
             <label>
               {datosSolicitud.nombreSolicitante ??
                 "No se ha cargado ninguna solicitud"}
             </label>
             <br />
             <br />
-            <label>Trámite que solicita: </label>
+            <label className="Indicador">Trámite que solicita:⠀ </label>
             <label>
               {datosSolicitud.tramiteSolicitado ??
                 "No se ha cargado ninguna solicitud"}
             </label>
             <br />
             <br />
-            <label>Estatus actual: </label>
+            <label className="Indicador">Estatus actual:⠀ </label>
             <label>
               {datosSolicitud.estatusAlMomento
                 ? estatusLexico[datosSolicitud.estatusAlMomento]
@@ -301,7 +301,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             </label>
             <br />
             <br />
-            <label>Fecha en que se solicitó: </label>
+            <label className="Indicador">Fecha en que se solicitó:⠀ </label>
             <label>
               {datosSolicitud.fechaSolicitacion ??
                 "No se ha cargado ninguna solicitud"}
@@ -309,7 +309,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             <br />
             <br />
             <div>
-              <label>Progreso de la solicitud: </label>
+              <label className="Indicador">Progreso de la solicitud: </label>
 
               <div className="progressBar">
                 <div
@@ -329,14 +329,14 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             </div>
             <br />
             <br />
-            <label>Fecha del último estatus: </label>
+            <label className="Indicador">Fecha del último estatus: </label>
             <label>
               {datosSolicitud.fechaUltimaActualizacion ??
                 "No se ha cargado ninguna solicitud"}
             </label>
             <br />
             <br />
-            <label>Lista de documentos: </label>
+            <label className="Indicador">Lista de documentos: </label>
             <br />
             <br />
             {documentList !== undefined &&
@@ -356,7 +356,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         </div>
         <div className="row_2_administrarSolicitud">
           <form className="w3-container">
-            <label>Cambiar estatus: </label>
+            <label className="Indicador">Cambiar estatus: </label>
             <br />
             <br />
             <form className="w3-container">
@@ -373,7 +373,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
               </select>
             </form>
             <br />
-            <label>Retroalimentación: </label>
+            <label className="Indicador">Retroalimentación: </label>
             <br />
             <textarea
               name="retroalimentacion"
@@ -397,8 +397,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         </div>
       </div>
       <div className="requestInvoice">
-        <label>Guia de paqueteria: </label>
-        <br />
+        <label className="Indicador">Guia de paqueteria: </label>
         <br />
         <input
         type="text"

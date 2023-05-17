@@ -51,112 +51,68 @@ function EdicionCorreos() {
     const srvReq = srvDir.getServer() + "/ModificarJSON";
     const formData = new FormData();
 
-    //Añadimos otros parámetros importantes
-    formData.append("isSolicitud", false);
+    let emailValidator =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //console.log(document.getElementById("asunto").value.length);
 
-    formData.append(
-      "subCarpeta",
-      document.getElementById("seleccionMetadata").options[
-        document.getElementById("seleccionMetadata").selectedIndex
-      ].innerText
-    );
+    if (emailValidator.test(document.getElementById("correoDestinatario").value)) {
+      if (document.getElementById("asunto").value.length >= 10 && document.getElementById("asunto").value.length <= 70) {
+        //Añadimos otros parámetros importantes
+        formData.append("isSolicitud", false);
 
-    var parametros = {
-      titulo:
-        document.getElementById("seleccionMetadata").options[
-          document.getElementById("seleccionMetadata").selectedIndex
-        ].innerText,
-      asunto: document.getElementById("asunto").value,
-      destinatario: document.getElementById("correoDestinatario").value,
-      cuerpo: document.getElementById("cuerpoCorreo").value,
-    };
+        formData.append(
+          "subCarpeta",
+          document.getElementById("seleccionMetadata").options[
+            document.getElementById("seleccionMetadata").selectedIndex
+          ].innerText
+        );
 
-    formData.append("data", JSON.stringify(parametros));
+        var parametros = {
+          titulo:
+            document.getElementById("seleccionMetadata").options[
+              document.getElementById("seleccionMetadata").selectedIndex
+            ].innerText,
+          asunto: document.getElementById("asunto").value,
+          destinatario: document.getElementById("correoDestinatario").value,
+          cuerpo: document.getElementById("cuerpoCorreo").value,
+        };
 
-    //Añadimos todos los archivos para enviarlos a la API
-    for (var indice = 0; indice < loadedFiles.length; indice++) {
-      formData.append("Archivo", loadedFiles[indice], loadedFiles[indice].name);
-    }
+        formData.append("data", JSON.stringify(parametros));
 
-    axios
-      .post(srvReq, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((resultado) => {
-        console.log(resultado.data.Code);
-        if(resultado.data.Code === 1){
-          showToast(
-                "success",
-                "Actualizado",
-                "Los cambios han sido guardados"
-              );
+        //Añadimos todos los archivos para enviarlos a la API
+        for (var indice = 0; indice < loadedFiles.length; indice++) {
+          formData.append("Archivo", loadedFiles[indice], loadedFiles[indice].name);
         }
-        else{
-          showToast("error", "Error", "Los cambios no han sido guardados");
-        }
-      })
-      .catch((error) => console.log(error));
-  };
 
-  const guardarCorreo = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/ModificarCorreo";
-    try {
-      var elemento = document.getElementById("seleccionMetadata");
-      var ID_Metadata = elemento.options[elemento.selectedIndex].value;
-      let cuerpo = document.getElementById("cuerpoCorreo").value;
-      let destinatario = document.getElementById("correoDestinatario").value;
-      let asunto = document.getElementById("asunto").value;
-      let adjuntos = "Archivos Adjuntos";
-      let nombre_a = "";
-
-      if (ID_Metadata !== "Seleccionar") {
-        switch (ID_Metadata) {
-          case "0":
-            nombre_a = "inicio.json";
-            adjuntos = listaCorreos[0].adjuntos.toString()
-            break;
-          case "1":
-            nombre_a = "seguimiento.json";
-            adjuntos = listaCorreos[1].adjuntos.toString()
-            break;
-          default:
-            break;
-        }
         axios
-          .post(srvReq, {
-            Cuerpo: cuerpo,
-            Destinatario: destinatario,
-            Asunto: asunto,
-            Adjuntos: adjuntos,
+          .post(srvReq, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           })
-          .then((result) => {
-            if (result.data.Code === 1) {
+          .then((resultado) => {
+            console.log(resultado.data.Code);
+            if (resultado.data.Code === 1) {
               showToast(
                 "success",
                 "Actualizado",
                 "Los cambios han sido guardados"
               );
-            } else {
-              console.log(result)
+              ObtenerCorreos();
+              ColocarMetadata();
+            }
+            else {
               showToast("error", "Error", "Los cambios no han sido guardados");
             }
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch((error) => console.log(error));
       }
-      if (ID_Metadata === "Seleccionar") {
-        showToast("error", "Error", "Seleccione una opcion");
+      else {
+        showToast("error", "Error", "Coloque un asunto valido");
       }
-    } catch (exception) {
-      showToast(
-        "error",
-        "Inicios de sesión",
-        "Ha ocurrido un error inesperado." + exception
-      );
+    }
+    else {
+      showToast("error", "Error", "Coloque un destinatario valido");
     }
   };
 
@@ -445,12 +401,13 @@ function EdicionCorreos() {
             );
           })}
         <br />
-        <input
+        <button
           type="submit"
           className="guardarCorreo"
           value="Guardar Cambios"
+          class="w3-button w3-green"
           onClick={actualizarPlantilla}
-        ></input>
+        >Guardar Cambios</button>
       </div>
     </Container>
   );

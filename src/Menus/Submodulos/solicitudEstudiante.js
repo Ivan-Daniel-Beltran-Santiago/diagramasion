@@ -59,7 +59,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
   const showToast = (severityValue, summaryValue, detailValue) => {
     toast.current.show({
       closable: false,
-      life: 5000,
+      life: 8000,
       severity: severityValue,
       summary: summaryValue,
       detail: detailValue,
@@ -186,7 +186,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
     showToast(
       "info",
       "Subiendo archivos",
-      "Subiendo archivos a la base de datos"
+      "Subiendo archivos NO SALGA DE LA PAGINA HASTA QUE SE LE INDIQUE"
     );
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/UploadDocuments";
@@ -284,23 +284,23 @@ function SolicitudEstudiante({ currentUserInformation }) {
       <Toast ref={toast} position="top-right" />
       <div className="contenedorSolicitud">
         <p>
-          <label>Fecha en la que se solicitó: </label>
+          <label className="Indicador">Fecha en la que se solicitó:⠀  </label>
           {requestData.fecha_inicio}
         </p>
         <p>
-          <label>Trámite solicitado: </label>
+          <label className="Indicador">Trámite solicitado:⠀  </label>
           {requestData.tramite}
         </p>
         <p>
-          <label>Estatus: </label>
+          <label className="Indicador">Estatus:⠀  </label>
           {estatusLexico[requestData.estatus]}
         </p>
         <p>
-          <label>Guia de paqueteria: </label>
+          <label className="Indicador">Guia de paqueteria:⠀  </label>
           {requestData.guiaPaq}
         </p>
         <p>
-          <label>Retroalimentación disponible</label>
+          <label className="Indicador">Retroalimentación disponible</label>
         </p>
         <pre>{requestData.retroalim}</pre>
         {(requestData.estatus === 1 ||

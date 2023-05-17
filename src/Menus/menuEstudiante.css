@@ -35,15 +35,6 @@
     max-height: 144px;
   }
   
-  .modules{
-    width: 95%;
-    padding: 10px;
-    margin: 20px;
-    margin-top:15px;
-    border: 2px;
-    border-style: inset;
-  }
-  
   .content{
     padding-top:20px;
   }
@@ -230,6 +221,10 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 300ms;
+  }
+
+  .botonTramite{
+    background: #0670d9;
   }
   
   .confirmarCambios{

@@ -55,90 +55,32 @@ function BienvenidaEncargada() {
     //console.log(n, d, f, fn)
   };
 
-  const conseguirDocu = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
-    axios
-      .post(srvReq, {
-        estatus: 2,
-      })
-      .then((response) => {
-        setConteo({
-          nuevas: conteo.nuevas,
-          documentos: 2,
-          finiquitos: conteo.finiquitos,
-          finalizados: conteo.finalizados,
-        });
-      });
-    //console.log(conteo.documentos)
-  };
-
-  const conseguirFini = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
-    axios
-      .post(srvReq, {
-        estatus: 11,
-      })
-      .then((response) => {
-        console.log("Finiquitos " + response.data);
-        return 3;
-      });
-    //console.log(conteo.finiquitos)
-  };
-
-  const conseguirFinal = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/GetConteoSolicitudes";
-    axios
-      .post(srvReq, {
-        estatus: 12,
-      })
-      .then((response) => {
-        setConteo({
-          nuevas: conteo.nuevas,
-          documentos: conteo.documentos,
-          finiquitos: conteo.finiquitos,
-          finalizados: response.data,
-        });
-      });
-    //console.log(conteo.documentos)
-  };
-
   useEffect(() => {
     conseguirNuevos();
-    //console.log(conteo)
-    //conseguirDocu()
-    //console.log(conteo)
-    //conseguirFini()
-    //console.log(conteo)
-    //conseguirFinal()
-    //console.log(conteo)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div id="bienvenidaEncargada" className="modules">
       <p>
         <span id="nuevas_solicitudes">
-          Numero de solicitudes nuevas actualmente: {conteo.nuevas}
+          <b>Numero de solicitudes nuevas actualmente:</b> {conteo.nuevas}
         </span>
       </p>
       <p>
         <span id="documentos_fisicos">
-          Numero de solicitudes con los documentos digitales revisados
-          actualmente: {conteo.documentos}
+          <b>Numero de solicitudes con los documentos digitales revisados
+            actualmente:</b> {conteo.documentos}
         </span>
       </p>
       <p>
         <span id="finiquito_espera">
-          Numero de solicitudes esperando el finiquito actualmente:{" "}
+          <b>Numero de solicitudes esperando el finiquito actualmente:</b>{" "}
           {conteo.finiquitos}
         </span>
       </p>
       <p>
         <span id="finalizados">
-          Numero de solicitudes finalizadas: {conteo.finalizados}
+          <b>Numero de solicitudes finalizadas:</b> {conteo.finalizados}
         </span>
       </p>
     </div>

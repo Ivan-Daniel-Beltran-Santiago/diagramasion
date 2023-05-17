@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const FooterContainer = styled.div`
-margin-top: 20em;
+margin-top: 95%;
 padding: 3em;
 padding-top: 2em;
 background-color: #E6E6E6
@@ -47,7 +47,7 @@ const Footer = () => {
                 <div className="col-sm-6">
                     <FTitle3>Anexos</FTitle3>
                     <ul>
-                        <FooterList><FooterLink href="">Política de Privacidad</FooterLink></FooterList>
+                        <FooterList><FooterLink href="" type="application/pdf" target="_blank">Política de Privacidad</FooterLink></FooterList>
                         <FooterList><FooterLink href="http://ith.mx/" >Página inicial ITH</FooterLink></FooterList>
                         <FooterList><FooterLink href="http://www.sith.ith.mx/menu/">SITH</FooterLink></FooterList>
                     </ul>

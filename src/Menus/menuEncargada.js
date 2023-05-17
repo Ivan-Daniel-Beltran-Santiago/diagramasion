@@ -11,7 +11,9 @@ import ServerConnectionConfig from "../Controller/ServerConnectionConfig";
 
 function MenuEncargada() {
   //Uso del State para cambiarse entre ventanas
-  const [indexVisible, setIndexVisible] = useState({ index: 1 });
+  const [indexVisible, setIndexVisible] = useState({
+    index: 1,
+  });
   const [matriculaSolicitudCargar, setMatriculaSolicitudCargar] = useState(0);
 
   const location = useLocation();
@@ -85,8 +87,8 @@ function MenuEncargada() {
                 setIndexVisible(1);
               }}
             >
-              Bienvenida
-            </button>
+              Bienvenida{" "}
+            </button>{" "}
             <button
               id="administrarSolicitudes"
               className="button"
@@ -94,8 +96,8 @@ function MenuEncargada() {
                 setIndexVisible(2);
               }}
             >
-              Administración de Solicitudes
-            </button>
+              Administración de Solicitudes{" "}
+            </button>{" "}
             <button
               id="administrarSolicitud"
               className="button"
@@ -103,8 +105,8 @@ function MenuEncargada() {
                 setIndexVisible(3);
               }}
             >
-              Administrar Solicitud Individual
-            </button>
+              Administrar Solicitud Individual{" "}
+            </button>{" "}
             <button
               id="administracionGeneral"
               className="button"
@@ -112,17 +114,8 @@ function MenuEncargada() {
                 setIndexVisible(5);
               }}
             >
-              Informe Estadistico
-            </button>
-            <button
-              id="informacionUsuario"
-              className="button"
-              onClick={() => {
-                setIndexVisible(6);
-              }}
-            >
-              Información de Usuario
-            </button>
+              Informe Estadistico{" "}
+            </button>{" "}
             <button
               id="administracionUsuarios"
               className="button"
@@ -130,9 +123,36 @@ function MenuEncargada() {
                 setIndexVisible(15);
               }}
             >
-              Administración de Usuarios
-            </button>
-          </div>
+              Administración de Usuarios{" "}
+            </button>{" "}
+            <button
+              id="administracionTramites"
+              className="button"
+              onClick={() => {
+                setIndexVisible(16);
+              }}
+            >
+              Administración de Tramites{" "}
+            </button>{" "}
+            <button
+              id="edicionCorreos"
+              className="button"
+              onClick={() => {
+                setIndexVisible(17);
+              }}
+            >
+              Administración de Correos{" "}
+            </button>{" "}
+            <button
+              id="informacionUsuario"
+              className="button"
+              onClick={() => {
+                setIndexVisible(6);
+              }}
+            >
+              Información de Usuario{" "}
+            </button>{" "}
+          </div>{" "}
           <div>
             <div className="content">
               <CambiarVistaController
@@ -140,12 +160,12 @@ function MenuEncargada() {
                 currentUser={currentUser}
                 CargarMatricula={cargarMatriculaSolicitud}
                 MatriculaCargada={matriculaSolicitudCargar}
-              />
+              />{" "}
               <RegresarMenu />
-            </div>
-          </div>
-        </div>
-      </div>
+            </div>{" "}
+          </div>{" "}
+        </div>{" "}
+      </div>{" "}
     </div>
   );
 }

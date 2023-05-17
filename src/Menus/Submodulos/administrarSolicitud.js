@@ -15,7 +15,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     });
   };
 
-  const barraProgresoEstatus = {
+  const [barraProgresoEstatus, setbarraProgresoEstatus] = useState ({
     1: 0,
     2: 20,
     3: 15,
@@ -28,21 +28,38 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     10: 75,
     11: 80,
     12: 100,
-  };
-  const estatusLexico = {
-    1: "Solicitud iniciada",
+  });
+
+  const [estatusLexico, setEstatusLexico] = useState({
+    1: "Solicitud iniciado",
     2: "Documentos subidos en formato digital",
     3: "Documentos rechazados en formato digital",
     4: "Documentos aceptados en formato digital",
     5: "Documentos recibidos en persona",
-    6: "Solicitud enviada a la aseguradora",
+    6: "Solicitud enviada a la aseguradora por FEDEX",
     7: "Solicitud rechazada por la aseguradora",
     8: "Nuevos documentos recibidos en formato digital",
     9: "Nuevos documentos rechazados",
-    10: "Solicitud reenviada a la aseguradora",
+    10: "Solicitud reenviada a la aseguradora por FEDEX",
     11: "Finiquito en espera de firma en persona",
-    12: "Solicitud terminada",
-  };
+    12: "Solicitud terminado",
+  });
+
+  const [retroalimentaciones, setRetroalimentaciones] = useState({
+    1: " ",
+    2: " ",
+    3: " ",
+    4: " ",
+    5: " ",
+    6: " ",
+    7: " ",
+    8: " ",
+    9: " ",
+    10: " ",
+    11: " ",
+    12: " ",
+  });
+
   const [documentList, setDocumentList] = useState([]);
   const [datosSolicitud, setDatosSolicitud] = useState({
     nombreSolicitante: "",
@@ -53,6 +70,62 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
     retroalimentacion: "",
     folio_Solicitud: "",
   });
+
+  const informacionMenus = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/infoDescripcionesMenus";
+    //console.log(matriculaSolicitud);
+    axios
+      .post(srvReq)
+      .then((result) => {
+        //console.log(result.data[0])
+        setEstatusLexico({
+          1: result.data[0].texto,
+          2: result.data[1].texto,
+          3: result.data[2].texto,
+          4: result.data[3].texto,
+          5: result.data[4].texto,
+          6: result.data[5].texto,
+          7: result.data[6].texto,
+          8: result.data[7].texto,
+          9: result.data[8].texto,
+          10: result.data[9].texto,
+          11: result.data[10].texto,
+          12: result.data[11].texto
+        })
+        setbarraProgresoEstatus({
+          1: result.data[0].barraEstatus,
+          2: result.data[1].barraEstatus,
+          3: result.data[2].barraEstatus,
+          4: result.data[3].barraEstatus,
+          5: result.data[4].barraEstatus,
+          6: result.data[5].barraEstatus,
+          7: result.data[6].barraEstatus,
+          8: result.data[7].barraEstatus,
+          9: result.data[8].barraEstatus,
+          10: result.data[9].barraEstatus,
+          11: result.data[10].barraEstatus,
+          12: result.data[11].barraEstatus
+        })
+        setRetroalimentaciones({
+          1: result.data[0].retroalimentaciones,
+          2: result.data[1].retroalimentaciones,
+          3: result.data[2].retroalimentaciones,
+          4: result.data[3].retroalimentaciones,
+          5: result.data[4].retroalimentaciones,
+          6: result.data[5].retroalimentaciones,
+          7: result.data[6].retroalimentaciones,
+          8: result.data[7].retroalimentaciones,
+          9: result.data[8].retroalimentaciones,
+          10: result.data[9].retroalimentaciones,
+          11: result.data[10].retroalimentaciones,
+          12: result.data[11].retroalimentaciones
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const conseguirSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
@@ -113,7 +186,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
       isNaN(Number(document.getElementById("Folio").value)) ||
       Number(document.getElementById("Folio").value) < 0
     ) {
-      showToast("error", "Folio invalido", "Debe de ser un folio Numerico");
+      showToast("error", "Guia invalido", "Debe de ser guia numerica");
     } else {
       if (Number(document.getElementById("Folio").value) !== 0) {
         numfolio = Number(document.getElementById("Folio").value);
@@ -130,7 +203,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
           retroAnterior: datosSolicitud.retroalimentacion,
           id: datosSolicitud.id_solicitud,
           nuevoEstatus: idEvento,
-          retroNueva: textoRetro,
+          retroNueva: retroalimentaciones[idEvento]+ ". " + textoRetro,
           folio: numfolio,
         })
         .then((response) => {
@@ -195,30 +268,32 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
 
   useEffect(() => {
     conseguirSolicitud();
+    informacionMenus();
     //conseguirDocumentos();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div id="NuevaInterfaz" className="modules">
       <Toast ref={toast} position="top-right" />
       <div className="newInterface_container">
         <div className="row_1_administrarSolicitud">
           <form className="w3-container">
-            <label>Nombre del solicitante: </label>
+            <label className="Indicador">Nombre del solicitante:⠀ </label>
             <label>
               {datosSolicitud.nombreSolicitante ??
                 "No se ha cargado ninguna solicitud"}
             </label>
             <br />
             <br />
-            <label>Trámite que solicita: </label>
+            <label className="Indicador">Trámite que solicita:⠀ </label>
             <label>
               {datosSolicitud.tramiteSolicitado ??
                 "No se ha cargado ninguna solicitud"}
             </label>
             <br />
             <br />
-            <label>Estatus actual: </label>
+            <label className="Indicador">Estatus actual:⠀ </label>
             <label>
               {datosSolicitud.estatusAlMomento
                 ? estatusLexico[datosSolicitud.estatusAlMomento]
@@ -226,7 +301,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             </label>
             <br />
             <br />
-            <label>Fecha en que se solicitó: </label>
+            <label className="Indicador">Fecha en que se solicitó:⠀ </label>
             <label>
               {datosSolicitud.fechaSolicitacion ??
                 "No se ha cargado ninguna solicitud"}
@@ -234,7 +309,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             <br />
             <br />
             <div>
-              <label>Progreso de la solicitud: </label>
+              <label className="Indicador">Progreso de la solicitud: </label>
 
               <div className="progressBar">
                 <div
@@ -254,14 +329,14 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
             </div>
             <br />
             <br />
-            <label>Fecha del último estatus: </label>
+            <label className="Indicador">Fecha del último estatus: </label>
             <label>
               {datosSolicitud.fechaUltimaActualizacion ??
                 "No se ha cargado ninguna solicitud"}
             </label>
             <br />
             <br />
-            <label>Lista de documentos: </label>
+            <label className="Indicador">Lista de documentos: </label>
             <br />
             <br />
             {documentList !== undefined &&
@@ -281,7 +356,7 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         </div>
         <div className="row_2_administrarSolicitud">
           <form className="w3-container">
-            <label>Cambiar estatus: </label>
+            <label className="Indicador">Cambiar estatus: </label>
             <br />
             <br />
             <form className="w3-container">
@@ -298,13 +373,16 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
               </select>
             </form>
             <br />
-            <label>Retroalimentación: </label>
+            <label className="Indicador">Retroalimentación: </label>
             <br />
             <textarea
               name="retroalimentacion"
               cols="48"
               rows="8"
               id="retro"
+              placeholder={
+            datosSolicitud.retroalimentacion ?? "Sin guia"
+          }
             ></textarea>
           </form>
           <br />
@@ -319,18 +397,18 @@ function AdministrarSolicitud({ matriculaSolicitud }) {
         </div>
       </div>
       <div className="requestInvoice">
-        <label>Folio de solicitud: </label>
+        <label className="Indicador">Guia de paqueteria: </label>
         <br />
-        <br />
-        <textarea
+        <input
+        type="text"
           name="Num_folio"
           cols="80"
           rows="1"
           id="Folio"
           placeholder={
-            datosSolicitud.folio_Solicitud ?? "No se tiene asignado algun folio"
+            datosSolicitud.folio_Solicitud ?? "Sin guia"
           }
-        ></textarea>
+        ></input>
       </div>
     </div>
   );

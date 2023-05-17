@@ -10,6 +10,8 @@ function AdministracionUsuarios() {
   const [registroUsuarios, setRegistroUsuarios] = useState([{}]);
   //Permitir el procesamiento del excel
   const [permitirExcel, setPermitirExcel] = useState(false);
+  //Almancenar ultima matricula
+  const [ultimaMatricula, setUltimaMatricula] = useState("");
   //Determinar si se trata de un Encargado o un estudiante
   const [esEncargado, setEsEncargado] = useState(false);
   //Registro de un solo estudiante
@@ -19,6 +21,7 @@ function AdministracionUsuarios() {
     correoElectronico: "",
     carrera: "",
     semestre: "",
+    newMatricula: ""
   });
   //Validar a un solo estudiante
   const [validRegistro, setValidRegistro] = useState({
@@ -28,6 +31,7 @@ function AdministracionUsuarios() {
     carrera: false,
     semestre: false,
   });
+
 
   //Alertas
   const toast = useRef(null);
@@ -171,8 +175,8 @@ function AdministracionUsuarios() {
   const validateInputChange = (event) => {
     switch (event.target.name) {
       case "matricula":
-        let ValidadorStudent = new RegExp("^(M|m)?[0-9]{8}$");
-        let ValidadorAdmin = new RegExp("^[0-9]{5}$");
+        let ValidadorStudent = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
+        let ValidadorAdmin = new RegExp("^[0-9]{3}$");
         setValidRegistro({
           ...validRegistro,
           [event.target.name]:
@@ -231,21 +235,21 @@ function AdministracionUsuarios() {
           })
           .then((result) => {
             //console.log(result.data.Code);
-            if(result.data.Code === 1){
+            if (result.data.Code === 1) {
               showToast(
                 "success",
                 "Finalizado",
                 "Estudiante " +
-                  registroUsuario.matricula +
-                  " a sido dado de alta."
+                registroUsuario.matricula +
+                " a sido dado de alta."
               );
             } else {
               showToast(
                 "error",
                 "No dado de alta",
                 "Estudiante " +
-                  registroUsuario.matricula +
-                  " posiblemente ya existe."
+                registroUsuario.matricula +
+                " posiblemente ya existe."
               );
             }
           })
@@ -298,8 +302,8 @@ function AdministracionUsuarios() {
               "error",
               "No dado de alta",
               "Encargado " +
-                registroUsuario.matricula +
-                " posiblemente ya existe."
+              registroUsuario.matricula +
+              " posiblemente ya existe."
             );
           }
         })
@@ -322,9 +326,9 @@ function AdministracionUsuarios() {
       validRegistro.correoElectronico === true
     ) {
       if (esEncargado) {
-        if(registroUsuario.matricula.length === 5){
+        if (registroUsuario.matricula.length === 3) {
           uploadEncargado();
-        }else{
+        } else {
           showToast(
             "error",
             "Matricula Erronea",
@@ -332,9 +336,9 @@ function AdministracionUsuarios() {
           );
         }
       } else {
-        if(registroUsuario.matricula.length !=5){
+        if (registroUsuario.matricula.length != 3) {
           uploadAlumno();
-        }else{
+        } else {
           showToast(
             "error",
             "Matricula Erronea",
@@ -374,14 +378,26 @@ function AdministracionUsuarios() {
                 "Datos encontrados",
                 "Se encontraron los datos de " + registroUsuario.matricula
               );
+
+              setRegistroUsuario({
+                matricula: registroUsuario.matricula,
+                nombreCompleto: result.data.result[0].nombre_Completo,
+                correoElectronico: result.data.result[0].correo_e
+              })
+
+              setValidRegistro({
+                matricula: true,
+                nombreCompleto: true,
+                correoElectronico: true
+              });
             }
             if (result.data.Code == -1) {
               showToast(
                 "error",
                 "Finalizado",
                 "El usuario con matricula " +
-                  registroUsuario.matricula +
-                  " no esta registrado o no es un estudiante."
+                registroUsuario.matricula +
+                " no esta registrado o no es un estudiante."
               );
               document.getElementById("nom").value = "";
               document.getElementById("cor").value = "";
@@ -435,14 +451,30 @@ function AdministracionUsuarios() {
                 "Datos encontrados",
                 "Se encontraron los datos de " + registroUsuario.matricula
               );
+
+              setRegistroUsuario({
+                matricula: registroUsuario.matricula,
+                nombreCompleto: result.data.result[0].nombre_Completo,
+                correoElectronico: result.data.result[0].correo_e,
+                carrera: result.data.datos[0].carrera,
+                semestre: result.data.datos[0].semestre,
+              })
+
+              setValidRegistro({
+                matricula: true,
+                nombreCompleto: true,
+                correoElectronico: true,
+                carrera: true,
+                semestre: true,
+              });
             }
             if (result.data.Code == -1) {
               showToast(
                 "error",
                 "Finalizado",
                 "El usuario con matricula " +
-                  registroUsuario.matricula +
-                  " no esta registrado o no es un estudiante."
+                registroUsuario.matricula +
+                " no esta registrado o no es un estudiante."
               );
               document.getElementById("nom").value = "";
               document.getElementById("cor").value = "";
@@ -457,8 +489,8 @@ function AdministracionUsuarios() {
               "error",
               "Finalizado",
               "El usuario con matricula " +
-                registroUsuario.matricula +
-                " no esta registrado o no es un estudiante."
+              registroUsuario.matricula +
+              " no esta registrado o no es un estudiante."
             );
           });
       } catch (exception) {
@@ -477,19 +509,24 @@ function AdministracionUsuarios() {
     }
   }
 
-  const editAlumno = () =>{
+  const editAlumno = () => {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/EditEstudiante";
-    if(validRegistro.carrera === true && validRegistro.semestre === true){
-    try {
-        let matricula = registroUsuario.matricula;
+    if (validRegistro.carrera === true && validRegistro.semestre === true) {
+      try {
+        let matricula = ultimaMatricula;
         let nombre_Completo = registroUsuario.nombreCompleto
         let correo_e = registroUsuario.correoElectronico;
         let carrera = registroUsuario.carrera;
         let semestre = registroUsuario.semestre;
+        let newMatricula = registroUsuario.matricula;
+
+        console.log({ matricula, newMatricula });
+
         axios
           .post(srvReq, {
             matriculaUser: matricula,
+            nuevaMatricula: newMatricula,
             nombreUser: nombre_Completo,
             correoUser: correo_e,
             carreraUser: carrera,
@@ -497,14 +534,14 @@ function AdministracionUsuarios() {
           })
           .then((result) => {
             //(result.data.Code);
-            if(result.data.Code === 1){
+            if (result.data.Code === 1) {
               showToast(
                 "success",
                 "Finalizado",
                 "Estudiante " + registroUsuario.matricula + " a sido modificado."
               );
             }
-            else{
+            else {
               showToast(
                 "error",
                 "No dado de alta",
@@ -515,60 +552,7 @@ function AdministracionUsuarios() {
           .catch((error) => {
             console.log(error);
           });
-    } catch (exception) {
-      showToast(
-        "error",
-        "Inicios de sesión",
-        "Ha ocurrido un error inesperado." + exception
-      );
-    }
-  }
-  else{
-    //console.log(validRegistro)
-    showToast(
-      "error",
-      "Campos Invalidos",
-      "Favor de revisar que los campos sean correctos."
-    )
-  }
-  }
-
-    //Con los campos de texto, da de alta un nuevo encargado
-  const editEncargado = () => {
-      const srvDir = new ServerConnectionConfig();
-      const srvReq = srvDir.getServer() + "/EditEncargados";
-      try {
-          let matricula = registroUsuario.matricula;
-          let nombre_Completo = registroUsuario.nombreCompleto
-          let contraseña = registroUsuario.matricula;
-          let correo_e = registroUsuario.correoElectronico;
-          axios
-            .post(srvReq, {
-              matriculaUser: matricula,
-              nombreUser: nombre_Completo,
-              contraseñaUser: contraseña,
-              correoUser: correo_e,
-            })
-            .then((result) => {
-              //console.log(result.data.Code);
-              if(result.data.Code === 1){
-                showToast(
-                  "success",
-                  "Finalizado",
-                  "Encargado " + registroUsuario.matricula + " a sido modificado."
-                );
-              }
-              else{
-                showToast(
-                  "error",
-                  "No dado de alta",
-                  "Encargado " + registroUsuario.matricula + " no existe."
-                );
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+        setUltimaMatricula(registroUsuario.matricula);
       } catch (exception) {
         showToast(
           "error",
@@ -576,13 +560,73 @@ function AdministracionUsuarios() {
           "Ha ocurrido un error inesperado." + exception
         );
       }
+    }
+    else {
+      //console.log(validRegistro)
+      showToast(
+        "error",
+        "Campos Invalidos",
+        "Favor de revisar que los campos sean correctos."
+      )
+    }
+  }
+
+  //Con los campos de texto, da de alta un nuevo encargado
+  const editEncargado = () => {
+    const srvDir = new ServerConnectionConfig();
+    const srvReq = srvDir.getServer() + "/EditEncargados";
+    try {
+      let matricula = ultimaMatricula;
+      let nombre_Completo = registroUsuario.nombreCompleto;
+      let contraseña = registroUsuario.matricula;
+      let correo_e = registroUsuario.correoElectronico;
+      let newMatricula = registroUsuario.matricula;
+
+      console.log({ matricula, newMatricula });
+
+      axios
+        .post(srvReq, {
+          matriculaUser: matricula,
+          nuevaMatricula: newMatricula,
+          nombreUser: nombre_Completo,
+          contraseñaUser: contraseña,
+          correoUser: correo_e,
+        })
+        .then((result) => {
+          //console.log(result.data.Code);
+          if (result.data.Code === 1) {
+            showToast(
+              "success",
+              "Finalizado",
+              "Encargado " + registroUsuario.matricula + " a sido modificado."
+            );
+          }
+          else {
+            showToast(
+              "error",
+              "No dado de alta",
+              "Encargado " + registroUsuario.matricula + " no existe."
+            );
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      setUltimaMatricula(registroUsuario.matricula);
+    } catch (exception) {
+      showToast(
+        "error",
+        "Inicios de sesión",
+        "Ha ocurrido un error inesperado." + exception
+      );
+    }
   };
 
   const restartContraseña = () => {
-    if(validRegistro.matricula)
-    {const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/RestorePassword";
-    try {
+    if (validRegistro.matricula) {
+      const srvDir = new ServerConnectionConfig();
+      const srvReq = srvDir.getServer() + "/RestorePassword";
+      try {
         let matricula = registroUsuario.matricula;
         //let correo_e = registroUsuario.correoElectronico;
         axios
@@ -592,14 +636,14 @@ function AdministracionUsuarios() {
           })
           .then((result) => {
             //console.log(result.data.Code);
-            if(result.data.Code === 1){
+            if (result.data.Code === 1) {
               showToast(
                 "success",
                 "Restablecido",
                 "Usuario " + registroUsuario.matricula + " se le a restablecido su contraseña."
               );
             }
-            else{
+            else {
               showToast(
                 "error",
                 "No restablecido",
@@ -610,41 +654,43 @@ function AdministracionUsuarios() {
           .catch((error) => {
             console.log(error);
           });
-    } catch (exception) {
-      showToast(
-        "error",
-        "Inicios de sesión",
-        "Ha ocurrido un error inesperado." + exception
-      );
-    }}
-    else{
+      } catch (exception) {
+        showToast(
+          "error",
+          "Inicios de sesión",
+          "Ha ocurrido un error inesperado." + exception
+        );
+      }
+    }
+    else {
       showToast(
         "error",
         "Error de matricula",
         "Favor de ingresar una matricula"
       )
     }
-};
+  };
 
   const searchUser = () => {
-    if(esEncargado){
-        if(registroUsuario.matricula.length == 5){
-          searchEncargada();
-        }
-        else{
-          showToast(
-            "error",
-            "Finalizado",
-            "El usuario con matricula " +
-              registroUsuario.matricula +
-              "no es un estudiante."
-          );
-          clearAll();
-        }
+    if (esEncargado) {
+      if (registroUsuario.matricula.length == 3) {
+        searchEncargada();
       }
-      else{
-        searchAlumno();
+      else {
+        showToast(
+          "error",
+          "Finalizado",
+          "El usuario con matricula " +
+          registroUsuario.matricula +
+          " no es un estudiante."
+        );
+        clearAll();
       }
+    }
+    else {
+      searchAlumno();
+    }
+    setUltimaMatricula(registroUsuario.matricula);
   }
 
   const clearAll = () => {
@@ -656,15 +702,15 @@ function AdministracionUsuarios() {
 
   const updateUser = () => {
     //console.log(validRegistro)
-    if(validRegistro.matricula === true && validRegistro.nombreCompleto === true && validRegistro.correoElectronico === true){
-      if(esEncargado){
+    if (validRegistro.matricula === true && validRegistro.nombreCompleto === true && validRegistro.correoElectronico === true) {
+      if (esEncargado) {
         editEncargado();
       }
-      else{
+      else {
         editAlumno();
       }
     }
-    else{
+    else {
       showToast(
         "error",
         "Campos Invalidos",
@@ -677,18 +723,17 @@ function AdministracionUsuarios() {
     <div className="AdministracionUsuarios modules">
       <Toast ref={toast} position="top-right" />
       <div className="InsertarExcel modules">
-        <label>Subir inicios de sesión (Excel)</label>
+      <br /> <label className="Indicador">Subir inicios de sesión (Excel)</label> <br />
         <p
           title="Subir inicios de sesión (Excel)"
           style={{ textAlign: "justify" }}
         >
-          Este apartado se encarga de subir los inicios de sesión para los
+          <u>Este apartado se encarga de subir los inicios de sesión para los
           estudiantes activos de la institución, por medio de un archivo
           previamente solicitado al departamento encargado de las altas y bajas
-          estudiantiles.
+          estudiantiles.</u>
         </p>
-        <br />
-        <label>Estructura y contenidos del archivo Excel</label>u
+        <label className="Indicador">Estructura y contenidos del archivo Excel</label>
         <p title="Formato Excel" style={{ textAlign: "justify" }}>
           El archivo tiene ciertos requerimientos para que funcione con el resto
           del sistema, los cuales se presentan a continuación
@@ -721,7 +766,7 @@ function AdministracionUsuarios() {
           <li>Los datos del estudiante deberán seguir el siguiente formato</li>
           <ul>
             <li>
-              La matricula debe constar de 5 digitos para los encargados, y 8
+              La matricula debe constar de 3 digitos para los encargados, y 8
               digitos para los estudiantes.{" "}
             </li>
             <li>
@@ -760,25 +805,23 @@ function AdministracionUsuarios() {
         </form>
       </div>
       <div className="Insertar modules">
-        <label>Subir/modificar inicio de sesión</label>
+      <br /><label className="Indicador">Subir/modificar inicio de sesión</label>
         <p title="Subir inicio de sesión" style={{ textAlign: "justify" }}>
-          Este apartado se encarga de subir o modificar un inicio de sesión a la
-          vez, de manera manual.
+          <u>Este apartado se encarga de subir o modificar un inicio de sesión a la
+          vez, de manera manual.</u>
         </p>
-        <br />
-        <label>Formato de datos del estudiante</label>
+        <label className="Indicador">Formato de datos del estudiante</label>
         <p title="Formato Excel" style={{ textAlign: "justify" }}>
           Los datos del estudiante deben seguir cierto formato para ser
           aceptados en la base de datos, los cuales se describen a continuación.
         </p>
         <ul>
           <li>
-            La matricula debe constar de 5 digitos para los encargados, y 8
+            La matricula debe constar de 3 digitos para los encargados, y 8
             digitos para los estudiantes.{" "}
           </li>
           <li>
-            En caso de ser estudiantes de posgrado, la matricula debe empezar
-            con la letra "M", ya sea mayuscula o minuscula.
+            En casos especiales, se pueden utilizar las letras B, C, D, y M, ya sea mayuscula o minuscula.
           </li>
           <li>
             El correo electronico debe ser uno valido y capaz de operar con
@@ -787,14 +830,17 @@ function AdministracionUsuarios() {
           </li>
           <li>El semestre debe ser un número entero entre 1 y 14.</li>
         </ul>
-        <label>Encargada</label>
-        <input 
-        type="checkbox" 
-        id="checkEncargada"
-        onChange={handleCheckChange}
-        ></input>
         <p>
-          <label>Matricula: </label>
+        <label>Encargadaㅤ</label>
+        <input
+          type="checkbox"
+          id="checkEncargada"
+          className="EncargadaCB"
+          onChange={handleCheckChange}
+        ></input>
+        </p>
+        <p>
+          <label>Matricula:</label><label className="Obligatorio">*ㅤ</label>
           <input
             type="text"
             name="matricula"
@@ -809,7 +855,7 @@ function AdministracionUsuarios() {
           )}
         </p>
         <p>
-          <label>Nombre completo: </label>
+          <label>Nombre completo:</label><label className="Obligatorio">*ㅤ</label>
           <input
             type="text"
             name="nombreCompleto"
@@ -818,7 +864,7 @@ function AdministracionUsuarios() {
           ></input>
         </p>
         <p>
-          <label>Correo Electronico: </label>
+          <label>Correo Electronico:</label><label className="Obligatorio">*ㅤ</label>
           <input
             type="text"
             name="correoElectronico"
@@ -833,7 +879,7 @@ function AdministracionUsuarios() {
         </p>
         {!esEncargado && (
           <p>
-            <label>Carrera: </label>
+            <label>Carrera:</label><label className="Obligatorio">*ㅤ</label>
             <input
               type="text"
               name="carrera"
@@ -844,7 +890,7 @@ function AdministracionUsuarios() {
         )}
         {!esEncargado && (
           <p>
-            <label>Semestre: </label>
+            <label>Semestre:</label><label className="Obligatorio">*ㅤ</label>
             <input
               type="number"
               name="semestre"
@@ -854,17 +900,17 @@ function AdministracionUsuarios() {
           </p>
         )}
         <div>
-          <button 
-          onClick={searchUser}
+          <button
+            onClick={searchUser}
           >Buscar por matricula</button>
           <button
-          onClick={updateUser}
+            onClick={updateUser}
           >Modificar</button>
           <button
-          onClick={uploadOneUser}
+            onClick={uploadOneUser}
           >Dar de alta</button>
           <button
-          onClick={restartContraseña}
+            onClick={restartContraseña}
           >Restablecer Contraseña</button>
         </div>
       </div>

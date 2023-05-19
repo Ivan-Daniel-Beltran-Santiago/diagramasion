@@ -2,7 +2,6 @@ import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginControlador from "./Controlador/LoginControlador";
-import MenuUsuario from "./View/menuUsuario";
 import MenuEncargada from "./Menus/menuEncargada";
 import MenuEstudiante from "./Menus/menuEstudiante";
 import Footer from "./View/Auxiliary/footer";
@@ -19,7 +18,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginControlador />} />
-        <Route path="/Menu" element={<MenuUsuario />} />
         <Route path="/Menu-Encargada" element={<MenuEncargada />} />
         <Route path="/Menu-Estudiante" element={<MenuEstudiante />} />
         <Route path="/Menu/Solicitud" />

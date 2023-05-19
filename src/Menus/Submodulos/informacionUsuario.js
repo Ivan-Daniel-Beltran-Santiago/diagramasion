@@ -3,8 +3,10 @@ import { Toast } from "primereact/toast";
 import axios from "axios";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-import styled from 'styled-components';
-const Container = styled.div`padding: 1em;`;
+import styled from "styled-components";
+const Container = styled.div`
+  padding: 1em;
+`;
 
 function InformacionUsuario({ currentUser }) {
   const CurrentPass = useRef(null);
@@ -15,7 +17,7 @@ function InformacionUsuario({ currentUser }) {
     contraseñaUsuario: "",
     newPassword: "",
     confirmPassword: "",
-    newEmail: currentUser.eMail,
+    newEmail: "",
   });
   const [validEmail, setValidEmail] = useState(false);
   const [validPass, setValidPass] = useState(false);
@@ -45,7 +47,7 @@ function InformacionUsuario({ currentUser }) {
         setValidPass(passwordValidator.test(entry));
         setEqualPass(
           document.getElementById("newPassword").value ===
-          document.getElementById("confirmPassword").value
+            document.getElementById("confirmPassword").value
         );
         break;
       case "confirmPassword":
@@ -53,7 +55,7 @@ function InformacionUsuario({ currentUser }) {
         setValidConfirm(confirmValidator.test(entry));
         setEqualPass(
           document.getElementById("newPassword").value ===
-          document.getElementById("confirmPassword").value
+            document.getElementById("confirmPassword").value
         );
         break;
       case "newEmail":
@@ -126,30 +128,32 @@ function InformacionUsuario({ currentUser }) {
       <div id="informacionUsuario" className="modules">
         <Toast ref={toast} position="top-right" />
         <form className="info_usuario">
-          <label className="Indicador">Matricula:⠀    </label>
-          <label>    {currentUser.controlNumber}</label>
+          <label className="Indicador">Matricula:⠀ </label>
+          <label> {currentUser.controlNumber}</label>
           <br />
           <br />
-          <label className="Indicador">Nombre:⠀    </label>
-          <label>    {currentUser.fullName}</label>
+          <label className="Indicador">Nombre:⠀ </label>
+          <label> {currentUser.fullName}</label>
           <br />
           <br />
           {currentUser.currentCarrer !== undefined && (
             <div>
-              <label className="Indicador">Carrera:⠀    </label>
-              <label>    {currentUser.currentCarrer}</label>
+              <label className="Indicador">Carrera:⠀ </label>
+              <label> {currentUser.currentCarrer}</label>
             </div>
           )}
           {currentUser.currentSemester !== undefined && (
             <div>
-              <label className="Indicador">Semestre:⠀    </label>
-              <label>    {currentUser.currentSemester}</label>
+              <label className="Indicador">Semestre:⠀ </label>
+              <label> {currentUser.currentSemester}</label>
             </div>
           )}
         </form>
         <form className="info_usuario">
-        <br />
-        <label className="Indicador">Para cambiar su contraseña. (Opcional)</label>
+          <br />
+          <label className="Indicador">
+            Para cambiar su contraseña. (Opcional)
+          </label>
           <p className="modules">
             <p>
               <label>Nueva contraseña: </label>
@@ -175,10 +179,10 @@ function InformacionUsuario({ currentUser }) {
             </p>
             {((!validPass && userInfo.newPassword.length > 0) ||
               (!validConfirm && userInfo.confirmPassword.length > 0)) && (
-                <label className="LoginWarning">
-                  La nueva contraseña debe contener entre 4 y 8 digitos{" "}
-                </label>
-              )}
+              <label className="LoginWarning">
+                La nueva contraseña debe contener entre 4 y 8 digitos{" "}
+              </label>
+            )}
             <br />
             {!equalPass &&
               userInfo.newPassword.length > 0 &&
@@ -188,51 +192,60 @@ function InformacionUsuario({ currentUser }) {
                 </label>
               )}
           </p>
-          <label className="Indicador">Para cambiar su correo electrónico: (Opcional)</label>
+          <label className="Indicador">
+            Para cambiar su correo electrónico: (Opcional)
+          </label>
           <p className="modules">
-          <p>
-          <label>Correo Electronico: </label>
-            <input
-              type="email"
-              placeholder={currentUser.eMail}
-              name="newEmail"
-              id="newEmail"
-              onChange={handleInputChange}
-            ></input>
+            <p>
+              <label>Correo Electronico: </label>
+              <input
+                type="email"
+                placeholder={currentUser.eMail}
+                name="newEmail"
+                id="newEmail"
+                onChange={handleInputChange}
+              ></input>
+            </p>
+            {!validEmail && userInfo.newEmail.length > 0 && (
+              <div>
+                <label className="LoginWarning">
+                  El correo electronico debe seguir el siguiente formato:
+                </label>
+                <br />
+                <label className="LoginWarning">
+                  -Al menos un caracter/digito antes y despues del @
+                </label>
+                <br />
+                <label className="LoginWarning">
+                  -Se permiten solo los simbolos @ y .{" "}
+                </label>
+                <br />
+                <label className="LoginWarning">
+                  -De 2 a 3 caracteres al final como el .com o .mx o similares
+                </label>
+              </div>
+            )}
           </p>
-          {!validEmail && userInfo.newEmail.length > 0 && (
+          {(validEmail || (validPass && equalPass)) && (
             <div>
-              <label className="LoginWarning">
-                El correo electronico debe seguir el siguiente formato:
+              <label className="Indicador">
+                Para actualizar los datos, ingrese su contraseña actual:{" "}
               </label>
-              <br />
-              <label className="LoginWarning">
-                -Al menos un caracter/digito antes y despues del @
-              </label>
-              <br />
-              <label className="LoginWarning">
-                -Se permiten solo los simbolos @ y .{" "}
-              </label>
-              <br />
-              <label className="LoginWarning">
-                -De 2 a 3 caracteres al final como el .com o .mx o similares
-              </label>
+              <p className="modules">
+                <label className="Indicador">Contraseña actual:</label>{" "}
+                <label className="Obligatorio">*</label>
+                <input
+                  ref={CurrentPass}
+                  type="password"
+                  placeholder="Contraseña actual"
+                  autoComplete="off"
+                  name="contraseñaUsuario"
+                  id="contraseñaUsuario"
+                  onChange={handleInputChange}
+                ></input>
+              </p>
             </div>
           )}
-        </p>
-        
-        <p className="modules">
-            <label className="Indicador">Contraseña actual:</label> <label className="Obligatorio">*</label>
-            <input
-              ref={CurrentPass}
-              type="password"
-              placeholder="Contraseña actual"
-              autoComplete="off"
-              name="contraseñaUsuario"
-              id="contraseñaUsuario"
-              onChange={handleInputChange}
-            ></input>
-        </p>
         </form>
         <button className="confirmarCambios" onClick={updateChanges}>
           Confirmar cambios

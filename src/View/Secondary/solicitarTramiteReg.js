@@ -51,7 +51,7 @@ const SolicitarRegistroTramite = ({
         tramiteSolicitado: idTramite,
       })
       .then((response) => {
-        switch (response.data.Code) {
+        switch (response.data.Codigo) {
           case 1:
             showToast(
               "success",
@@ -88,7 +88,7 @@ const SolicitarRegistroTramite = ({
         tramite: nombre,
       })
       .then((response) => {
-        switch (response.data.Code) {
+        switch (response.data.Codigo) {
           case 1:
             showToast(
               "success",
@@ -113,12 +113,12 @@ const SolicitarRegistroTramite = ({
   const handleRequestSubmit = async (event) => {
     event.preventDefault();
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/UserHasApplication";
+    const srvReq = srvDir.getServer() + "/solicitudes/consulta";
     let check = false;
     await axios
-      .post(srvReq, { matriculaUsuario: User.controlNumber })
+      .get(srvReq, { params: { matricula: User.controlNumber } })
       .then((result) => {
-        check = result.data.hasApplication;
+        check = result.data.Codigo === 1 || result.data.Codigo === 2;
       })
       .catch((error) => {
         console.log(error);
@@ -153,15 +153,14 @@ const SolicitarRegistroTramite = ({
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/RequisitosTramite";
     axios
-      .post(srvReq, {
-      })
+      .post(srvReq, {})
       .then((response) => {
         //console.log(response.data)
         let cantidadR = response.data.result.count - 1;
         for (let i = 1; i <= cantidadR; i++) {
-          requisitos = response.data.result.rows[i].texto
-          requisitos = requisitos.replace("\\n", "-")
-          requisitos = requisitos.replace("\\", "-")
+          requisitos = response.data.result.rows[i].texto;
+          requisitos = requisitos.replace("\\n", "-");
+          requisitos = requisitos.replace("\\", "-");
           response.data.result.rows[i].texto = requisitos;
         }
         if (response.data.Code === 1) {
@@ -200,22 +199,22 @@ const SolicitarRegistroTramite = ({
           <div className="contenidoAcordeon">
             <br />
             <p>
-              <label className="Indicador">Información:  </label> <br />
+              <label className="Indicador">Información: </label> <br />
               {transactionMetadata.trInfo === ""
                 ? "Información no disponible"
                 : transactionMetadata.trInfo}
             </p>
             <p>
-              <label className="Indicador">Requisitos: </label>   <br />
-              {transactionMetadata.trReq1}  <br />
-              {transactionMetadata.trReq2}  <br />
-              {transactionMetadata.trReq3}  <br />
-              {transactionMetadata.trReq4}  <br />
-              {transactionMetadata.trReq5}  <br />
-              {transactionMetadata.trReq6}  <br />
-              {transactionMetadata.trReq7}  <br />
-              {transactionMetadata.trReq8}  <br />
-              {transactionMetadata.trReq9}  <br />
+              <label className="Indicador">Requisitos: </label> <br />
+              {transactionMetadata.trReq1} <br />
+              {transactionMetadata.trReq2} <br />
+              {transactionMetadata.trReq3} <br />
+              {transactionMetadata.trReq4} <br />
+              {transactionMetadata.trReq5} <br />
+              {transactionMetadata.trReq6} <br />
+              {transactionMetadata.trReq7} <br />
+              {transactionMetadata.trReq8} <br />
+              {transactionMetadata.trReq9} <br />
               {transactionMetadata.trReq10} <br />
             </p>
             <button className="solicitarTramite" onClick={handleRequestSubmit}>

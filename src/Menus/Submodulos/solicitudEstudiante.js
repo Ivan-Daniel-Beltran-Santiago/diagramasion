@@ -17,7 +17,7 @@ function SolicitudEstudiante({ currentUserInformation }) {
   const [loadedFiles, setLoadedFiles] = useState([]);
   const [validatedFiles, setValidatedFiles] = useState([]);
 
-  const [barraProgresoEstatus, setbarraProgresoEstatus] = useState ({
+  const [barraProgresoEstatus, setbarraProgresoEstatus] = useState({
     1: 0,
     2: 20,
     3: 15,
@@ -127,8 +127,8 @@ function SolicitudEstudiante({ currentUserInformation }) {
           9: result.data[8].texto,
           10: result.data[9].texto,
           11: result.data[10].texto,
-          12: result.data[11].texto
-        })
+          12: result.data[11].texto,
+        });
         setbarraProgresoEstatus({
           1: result.data[0].barraEstatus,
           2: result.data[1].barraEstatus,
@@ -141,8 +141,8 @@ function SolicitudEstudiante({ currentUserInformation }) {
           9: result.data[8].barraEstatus,
           10: result.data[9].barraEstatus,
           11: result.data[10].barraEstatus,
-          12: result.data[11].barraEstatus
-        })
+          12: result.data[11].barraEstatus,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -191,16 +191,22 @@ function SolicitudEstudiante({ currentUserInformation }) {
     const srvDir = new ServerConnectionConfig();
     const srvReq = srvDir.getServer() + "/UploadDocuments";
     const formData = new FormData();
+
+    formData.append("isSolicitud", true);
+    formData.append("subCarpeta", requestData.id);
+    formData.append("idSolicitud", requestData.id);
+
     for (var indice = 0; indice < validatedFiles.length; indice++) {
       formData.append(
-        "pdf",
+        "Archivo",
         validatedFiles[indice],
         validatedFiles[indice].name
       );
     }
-    formData.append("text", requestData.id);
     axios
-      .post(srvReq, formData, { idSolicitud: requestData.id })
+      .post(srvReq, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then((result) => {
         if (result.data.successUpload) {
           showToast(
@@ -225,30 +231,34 @@ function SolicitudEstudiante({ currentUserInformation }) {
 
   const obtenerSolicitud = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/RequestUserApplication";
+    const srvReq = srvDir.getServer() + "/solicitudes/consulta";
     axios
-      .post(srvReq, {
-        matriculaUsuario: currentUserInformation.controlNumber,
+      .get(srvReq, {
+        params: { matricula: currentUserInformation.controlNumber },
       })
       .then((result) => {
-        setRequestData({
-          id: result.data[0]
-            ? result.data[0].id_Solicitud
-            : "No se encontro ninguna solicitud ",
-          fecha_inicio: result.data[0]
-            ? result.data[0].fecha_Solicitud
-            : "No se encontro ninguna solicitud ",
-          tramite: result.data[0]
-            ? result.data[0].Tramite.nombre_Tramite
-            : "No se encontro ninguna solicitud ",
-          estatus: result.data[0] ? result.data[0].estatus_Actual : 0,
-          retroalim: result.data[0]
-            ? result.data[0].retroalimentacion_Actual
-            : "No se encontro ninguna solicitud ",
-          guiaPaq: result.data[0]
-            ? result.data[0].folio_Solicitud
-            : "No se encontro ninguna guia de paqueteria ",
-        });
+        if (result.data.Codigo === 1) {
+          var fecha_API = result.data.Dato.fecha_Solicitud;
+          var fecha_UTC = new Date(fecha_API);
+          var fecha_Local = fecha_UTC.toLocaleString();
+          setRequestData({
+            id: result.data.Dato.id_Solicitud,
+            fecha_inicio: result.data.Dato.fecha_Solicitud,
+            tramite: result.data.Dato.Tramite.nombre_Tramite,
+            estatus: result.data.Dato.estatus_Actual,
+            retroalim: result.data.Dato.retroalimentacion_Actual,
+            guiaPaq: result.data.Dato.folio_Solicitud ?? "Folio no asignado.",
+          });
+        } else {
+          setRequestData({
+            id: "No se encontro ninguna solicitud.",
+            fecha_inicio: "No se encontro ninguna solicitud ",
+            tramite: "No se encontro ninguna solicitud ",
+            estatus: 0,
+            retroalim: "No se encontro ninguna solicitud ",
+            guiaPaq: "No se encontro ninguna guia de paqueteria ",
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -284,19 +294,19 @@ function SolicitudEstudiante({ currentUserInformation }) {
       <Toast ref={toast} position="top-right" />
       <div className="contenedorSolicitud">
         <p>
-          <label className="Indicador">Fecha en la que se solicitó:⠀  </label>
+          <label className="Indicador">Fecha en la que se solicitó:⠀ </label>
           {requestData.fecha_inicio}
         </p>
         <p>
-          <label className="Indicador">Trámite solicitado:⠀  </label>
+          <label className="Indicador">Trámite solicitado:⠀ </label>
           {requestData.tramite}
         </p>
         <p>
-          <label className="Indicador">Estatus:⠀  </label>
+          <label className="Indicador">Estatus:⠀ </label>
           {estatusLexico[requestData.estatus]}
         </p>
         <p>
-          <label className="Indicador">Guia de paqueteria:⠀  </label>
+          <label className="Indicador">Guia de paqueteria:⠀ </label>
           {requestData.guiaPaq}
         </p>
         <p>

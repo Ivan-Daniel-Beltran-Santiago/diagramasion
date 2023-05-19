@@ -28,7 +28,7 @@ function MenuEstudiante() {
 
     axios
       .post(srvReq, {
-        loginID: location.state[0].loginID,
+        loginID: location.state.matricula,
       })
       .then((response) => {
         setCurrentUser({

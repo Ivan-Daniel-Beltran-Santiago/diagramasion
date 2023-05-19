@@ -44,11 +44,11 @@ const SolicitarRegistroTramite = ({
 
   const RegistrarSolicitud = () => {
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/NewUserApplication";
+    const srvReq = srvDir.getServer() + "/solicitudes/nueva";
     axios
       .post(srvReq, {
-        estudiante_S: User.controlNumber,
-        tramite_S: idTramite,
+        estudianteSolicitante: User.controlNumber,
+        tramiteSolicitado: idTramite,
       })
       .then((response) => {
         switch (response.data.Code) {
@@ -158,13 +158,13 @@ const SolicitarRegistroTramite = ({
       .then((response) => {
         //console.log(response.data)
         let cantidadR = response.data.result.count - 1;
-        for (let i=1; i <= cantidadR; i++){
-          requisitos= response.data.result.rows[i].texto
-          requisitos = requisitos.replace("\\n","-")
-          requisitos = requisitos.replace("\\","-")
+        for (let i = 1; i <= cantidadR; i++) {
+          requisitos = response.data.result.rows[i].texto
+          requisitos = requisitos.replace("\\n", "-")
+          requisitos = requisitos.replace("\\", "-")
           response.data.result.rows[i].texto = requisitos;
         }
-        if(response.data.Code === 1){
+        if (response.data.Code === 1) {
           setTransactionMetadata({
             trInfo: response.data.result.rows[0].texto,
             trReq1: response.data.result.rows[1].texto,
@@ -198,7 +198,7 @@ const SolicitarRegistroTramite = ({
         </div>
         {isActive && (
           <div className="contenidoAcordeon">
-          <br />
+            <br />
             <p>
               <label className="Indicador">Información:  </label> <br />
               {transactionMetadata.trInfo === ""

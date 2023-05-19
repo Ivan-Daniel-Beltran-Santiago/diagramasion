@@ -99,11 +99,12 @@ const LoginControlador = () => {
               InicioSesion.matricula.length > 7
                 ? "/Menu-Estudiante"
                 : "/Menu-Encargada",
-              {
+
+              /*"/Menu"*/ {
                 state: { matricula: InicioSesion.matricula },
               }
             );
-          }, 5000);
+          }, 1000);
         } else {
           showToast(
             "warn",

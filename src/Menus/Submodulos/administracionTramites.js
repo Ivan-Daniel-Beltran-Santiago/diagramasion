@@ -34,7 +34,7 @@ function AdministracionTramites() {
     if (ID_Tramite !== "Seleccionar" && ID_Tramite !== "Fallo") {
       const srvDir = new ServerConnectionConfig();
       const srvReq =
-        srvDir.getServer() + "/GestionTramites/ObtenerDatosTramite";
+        srvDir.getServer() + "/tramites/detalles";
       axios
         .post(srvReq, { ID_Tramite })
         .then((respuesta) => {
@@ -67,7 +67,7 @@ function AdministracionTramites() {
   //Obtener todos los trámites, para colocarlos en el botón de selección
   const ObtenerTramites = useCallback(() => {
     const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/GestionTramites/ObtenerListaTramites";
+    const srvReq = srvDir.getServer() + "/tramites/lista";
     axios
       .get(srvReq)
       .then((respuesta) => {

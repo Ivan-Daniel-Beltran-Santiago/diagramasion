@@ -239,11 +239,10 @@ function SolicitudEstudiante({ currentUserInformation }) {
       .then((result) => {
         if (result.data.Codigo === 1) {
           var fecha_API = result.data.Dato.fecha_Solicitud;
-          var fecha_UTC = new Date(fecha_API);
-          var fecha_Local = fecha_UTC.toLocaleString();
+          fecha_API = fecha_API.split("T")[0];
           setRequestData({
             id: result.data.Dato.id_Solicitud,
-            fecha_inicio: result.data.Dato.fecha_Solicitud,
+            fecha_inicio: fecha_API,
             tramite: result.data.Dato.Tramite.nombre_Tramite,
             estatus: result.data.Dato.estatus_Actual,
             retroalim: result.data.Dato.retroalimentacion_Actual,

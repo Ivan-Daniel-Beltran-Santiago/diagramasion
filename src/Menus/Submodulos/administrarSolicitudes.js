@@ -18,7 +18,7 @@ const estatusLexico = {
 };
 
 function AdmnistrarSolicitudes({ cargarMatricula }) {
-  const [filtroEstatus, setFiltroEstatus] = useState(3);
+  const [filtroEstatus, setFiltroEstatus] = useState(1);
 
   const handlecargarMatricula = (matriculaCargarSol) => {
     cargarMatricula(matriculaCargarSol);

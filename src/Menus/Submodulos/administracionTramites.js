@@ -119,7 +119,7 @@ function AdministracionTramites() {
 
     if (ID_Metadata !== "Seleccionar" && ID_Metadata !== "Fallo"){
       const srvDir = new ServerConnectionConfig();
-      const srvReq = srvDir.getServer() + "/GestionTramites/ActualizarMetadata";
+      const srvReq = srvDir.getServer() + "/tramites/actualizar";
       axios
         .post(srvReq, {  id_metadata: ID_Metadata, contenido: contenidoMetadata})
         .then((respuesta) => {

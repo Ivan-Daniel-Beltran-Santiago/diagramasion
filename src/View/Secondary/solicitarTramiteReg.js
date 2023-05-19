@@ -88,7 +88,7 @@ const SolicitarRegistroTramite = ({
         tramite: nombre,
       })
       .then((response) => {
-        switch (response.data.Codigo) {
+        switch (response.data.Code) {
           case 1:
             showToast(
               "success",

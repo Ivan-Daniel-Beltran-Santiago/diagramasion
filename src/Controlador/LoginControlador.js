@@ -104,7 +104,7 @@ const LoginControlador = () => {
                 state: { matricula: InicioSesion.matricula },
               }
             );
-          }, 1000);
+          }, 100);
         } else {
           showToast(
             "warn",

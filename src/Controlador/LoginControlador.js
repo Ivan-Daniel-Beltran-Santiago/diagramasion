@@ -100,7 +100,7 @@ const LoginControlador = () => {
                 ? "/Menu-Estudiante"
                 : "/Menu-Encargada",
               {
-                state: [{ matricula: InicioSesion.matricula }],
+                state: { matricula: InicioSesion.matricula },
               }
             );
           }, 5000);

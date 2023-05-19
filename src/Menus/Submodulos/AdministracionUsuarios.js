@@ -196,10 +196,19 @@ function AdministracionUsuarios() {
         });
         break;
       case "nombreCompleto":
-      case "carrera":
+        let validadorNombre = new RegExp("[A-Z a-z]{10,100}$");
         setValidRegistro({
           ...validRegistro,
-          [event.target.name]: true,
+          [event.target.name]:
+          validadorNombre.test(event.target.value)
+        });
+        break;
+      case "carrera":
+        let validCarrera = new RegExp("[A-Z a-z]{10,100}$");
+        setValidRegistro({
+          ...validRegistro,
+          [event.target.name]:
+          validCarrera.test(event.target.value)
         });
         break;
       default:
@@ -320,6 +329,7 @@ function AdministracionUsuarios() {
   };
 
   const uploadOneUser = () => {
+    console.log(validRegistro)
     if (
       validRegistro.matricula === true &&
       validRegistro.nombreCompleto === true &&
@@ -521,7 +531,7 @@ function AdministracionUsuarios() {
         let semestre = registroUsuario.semestre;
         let newMatricula = registroUsuario.matricula;
 
-        console.log({ matricula, newMatricula });
+        //console.log({ matricula, newMatricula });
 
         axios
           .post(srvReq, {
@@ -701,7 +711,7 @@ function AdministracionUsuarios() {
   }
 
   const updateUser = () => {
-    //console.log(validRegistro)
+    console.log(validRegistro)
     if (validRegistro.matricula === true && validRegistro.nombreCompleto === true && validRegistro.correoElectronico === true) {
       if (esEncargado) {
         editEncargado();

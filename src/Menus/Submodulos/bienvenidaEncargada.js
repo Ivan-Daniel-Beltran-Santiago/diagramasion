@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
 
-function BienvenidaEncargada() {
+function BienvenidaEncargada({ currentUser }) {
   const [conteo, setConteo] = useState({
     nuevas: 0,
     documentos: 0,
@@ -61,6 +61,11 @@ function BienvenidaEncargada() {
 
   return (
     <div id="bienvenidaEncargada" className="modules">
+      <p>
+        <span>
+          <u>Bienvenida Encargad@ <b>{currentUser.fullName}.</b></u>
+        </span>
+      </p>
       <p>
         <span id="nuevas_solicitudes">
           <b>Numero de solicitudes nuevas actualmente:</b> {conteo.nuevas}

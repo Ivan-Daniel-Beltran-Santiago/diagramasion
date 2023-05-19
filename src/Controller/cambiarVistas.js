@@ -57,7 +57,10 @@ const CambiarVistaController = ( {
     return <EdicionCorreos / > ;
   default:
     if ( VistaIndex < 7 ) {
-      return <BienvenidaEncargada / > ;
+      return <BienvenidaEncargada currentUser = {
+        currentUser
+      } 
+      / > ;
     } else {
       return <BienvenidaEstudiante currentUser = {
         currentUser

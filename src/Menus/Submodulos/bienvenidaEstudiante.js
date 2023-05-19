@@ -51,7 +51,7 @@ function BienvenidaEstudiante({ currentUser }) {
     <div id="bienvenidaEstudiante" className="modules">
       <p>
         <span>
-          <u>Estudiante <b>{currentUser.fullName}.</b></u>
+          <u>Bienvenido Estudiante <b>{currentUser.fullName}.</b></u>
         </span>
       </p>
       <p>

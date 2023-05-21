@@ -50,7 +50,7 @@ const LoginControlador = () => {
         let validarMatriculaEncargada = new RegExp("^[0-9]{3}$");
         setMatriculaValidada(
           validarMatriculaEstudiante.test(inputChange) ||
-            validarMatriculaEncargada.test(inputChange)
+          validarMatriculaEncargada.test(inputChange)
         );
       } else {
         let validarContraseña = new RegExp("^[0-9]{3,8}$");
@@ -86,36 +86,57 @@ const LoginControlador = () => {
     const funcion = servidor.obtenerServidor() + "/usuarios/sesion";
 
     await axios
-      .post(funcion, InicioSesion)
-      .then(async (respuesta) => {
-        if (respuesta.data.Codigo === 1) {
-          await showToast(
-            "success",
-            "Login exitoso",
-            "En un momento sera redirigido"
-          );
-          setTimeout(() => {
-            navigate(
-              InicioSesion.matricula.length > 7
-                ? "/Menu-Estudiante"
-                : "/Menu-Encargada",
-
-              /*"/Menu"*/ {
-                state: { matricula: InicioSesion.matricula },
-              }
+      .get(funcion, { params: { matricula: InicioSesion.matricula, contraseña: InicioSesion.contraseña } })
+      .then((respuesta) => {
+        switch (respuesta.status) {
+          case 200:
+            showToast(
+              "success",
+              "Login exitoso",
+              "Usuario reconocido, iniciando sesión."
             );
-          }, 100);
-        } else {
-          showToast(
-            "warn",
-            "Datos invalidos",
-            "Usuario/Contraseña incorrectos"
-          );
+            setTimeout(() => {
+              navigate(
+                /*
+                InicioSesion.matricula.length > 7
+                  ? "/Menu-Estudiante"
+                  : "/Menu-Encargada",
+                */ "/Menu",
+                {
+                  state: { matricula: InicioSesion.matricula },
+                }
+              );
+            }, 100);
+            break;
+          case 400:
+            showToast(
+              "error",
+              "Formato invalido",
+              "Formato de usuario y/o contraseña incorrecto."
+            );
+            break;
+          case 404:
+            showToast(
+              "error",
+              "Datos invalidos",
+              "Usuario y/o contraseña incorrectos."
+            );
+            break;
+          default:
+            showToast(
+              "error",
+              "Error de servidor",
+              "Contacte con el administrador del sistema."
+            );
+            break;
         }
       })
-      .catch((error) => {
-        console.error(error);
-        showToast("error", "Error inesperado", "Intente mas tarde");
+      .catch(() => {
+        showToast(
+          "error",
+          "Error de servidor",
+          "Contacte con el administrador del sistema."
+        );
       });
   };
 

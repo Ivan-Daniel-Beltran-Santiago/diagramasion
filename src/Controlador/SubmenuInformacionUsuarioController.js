@@ -4,13 +4,13 @@ import SubmenuInformacionUsuario from "../Vista/SubmenuInformacionUsuario";
 import ConfigurarConexion from "./ConfigurarConexion";
 
 const SubmenuInformacionUsuarioControlador = ({
-  SubmenuInformacionUsuarioControladorUsuarioActual,
-  SubmenuInformacionUsuarioControladorSetUsuarioActual,
+  SubmenuSolicitarTramiteControladorUsuarioActivo,
+  SubmenuInformacionUsuarioControladorSetUsuarioActivo,
 }) => {
   //Variables de estado.
   const [informacionUsuarioActualizar, setInformacionUsuarioActualizar] =
     useState({
-      matricula: SubmenuInformacionUsuarioControladorUsuarioActual.matricula,
+      matricula: SubmenuSolicitarTramiteControladorUsuarioActivo.matricula,
       nuevoCorreo_e: "",
       nuevaContraseña: "",
       nuevaContraseñaConfirmar: "",
@@ -101,7 +101,7 @@ const SubmenuInformacionUsuarioControlador = ({
 
     switch (actualizacion.status) {
       case 200:
-        SubmenuInformacionUsuarioControladorSetUsuarioActual(
+        SubmenuInformacionUsuarioControladorSetUsuarioActivo(
           actualizacion.data
         );
         setTimeout(() => {
@@ -149,8 +149,8 @@ const SubmenuInformacionUsuarioControlador = ({
       ActualizarDatosUsuario={actualizarDatosUsuario}
       InformacionUsuarioActualizar={informacionUsuarioActualizar}
       ValidacionInformacionUsuario={validacionInformacionUsuario}
-      SubmenuInformacionUsuarioUsuarioActual={
-        SubmenuInformacionUsuarioControladorUsuarioActual
+      SubmenuInformacionUsuarioUsuarioActivo={
+        SubmenuSolicitarTramiteControladorUsuarioActivo
       }
     />
   );

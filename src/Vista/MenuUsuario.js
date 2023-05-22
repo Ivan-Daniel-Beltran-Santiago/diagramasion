@@ -6,7 +6,7 @@ import LogoHeader from "../View/Auxiliary/Logo_Header";
 import MenuControlador from "../Controlador/MenuControlador";
 import RegresarMenu from "../View/Auxiliary/regresarMenu";
 
-function MenuUsuario({ MenuUsuarioTostado, MenuIndex, MenuCambiarIndex, MenuInformacionUsuario, MenuUsuarioSetUsuarioActivo }) {
+function MenuUsuario({ MenuUsuarioTostado, MenuIndex, MenuCambiarIndex, MenuUsuarioUsuarioActivo, MenuUsuarioSetUsuarioActivo }) {
   return (
     <div className="App">
       <LogoHeader />
@@ -15,7 +15,7 @@ function MenuUsuario({ MenuUsuarioTostado, MenuIndex, MenuCambiarIndex, MenuInfo
         <Toast ref={MenuUsuarioTostado} position="top-right" />
           <div className="content-section">
             <div className="contentSelector">
-              {MenuInformacionUsuario.Estudiante !== null && (
+              {MenuUsuarioUsuarioActivo.Estudiante !== null && (
                 <div>
                   <button
                     id="bienvenidaEstudiante"
@@ -47,7 +47,7 @@ function MenuUsuario({ MenuUsuarioTostado, MenuIndex, MenuCambiarIndex, MenuInfo
                   </button>
                 </div>
               )}
-              {MenuInformacionUsuario.Estudiante === null && (
+              {MenuUsuarioUsuarioActivo.Estudiante === null && (
                 <div>
                   <button
                     id="bienvenidaEncargada"
@@ -127,9 +127,9 @@ function MenuUsuario({ MenuUsuarioTostado, MenuIndex, MenuCambiarIndex, MenuInfo
             <div>
               <div className="content">
                 <MenuControlador
-                  submenuIndex={MenuIndex}
-                  submenuUsuario={MenuInformacionUsuario}
-                  MenuControladorSetUsuarioActivo={MenuUsuarioSetUsuarioActivo}
+                  SubmenuIndex={MenuIndex}
+                  SubmenuUsuario={MenuUsuarioUsuarioActivo}
+                  SubmenuSetUsuarioActivo={MenuUsuarioSetUsuarioActivo}
                 />
                 <RegresarMenu />
               </div>

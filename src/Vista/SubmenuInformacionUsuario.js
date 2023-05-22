@@ -9,7 +9,7 @@ const Container = styled.div`
 function SubmenuInformacionUsuario({
   InfoUsuarioTostado,
   HandleInputChange,
-  SubmenuInformacionUsuarioUsuarioActual,
+  SubmenuInformacionUsuarioUsuarioActivo,
   InformacionUsuarioActualizar,
   ValidacionInformacionUsuario,
   ActualizarDatosUsuario,
@@ -20,26 +20,27 @@ function SubmenuInformacionUsuario({
         <Toast ref={InfoUsuarioTostado} position="top-right" />
         <form className="info_usuario">
           <label className="Indicador">Matricula:⠀ </label>
-          <label> {SubmenuInformacionUsuarioUsuarioActual.matricula}</label>
-          <br />
+          <label> {SubmenuInformacionUsuarioUsuarioActivo.matricula}</label>
           <br />
           <label className="Indicador">Nombre:⠀ </label>
           <label>
             {" "}
-            {SubmenuInformacionUsuarioUsuarioActual.nombre_Completo}
+            {SubmenuInformacionUsuarioUsuarioActivo.nombre_Completo}
           </label>
           <br />
-          <br />
-          {SubmenuInformacionUsuarioUsuarioActual.carrera !== undefined && (
+          {SubmenuInformacionUsuarioUsuarioActivo.Estudiante !== undefined && (
             <div>
               <label className="Indicador">Carrera:⠀ </label>
-              <label> {SubmenuInformacionUsuarioUsuarioActual.carrera}</label>
-            </div>
-          )}
-          {SubmenuInformacionUsuarioUsuarioActual.semestre !== undefined && (
-            <div>
+              <label>
+                {" "}
+                {SubmenuInformacionUsuarioUsuarioActivo.Estudiante.carrera}
+              </label>
+              <br />
               <label className="Indicador">Semestre:⠀ </label>
-              <label> {SubmenuInformacionUsuarioUsuarioActual.semestre}</label>
+              <label>
+                {" "}
+                {SubmenuInformacionUsuarioUsuarioActivo.Estudiante.semestre}
+              </label>
             </div>
           )}
         </form>
@@ -98,7 +99,7 @@ function SubmenuInformacionUsuario({
               <label>Correo Electronico: </label>
               <input
                 type="email"
-                placeholder={SubmenuInformacionUsuarioUsuarioActual.correo_e}
+                placeholder={SubmenuInformacionUsuarioUsuarioActivo.correo_e}
                 name="nuevoCorreo_e"
                 id="newEmail"
                 onChange={HandleInputChange}

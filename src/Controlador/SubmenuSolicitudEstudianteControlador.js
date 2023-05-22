@@ -68,6 +68,50 @@ const SubmenuSolicitudEstudianteControlador = ({
     ValidateFiles();
   };
 
+  const ValidateFiles = async () => {
+  const porValidar = [];
+  
+  for (let indice = 0; indice < archivosSeleccionados.length; indice++) {
+    const archivoActual = archivosSeleccionados[indice];
+
+    try {
+      await validarArchivo(archivoActual);
+      porValidar.push(archivoActual);
+    } catch (error) {
+      showToast("error", "Formato de archivo invalido", error.message);
+    }
+  }
+
+  setArchivosSubir([...archivosSubir, ...porValidar]);
+};
+
+const validarArchivo = (archivo) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (archivo.size > 2000000) {
+        reject(
+          "El archivo " +
+            archivo.name +
+            " no será incluido, ya que excede el tamaño de 2MB."
+        );
+      } else {
+        const validarNombreArchivo = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
+        if (validarNombreArchivo.test(archivo.name)) {
+          resolve();
+        } else {
+          reject(
+            "El archivo " +
+              archivo.name +
+              " no será incluido, ya que contiene caracteres inválidos en el nombre."
+          );
+        }
+      }
+    }, 500);
+  });
+};
+
+  /*
+
   const ValidateFiles = () => {
     var porValidar = [];
     var indice = 0;
@@ -109,6 +153,8 @@ const SubmenuSolicitudEstudianteControlador = ({
     };
     validarSiguienteArchivo();
   };
+
+  */
 
   const handleValidateFiles = (archivos) => {
     const validados = [...archivosSubir];

@@ -1,284 +1,320 @@
 .App {
-    text-align: left;
-  }
-  
-  .App-logo {
-    width: 50%;
-    height: auto;
-    pointer-events: none;
-  }
-  
-  .App-header {
-    background-color: white;
-    min-height: 12vh;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: left;
-    font-size: calc(10px + 2vmin);
-    color: #282c34;
-  }
-  
-  .App-link {
-    color: #61dafb;
-  }
-  
-  .content-section{
-    min-height: 60px;
-    background: #e7e7e7;
-    max-height: 180px;
-  }
-  
-  .contentSelector{
-    min-height: 48px;
-    display:flexbox;
-    max-height: 144px;
-  }
-  
-  .content{
-    padding-top:20px;
-  }
-  
-  .tablas{
-    margin:12px;
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-  
-  .tablas tbody{
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-  
-  .modules span{
-    font-size: 16px;
-  }
-  
-  .modules p{
-    padding-bottom: 6px;
-  }
-  
-  .Cabecera{
-    background-color: rgb(175, 175, 175);
-  }
-  
-  .registroPar{
-    background-color: rgb(230, 230, 230);
-  }
-  
-  .info_usuario{
-    padding:6px;
-    padding-left:18px;
-  }
-  
-  .progreso_en_Solicitud{
-    margin-left:12px;
-    background-color: khaki;
-    padding:4px;
-    padding-left:16px;
-    padding-right:12px;
-  }
-  
-  .impedimentos_en_Solicitud{
-    margin-left:12px;
-    background-color: tomato;
-    padding:4px;
-    padding-left:16px;
-    padding-right:12px;
-  }
-  
-  .nombreTramite{
-    margin:16px;
-    background-color: rgb(220, 220, 220);
-    border: 2px solid rgb(120, 120, 120);
-    border-radius: 6px;
-  }
-  
-  .tituloAcordeon{
-    padding:12px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  
-  .contenidoAcordeon{
-    background-color: rgb(250, 250, 250);
-    padding-left: 24px;
-    border-top: 2px solid rgb(120, 120, 120);
-  }
-  
-  .solicitarTramite:hover{
-    background-color: springgreen;
-    color: black;
-  }
-  
-  .debugProgressBar:hover{
-    background-color: khaki;
-    color: black;
-  }
-  
-  .tablas th{
-    padding: 12px;
-    padding-right:24px;
-    border: 2px solid rgb(120, 120, 120);
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
-  
-  pre{
-    margin-left:24px;
-  }
-  
-  .contenedorSolicitud{
-    background-color: rgb(230, 230, 230);
-    border-radius: 6px;
-    border: 2px solid rgb(120, 120, 120);
-    margin:12px;
-    padding:12px;
-    padding-left: 18px;
-  }
-  
-  .contenedorSolicitud button:hover{
-    background-color: springgreen;
-    color: black;
-  }
-  
-  .progressBar{
-    margin: 16px;
-    margin-left: 24px;
-    margin-top: 24px;
-    background-color: rgb(230, 230, 230);
-    border: 2px solid rgb(120, 120, 120);
-    border-radius: 6px;
-    width: 96%;
-  }
-  
-  .progresando{
-    background-color: springgreen;
-    width: 0%;
-    height: 30px;
-    border-radius: 6px;
-    text-align: center;
-    padding-top: 10px;
-  }
-  
-  .confirmDocumentUpload:hover{
-    background-color: springgreen;
-    color: black;
-    transform: scale(1.075, 1.075);
-  }
-  
-  .logout:hover{
-    background-color: tomato;
-    color: black;
-  }
-  
-  .dateContainer button:hover{
-    background-color: springgreen;
-    color: black;
-  }
-  
-  .dates{
-    width:100%;
-    padding-bottom:6px;
-    margin-bottom:9px;
-  }
-  
-  .labelDate{
-    font-size: 18px;
-  }
-  
-  .info_usuario input[type = "email"], input[type = "password"]{
-      font-family: Arial, Helvetica, sans-serif;
-      margin-left:24px;
-      border-radius: 6px;
-      margin:6px;
-      padding-left:12px;
-      background: #f6f7f9;
-      color: #454545;
-      width: 98%;
-      opacity: 4;
-  }
-  
-  button, input[type = "submit"], input[type = "button"]{
-    height: 80%;
-    width: auto;
-    background: #0ba4e1;
-    border: 0;
-    outline: 0;
-    margin-left:30px;
-    color: white;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 12px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    border-radius: 3px;
-    text-transform: capitalize;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 300ms;
-  }
+  text-align: center;
+  min-width: 900px;
+}
 
-  .botonTramite{
-    background: #0670d9;
-  }
-  
-  .confirmarCambios{
-    height: 80%;
-    width: auto;
-    background: #0ba4e1;
-    border: 0;
-    outline: 0;
-    margin-left:30px;
-    color: white;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 12px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    border-radius: 3px;
-    text-transform: capitalize;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 300ms;
-  }
-  
-  .confirmarCambios:hover{
-    background-color: khaki;
-    color: black;
-  }
-  
-  button, input[type="file"]{
-    margin-left:20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 12px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-  }
-  
-  button:hover{
-    transform: scale(1.075, 1.075);
-  }
-  
-  .login p{
-    text-align: center;
-    font-size: 24px;
-    padding-top: 10px;
-    font-style: italic;
-    color: #0000007a;
-  }
-  
-  .login h2, h4{
-    text-align: center;
-    font-weight: bold;
-  }
-  
-  .login h2{
-    margin-bottom: 20px;
-  }
+.App-logo {
+  width: 50%;
+  height: auto;
+  pointer-events: none;
+  margin: auto;
+}
+
+.App-header {
+  background-color: white;
+  min-height: 12vh;
+  display: block;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #282c34;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.buttonContainer_menu{
+  display:flexbox;
+  background-color: #e7e7e7;
+  text-align: center;
+}
+
+.buttonContainer_menu button{
+  background-color: #0ba4e1;
+  color: white;
+}
+
+.buttonContainer button{
+  background-color: springgreen;
+  color: black;
+  width: 90%;
+}
+
+.buttonContainer button:hover{
+  background-color: #0ba4e1;
+  color: white;
+}
+
+.buttonContainer{
+  display: flexbox;
+}
+
+.row_1{
+  flex: 33%;
+  padding: 10px;
+}
+
+.row_2{
+  flex: 33%;
+  padding: 10px;
+}
+
+.row_3{
+  flex: 33%;
+  padding: 10px;
+}
+
+.newInterface_container{
+  display: flex;
+}
+
+.row_1_administrarSolicitud{
+  flex: 50%;
+  padding: 10px;
+}
+
+.row_2_administrarSolicitud{
+  flex: 50%;
+  padding: 10px;
+}
+
+.row_2_administrarSolicitud button{
+  height: 36px;
+}
+
+.documentList ::before{
+  content: "•";
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.requestInvoice{
+  padding: 12px;
+}
+
+.modules{
+  width: 95%;
+  padding: 10px;
+  margin: 20px;
+  margin-top:15px;
+  border: 4px;
+  border-style:ridge;
+}
+
+.listContainer{
+  width: 95%;
+  padding: 10px;
+  margin: 20px;
+  margin-top:15px;
+  border: 2px;
+  border-style: inset;
+}
+
+.buttonContainer{
+  width: 95%;
+  margin: 20px;
+  margin-top:15px;
+  border: 2px;
+  border-style: outset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content{
+  padding-top:20px;
+}
+
+.tablas{
+  width: 97%;
+  display: flex;
+  margin:12px;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.tablas tbody{
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.modules span{
+  font-size: 16px;
+  padding-left: 12px;
+}
+
+.modules p{
+  padding-bottom: 6px;
+}
+
+.Cabecera{
+  background-color: rgb(175, 175, 175);
+}
+
+.registroPar{
+  background-color: rgb(230, 230, 230);
+}
+
+.info_usuario{
+  padding:6px;
+  padding-left:18px;
+}
+
+.nuevasSolicitudes{
+  background-color: springgreen;
+  padding:4px;
+  padding-left:16px;
+  padding-right:12px;
+}
+
+.requiereAtencion{
+  background-color: khaki;
+  padding:4px;
+  padding-left:16px;
+  padding-right:12px;
+}
+
+.requiereAjustes{
+  background-color: tomato;
+  padding:4px;
+  padding-left:16px;
+  padding-right:12px;
+}
+
+.tablas th{
+  padding: 12px;
+  padding-right:24px;
+  border: 2px solid rgb(120, 120, 120);
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.dateContainer{
+  background-color: rgb(230, 230, 230);
+  border-radius: 6px;
+  border: 2px solid rgb(120, 120, 120);
+  margin:12px;
+  padding:12px;
+}
+
+.dateContainer button:hover{
+  background-color: springgreen;
+  color: black;
+}
+
+.loadLogin:hover{
+  background-color: khaki;
+  color: black;
+  transform: scale(1.075, 1.075);
+}
+
+.logout:hover{
+  background-color: tomato;
+  color: black;
+}
+
+.dateContainer button:hover{
+  background-color: springgreen;
+  color: black;
+}
+
+.dates{
+  width:100%;
+  padding-bottom:6px;
+  margin-bottom:9px;
+}
+
+.labelDate{
+  font-size: 18px;
+}
+
+.info_usuario input[type = "email"], input[type = "password"]{
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left:24px;
+    border-radius: 6px;
+    margin:6px;
+    padding-left:12px;
+    background: #f6f7f9;
+    color: #454545;
+    width: 98%;
+    opacity: 4;
+}
+
+button, input[type = "submit"], input[type = "button"]{
+  height: 80%;
+  width: auto;
+  background: #0ba4e1;
+  border: 0;
+  outline: 0;
+  margin-left:15px;
+  margin-right: 15px;
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 3px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.confirmarCambios{
+  height: 80%;
+  width: auto;
+  background: #0ba4e1;
+  border: 0;
+  outline: 0;
+  margin-left:30px;
+  color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 3px;
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 300ms;
+}
+
+.confirmarCambios:hover{
+  background-color: khaki;
+  color: black;
+}
+
+button, input[type="file"]{
+  margin-left:15px;
+  margin-right: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+button:hover{
+  transform: scale(1.075, 1.075);
+}
+
+.login p{
+  text-align: center;
+  font-size: 24px;
+  padding-top: 10px;
+  font-style: italic;
+  color: #0000007a;
+}
+
+.login h2, h4{
+  text-align: center;
+  font-weight: bold;
+}
+
+.login h2{
+  margin-bottom: 20px;
+}

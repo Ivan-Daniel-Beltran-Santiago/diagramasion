@@ -60,8 +60,10 @@ const SubmenuBienvenidaUsuarioControlador = ({
   }, []);
 
   useEffect(() => {
-    obtenerSolicitudes();
-    obtenerDescripciones();
+    if (SubmenuBienvenidaUsuarioControladorUsuarioActual.Estudiante !== null) {
+      obtenerSolicitudes();
+      obtenerDescripciones();
+    }
   }, []);
 
   return (

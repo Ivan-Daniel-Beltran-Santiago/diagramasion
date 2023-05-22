@@ -4,6 +4,7 @@ const SubmenuBienvenidaUsuario = ({
   SubmenuBienvenidaUsuarioUsuarioActivo,
   SubmenuBienvenidaUsuarioListaSolicitudes,
   SubmenuBienvenidaUsuarioEstatusLexico,
+  SubmenuBienvenidaUsuarioConteoSolicitudes,
 }) => {
   return (
     <div id="bienvenidaEstudiante" className="modules">
@@ -22,7 +23,11 @@ const SubmenuBienvenidaUsuario = ({
               <span className="progreso_en_Solicitud">
                 Su solicitud tiene un estatus a esta fecha de:{" "}
                 <b>
-                  {SubmenuBienvenidaUsuarioEstatusLexico[SubmenuBienvenidaUsuarioListaSolicitudes[0].estatus_Actual]}
+                  {
+                    SubmenuBienvenidaUsuarioEstatusLexico[
+                      SubmenuBienvenidaUsuarioListaSolicitudes[0].estatus_Actual
+                    ]
+                  }
                 </b>
               </span>
             </p>
@@ -50,6 +55,37 @@ const SubmenuBienvenidaUsuario = ({
               En caso de querer actualizaciones en su solicitud, vea la pestaña
               "Mis Solicitudes" o mande correo a{" "}
               <i>ventanillaith@hermosillo.tecnm.mx</i>
+            </span>
+          </p>
+        </div>
+      )}
+      {SubmenuBienvenidaUsuarioUsuarioActivo.Estudiante === null && (
+        <div>
+          <p>
+            <span id="nuevas_solicitudes">
+              <b>Numero de solicitudes nuevas actualmente:</b>{" "}
+              {SubmenuBienvenidaUsuarioConteoSolicitudes.nuevas}
+            </span>
+          </p>
+          <p>
+            <span id="documentos_fisicos">
+              <b>
+                Numero de solicitudes con los documentos digitales revisados
+                actualmente:
+              </b>{" "}
+              {SubmenuBienvenidaUsuarioConteoSolicitudes.documentos}
+            </span>
+          </p>
+          <p>
+            <span id="finiquito_espera">
+              <b>Numero de solicitudes esperando el finiquito actualmente:</b>{" "}
+              {SubmenuBienvenidaUsuarioConteoSolicitudes.finiquitos}
+            </span>
+          </p>
+          <p>
+            <span id="finalizados">
+              <b>Numero de solicitudes finalizadas:</b>{" "}
+              {SubmenuBienvenidaUsuarioConteoSolicitudes.finalizados}
             </span>
           </p>
         </div>

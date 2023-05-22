@@ -8,6 +8,12 @@ const SubmenuBienvenidaUsuarioControlador = ({
 }) => {
   //Variables de estado
   const [listaSolicitudes, setListaSolicitudes] = useState([]);
+  const [conteoSolicitudes, setConteoSolicitudes] = useState({
+    nuevas: 0,
+    documentos: 0,
+    finiquitos: 0,
+    finalizados: 0,
+  });
   const [estatusLexico, setEstatusLexico] = useState({
     1: "Solicitud iniciado",
     2: "Documentos subidos en formato digital",
@@ -59,10 +65,37 @@ const SubmenuBienvenidaUsuarioControlador = ({
     setListaSolicitudes(solicitudesUsuario.data);
   }, []);
 
+  const obtenerConteoSolicitudes = useCallback(async () => {
+    const servidor = new ConfigurarConexion();
+    const funcion = servidor.obtenerServidor() + "/solicitudes/conteo";
+
+    const nuevasSolicitudes = await axios.get(funcion, {
+      params: { estatus_Actual: 1 },
+    });
+    const documentosSolicitudes = await axios.get(funcion, {
+      params: { estatus_Actual: 2 },
+    });
+    const finiquitosSolicitudes = await axios.get(funcion, {
+      params: { estatus_Actual: 11 },
+    });
+    const finalizadosSolicitudes = await axios.get(funcion, {
+      params: { estatus_Actual: 12 },
+    });
+
+    setConteoSolicitudes({
+      nuevas: nuevasSolicitudes.data.count,
+      documentos: documentosSolicitudes.data.count,
+      finiquitos: finiquitosSolicitudes.data.count,
+      finalizados: finalizadosSolicitudes.data.count,
+    });
+  }, []);
+
   useEffect(() => {
     if (SubmenuBienvenidaUsuarioControladorUsuarioActual.Estudiante !== null) {
       obtenerSolicitudes();
       obtenerDescripciones();
+    } else {
+      obtenerConteoSolicitudes();
     }
   }, []);
 
@@ -73,6 +106,7 @@ const SubmenuBienvenidaUsuarioControlador = ({
       }
       SubmenuBienvenidaUsuarioListaSolicitudes={listaSolicitudes}
       SubmenuBienvenidaUsuarioEstatusLexico={estatusLexico}
+      SubmenuBienvenidaUsuarioConteoSolicitudes={conteoSolicitudes}
     />
   );
 };

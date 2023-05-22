@@ -1,8 +1,13 @@
 import SubmenuBienvenidaUsuarioControlador from "./SubmenuBienvenidaUsuarioControlador";
-import SubmenuAdministracionUsuariosControlador from "./SubmenuAdministracionUsuariosController";
+import SubmenuSolicitarTramiteControlador from "./SubmenuSolicitarTramiteControlador";
 import SubmenuInformacionUsuarioControlador from "./SubmenuInformacionUsuarioController";
+import SubmenuAdministracionUsuariosControlador from "./SubmenuAdministracionUsuariosController";
 
-const MenuControlador = ({ submenuIndex, submenuUsuario, MenuControladorSetUsuarioActivo }) => {
+const MenuControlador = ({
+  submenuIndex,
+  submenuUsuario,
+  MenuControladorSetUsuarioActivo,
+}) => {
   switch (submenuIndex) {
     case 1:
     case 5:
@@ -10,15 +15,23 @@ const MenuControlador = ({ submenuIndex, submenuUsuario, MenuControladorSetUsuar
         <SubmenuBienvenidaUsuarioControlador usuarioActual={submenuUsuario} />
       );
     case 2:
-      break;
+      return (
+        <SubmenuSolicitarTramiteControlador
+          SubmenuSolicitarTramiteControladorUsuarioActivo={
+            MenuControladorSetUsuarioActivo
+          }
+        />
+      );
     case 3:
       break;
     case 4:
     case 12:
       return (
         <SubmenuInformacionUsuarioControlador
-          SubmenuInformacionUsuarioControladorUsuarioActual={submenuUsuario}
-          SubmenuInformacionUsuarioControladorSetUsuarioActual={MenuControladorSetUsuarioActivo}
+          SubmenuSolicitarTramiteControladorUsuarioActivo={submenuUsuario}
+          SubmenuInformacionUsuarioControladorSetUsuarioActual={
+            MenuControladorSetUsuarioActivo
+          }
         />
       );
     case 6:

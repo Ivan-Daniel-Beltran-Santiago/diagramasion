@@ -28,7 +28,7 @@ function SubmenuInformacionUsuario({
             {SubmenuInformacionUsuarioUsuarioActivo.nombre_Completo}
           </label>
           <br />
-          {SubmenuInformacionUsuarioUsuarioActivo.Estudiante !== undefined && (
+          {SubmenuInformacionUsuarioUsuarioActivo.Estudiante !== null && (
             <div>
               <label className="Indicador">Carrera:⠀ </label>
               <label>

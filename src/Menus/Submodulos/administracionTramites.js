@@ -23,7 +23,8 @@ function AdministracionTramites() {
     var elemento = document.getElementById("seleccionMetadata");
     var ID_Metadata = elemento.options[elemento.selectedIndex].value;
     if (ID_Metadata !== "Seleccionar" && ID_Metadata !== "Fallo") {
-      document.getElementById("contenidoMetadata").value = listaMetadataTramite[ID_Metadata].texto;
+      document.getElementById("contenidoMetadata").value =
+        listaMetadataTramite[ID_Metadata].texto;
     }
   };
 
@@ -33,15 +34,14 @@ function AdministracionTramites() {
     var ID_Tramite = elemento.options[elemento.selectedIndex].value;
     if (ID_Tramite !== "Seleccionar" && ID_Tramite !== "Fallo") {
       const srvDir = new ServerConnectionConfig();
-      const srvReq =
-        srvDir.getServer() + "/tramites/detalles";
+      const srvReq = srvDir.getServer() + "/tramites/consulta";
       axios
-        .post(srvReq, { ID_Tramite })
+        .get(srvReq, { params: { id_Tramite: ID_Tramite } })
         .then((respuesta) => {
-          if (respuesta.data[0].Tramite_Ms.length > 0) {
+          if (respuesta.data.Tramite_Ms.length > 0) {
             //Se añaden los datos del trámite al arreglo.
             setFalloListaMetadataTramites(false);
-            setListaMetadataTramite(respuesta.data[0].Tramite_Ms);
+            setListaMetadataTramite(respuesta.data.Tramite_Ms);
           } else {
             //Si los datos del tramite regresan vacios.
             setFalloListaMetadataTramites(true);
@@ -108,22 +108,27 @@ function AdministracionTramites() {
   const GuardarCambios = () => {
     // Obtener el ID de la metadata seleccionada
     const elementoMetadata = document.getElementById("seleccionMetadata");
-    let ID_Metadata = elementoMetadata.options[elementoMetadata.selectedIndex].value;
+    let ID_Metadata =
+      elementoMetadata.options[elementoMetadata.selectedIndex].value;
 
     ID_Metadata = (parseInt(ID_Metadata) + 1).toString();
 
     // Obtener el valor del campo de texto
-    const contenidoMetadata = document.getElementById("contenidoMetadata").value;
+    const contenidoMetadata =
+      document.getElementById("contenidoMetadata").value;
 
     //console.log(ID_Metadata, contenidoMetadata)
 
-    if (ID_Metadata !== "Seleccionar" && ID_Metadata !== "Fallo"){
+    if (ID_Metadata !== "Seleccionar" && ID_Metadata !== "Fallo") {
       const srvDir = new ServerConnectionConfig();
       const srvReq = srvDir.getServer() + "/tramites/actualizar";
       axios
-        .post(srvReq, {  id_metadata: ID_Metadata, contenido: contenidoMetadata})
+        .post(srvReq, {
+          id_metadata: ID_Metadata,
+          contenido: contenidoMetadata,
+        })
         .then((respuesta) => {
-          if(respuesta.data.Code == 1){
+          if (respuesta.data.Code == 1) {
             showToast(
               "success",
               "Guardar Cambios",
@@ -131,8 +136,7 @@ function AdministracionTramites() {
             );
             ObtenerTramites();
             ObtenerMetadataTramites();
-          }
-          else{
+          } else {
             showToast(
               "error",
               "Guardar Cambios",
@@ -153,9 +157,9 @@ function AdministracionTramites() {
         "warn",
         "Guardar Cambios",
         "Por favor seleccione una metadata antes de guardar los cambios."
-      )
+      );
     }
-  }
+  };
 
   return (
     <Container>
@@ -214,7 +218,11 @@ function AdministracionTramites() {
           ></textarea>
           <br></br>
         </div>
-        <button type="button" class="w3-button w3-green" onClick={GuardarCambios}>  
+        <button
+          type="button"
+          class="w3-button w3-green"
+          onClick={GuardarCambios}
+        >
           Guardar Cambios
         </button>
       </div>

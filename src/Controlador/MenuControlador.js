@@ -4,17 +4,19 @@ import SubmenuSolicitudEstudianteControlador from "./SubmenuSolicitudEstudianteC
 import SubmenuInformacionUsuarioControlador from "./SubmenuInformacionUsuarioController";
 import SubmenuAdministracionUsuariosControlador from "./SubmenuAdministracionUsuariosController";
 
+//Reemplazar despues
+import EdicionCorreos from "../Menus/Submodulos/edicionCorreos";
+import AdministracionTramites from "../Menus/Submodulos/administracionTramites";
+import AdministrarSolicitudes from "../Menus/Submodulos/administrarSolicitudes";
+import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
+import AdministracionGeneral from "../Menus/Submodulos/administracionGeneral";
+
 const MenuControlador = ({
   SubmenuIndex,
   SubmenuUsuario,
   SubmenuSetUsuarioActivo,
 }) => {
   switch (SubmenuIndex) {
-    case 1:
-    case 5:
-      return (
-        <SubmenuBienvenidaUsuarioControlador SubmenuBienvenidaUsuarioControladorUsuarioActual={SubmenuUsuario} />
-      );
     case 2:
       return (
         <SubmenuSolicitarTramiteControlador
@@ -38,35 +40,23 @@ const MenuControlador = ({
         />
       );
     case 6:
-      break;
+      return <AdministrarSolicitudes />;
     case 7:
-      break;
+      return <AdministrarSolicitud />;
     case 8:
-      break;
+      return <AdministracionGeneral />;
     case 9:
       return <SubmenuAdministracionUsuariosControlador />;
     case 10:
-      break;
+      return <AdministracionTramites />;
     case 11:
-      break;
-    case 13:
-      break;
-    case 14:
-      break;
-    case 15:
-      break;
-    case 16:
-      break;
-    case 17:
-      break;
-    case 18:
-      break;
-    case 19:
-      break;
-    case 20:
-      break;
+      return <EdicionCorreos />;
     default:
-      break;
+      return (
+        <SubmenuBienvenidaUsuarioControlador
+          SubmenuBienvenidaUsuarioControladorUsuarioActual={SubmenuUsuario}
+        />
+      );
   }
 };
 

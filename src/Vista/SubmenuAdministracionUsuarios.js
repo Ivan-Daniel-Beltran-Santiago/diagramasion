@@ -1,135 +1,14 @@
-import { useState, useRef } from "react";
-import * as XLSX from "xlsx";
-import axios from "axios";
-import ServerConnectionConfig from "../../Controller/ServerConnectionConfig";
+import React from "react";
 import { Toast } from "primereact/toast";
 
-function AdministracionUsuarios() {
-  //Los registros de todos los estudiantes obtenidos del excel
-  const [registroUsuarios, setRegistroUsuarios] = useState([{}]);
-  //Permitir el procesamiento del excel
-  const [permitirExcel, setPermitirExcel] = useState(false);
+function SubmenuAdministracionUsuarios({
+  AdminUsuariosTostado,
+  AdminUsuariosHandleFileEvent,
+  AdminUsuariosRegistrosUsuariosExcel,
+}) {
+  /*
   //Almancenar ultima matricula
   const [ultimaMatricula, setUltimaMatricula] = useState("");
-  //Determinar si se trata de un Encargado o un estudiante
-  const [esEncargado, setEsEncargado] = useState(false);
-  //Registro de un solo estudiante
-  const [registroUsuario, setRegistroUsuario] = useState({
-    matricula: "",
-    nombreCompleto: "",
-    correoElectronico: "",
-    carrera: "",
-    semestre: "",
-    newMatricula: "",
-  });
-  //Validar a un solo estudiante
-  const [validRegistro, setValidRegistro] = useState({
-    matricula: false,
-    nombreCompleto: false,
-    correoElectronico: false,
-    carrera: false,
-    semestre: false,
-  });
-
-  //Alertas
-  const toast = useRef(null);
-  const showToast = (severityValue, summaryValue, detailValue) => {
-    toast.current.show({
-      closable: false,
-      life: 7000,
-      severity: severityValue,
-      summary: summaryValue,
-      detail: detailValue,
-    });
-  };
-
-  //Registra a todos los usuarios y los prepara para ser dados de alta en la base de datos, tomando el cuenta solo los valores unicos
-  const handleNewUsers = (array) => {
-    var regexMatricula = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
-    var regexNombres = new RegExp("^[A-Za-z]{3,}(s[A-Za-z]{3,})?");
-    var regexApellidos = new RegExp("^[A-Za-z]{2,}(s[A-Za-z]{2,})*");
-    var regexCorreoElectronico =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const nuevoRegistroUsuarios = [];
-    showToast(
-      "info",
-      "Registros de Usuarios",
-      "Se esta procesando el archivo, por favor espere un momento."
-    );
-    try {
-      var todosRegistrosValidos;
-      for (var indice = 0; indice < array.length; indice++) {
-        var registroValido = regexMatricula.test(array[indice][0]);
-        if (registroValido) {
-          todosRegistrosValidos =
-            regexMatricula.test(array[indice][0]) &&
-            regexApellidos.test(array[indice][1]) &&
-            regexApellidos.test(array[indice][2]) &&
-            regexNombres.test(array[indice][3]) &&
-            array[indice][4] === ""
-              ? true
-              : regexCorreoElectronico.test(array[indice][4]) &&
-                array[indice][5] === ""
-              ? false
-              : true && array[indice][6] > 0
-              ? true
-              : false && array[indice][6] < 13
-              ? true
-              : false;
-          if (todosRegistrosValidos) nuevoRegistroUsuarios.push(array[indice]);
-        } else {
-          if (indice === 0) {
-            continue;
-          } else {
-            break;
-          }
-        }
-      }
-      console.log(todosRegistrosValidos);
-      setPermitirExcel(todosRegistrosValidos);
-      setRegistroUsuarios(nuevoRegistroUsuarios);
-    } catch (exception) {
-      showToast(
-        "error",
-        "Registros de Usuarios",
-        "Ha ocurrido un error inesperado." + exception
-      );
-    } finally {
-      console.log(permitirExcel);
-      if (permitirExcel) {
-        showToast(
-          "success",
-          "Registros de Usuarios",
-          "Archivo procesado con exito."
-        );
-      } else {
-        showToast(
-          "error",
-          "Registros de Usuarios",
-          "El archivo contiene registros con formato invalido, favor de revisarlo."
-        );
-        setRegistroUsuario([{}]);
-      }
-    }
-  };
-
-  //Lee el archivo y mantiene los registros en memoria
-  const handleFileChange = async (event) => {
-    event.preventDefault();
-
-    setRegistroUsuarios([{}]);
-
-    const file = event.target.files[0];
-    const data = await file.arrayBuffer();
-    const workbook = XLSX.read(data);
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-      header: 1,
-      defval: "",
-    });
-
-    handleNewUsers(jsonData);
-  };
 
   //Toma todos los nuevos registros y los sube a la base de datos de uno en uno
   const uploadNewUsers = () => {
@@ -223,66 +102,9 @@ function AdministracionUsuarios() {
     }
   };
 
-  //Capta los cambios a los campos de entrada para modificación o alta.
-  const handleInputChange = (event) => {
-    setRegistroUsuario({
-      ...registroUsuario,
-      [event.target.name]: event.target.value,
-    });
-    validateInputChange(event);
-  };
-
   const handleCheckChange = (event) => {
     setEsEncargado(event.target.checked);
     //console.log(esEncargado)
-  };
-
-  //Se encarga de validar los campos pertinentes.
-  const validateInputChange = (event) => {
-    switch (event.target.name) {
-      case "matricula":
-        let ValidadorStudent = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
-        let ValidadorAdmin = new RegExp("^[0-9]{3}$");
-        setValidRegistro({
-          ...validRegistro,
-          [event.target.name]:
-            ValidadorStudent.test(event.target.value) ||
-            ValidadorAdmin.test(event.target.value),
-        });
-        break;
-      case "correoElectronico":
-        let ValidadorCorreoElectronico = new RegExp(
-          /^([A-Za-z0-9]{2,64})(\.[A-Za-z0-9]{2,64})*@([A-Za-z0-9]{2,64})(\.[A-Za-z0-9]{2,64})+$/
-        );
-        setValidRegistro({
-          ...validRegistro,
-          [event.target.name]: ValidadorCorreoElectronico.test(
-            event.target.value
-          ),
-        });
-        break;
-      case "nombreCompleto":
-        let validadorNombre = new RegExp("[A-Z a-z]{10,100}$");
-        setValidRegistro({
-          ...validRegistro,
-          [event.target.name]: validadorNombre.test(event.target.value),
-        });
-        break;
-      case "carrera":
-        let validCarrera = new RegExp("[A-Z a-z]{10,100}$");
-        setValidRegistro({
-          ...validRegistro,
-          [event.target.name]: validCarrera.test(event.target.value),
-        });
-        break;
-      default:
-        setValidRegistro({
-          ...validRegistro,
-          [event.target.name]:
-            event.target.value >= 1 && event.target.value <= 14,
-        });
-        break;
-    }
   };
 
   //Con los campos de texto, da de alta un nuevo usuario
@@ -794,9 +616,11 @@ function AdministracionUsuarios() {
     }
   };
 
+  */
+
   return (
     <div className="AdministracionUsuarios modules">
-      <Toast ref={toast} position="top-right" />
+      <Toast ref={AdminUsuariosTostado} position="top-right" />
       <div className="InsertarExcel modules">
         <br />{" "}
         <label className="Indicador">Subir inicios de sesión (Excel)</label>{" "}
@@ -866,25 +690,150 @@ function AdministracionUsuarios() {
           <label>
             Favor de subir el archivo de inicios de sesión de estudiantes:{" "}
           </label>
+          <br />
           <input
             type="file"
             id="subirArchivos"
-            name="Subir archivo Excel"
+            name="Elegir archivos"
             accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            onChange={handleFileChange}
+            multiple
+            onChange={AdminUsuariosHandleFileEvent}
+            style={{ display: "none" }}
           ></input>
-          <p>
-            {permitirExcel && (
+          <label htmlFor="subirArchivos">
+            {
+              // eslint-disable-next-line jsx-a11y/anchor-is-valid
+              <a className="w3-btn w3-light-blue">
+                Seleccionar documentos para subir
+              </a>
+            }
+          </label>
+          {AdminUsuariosRegistrosUsuariosExcel.length > 0 && (
+            <div>
+              <details>
+                <summary>Inicios de sesión detectados: </summary>
+                <ul>
+                  {AdminUsuariosRegistrosUsuariosExcel.map(
+                    (registroUsuarioExcel) => {
+                      return (
+                        <li
+                          key={
+                            registroUsuarioExcel[0] +
+                            "." +
+                            AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              registroUsuarioExcel
+                            ) +
+                            ".Registro"
+                          }
+                        >
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".matricula"
+                            }
+                          >
+                            {"Matricula: " + registroUsuarioExcel[0]}
+                          </label>
+                          <br />
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".apellidoPaterno"
+                            }
+                          >
+                            {"Apellido Paterno: " + registroUsuarioExcel[1]}
+                          </label>
+                          <br />
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".apellidoMaterno"
+                            }
+                          >
+                            {"Apellido Materno: " + registroUsuarioExcel[2]}
+                          </label>
+                          <br />
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".nombreCompleto"
+                            }
+                          >
+                            {"Nombres: " + registroUsuarioExcel[3]}
+                          </label>
+                          <br />
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".correoElectronico"
+                            }
+                          >
+                            {"Correo Electronico: " + registroUsuarioExcel[4]}
+                          </label>
+                          <br />
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".carrera"
+                            }
+                          >
+                            {"Carrera: " + registroUsuarioExcel[5]}
+                          </label>
+                          <br />
+                          <label
+                            key={
+                              registroUsuarioExcel[0] +
+                              "." +
+                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                                registroUsuarioExcel
+                              ) +
+                              ".semestre"
+                            }
+                          >
+                            {"Semestre: " + registroUsuarioExcel[6]}
+                          </label>
+                          <br />
+                        </li>
+                      );
+                    }
+                  )}
+                </ul>
+              </details>
               <input
                 type="button"
                 className="loadLogin"
-                value="Cargar Inicios de Sesión"
-                onClick={uploadNewUsers}
+                value="Subir inicios de sesión al sistema"
+                onClick={null}
               ></input>
-            )}
-          </p>
+            </div>
+          )}
         </form>
       </div>
+      {/*
       <div className="Insertar modules">
         <br />
         <label className="Indicador">Subir/modificar inicio de sesión</label>
@@ -999,8 +948,9 @@ function AdministracionUsuarios() {
           <button onClick={restartContraseña}>Restablecer Contraseña</button>
         </div>
       </div>
+        */}
     </div>
   );
 }
 
-export default AdministracionUsuarios;
+export default SubmenuAdministracionUsuarios;

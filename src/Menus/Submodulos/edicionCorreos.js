@@ -55,8 +55,13 @@ function EdicionCorreos() {
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     //console.log(document.getElementById("asunto").value.length);
 
-    if (emailValidator.test(document.getElementById("correoDestinatario").value)) {
-      if (document.getElementById("asunto").value.length >= 10 && document.getElementById("asunto").value.length <= 70) {
+    if (
+      emailValidator.test(document.getElementById("correoDestinatario").value)
+    ) {
+      if (
+        document.getElementById("asunto").value.length >= 10 &&
+        document.getElementById("asunto").value.length <= 70
+      ) {
         //Añadimos otros parámetros importantes
         formData.append("isSolicitud", false);
 
@@ -81,7 +86,11 @@ function EdicionCorreos() {
 
         //Añadimos todos los archivos para enviarlos a la API
         for (var indice = 0; indice < loadedFiles.length; indice++) {
-          formData.append("Archivo", loadedFiles[indice], loadedFiles[indice].name);
+          formData.append(
+            "Archivo",
+            loadedFiles[indice],
+            loadedFiles[indice].name
+          );
         }
 
         axios
@@ -100,18 +109,15 @@ function EdicionCorreos() {
               );
               ObtenerCorreos();
               ColocarMetadata();
-            }
-            else {
+            } else {
               showToast("error", "Error", "Los cambios no han sido guardados");
             }
           })
           .catch((error) => console.log(error));
-      }
-      else {
+      } else {
         showToast("error", "Error", "Coloque un asunto valido");
       }
-    }
-    else {
+    } else {
       showToast("error", "Error", "Coloque un destinatario valido");
     }
   };
@@ -120,7 +126,6 @@ function EdicionCorreos() {
   const ColocarMetadata = () => {
     setLoadedFiles([]);
     setRecoveredFiles([]);
-    console.log(listaCorreos);
     var elemento = document.getElementById("seleccionMetadata");
     //console.log(elemento.options[elemento.selectedIndex].value)
     var ID_Metadata = elemento.options[elemento.selectedIndex].value;
@@ -131,7 +136,10 @@ function EdicionCorreos() {
         listaCorreos[ID_Metadata].destinatario;
       document.getElementById("cuerpoCorreo").value =
         listaCorreos[ID_Metadata].cuerpo;
-      var spliced = listaCorreos[ID_Metadata].Adjuntos.split(";");
+      var spliced =
+        listaCorreos[ID_Metadata].adjuntos !== ""
+          ? listaCorreos[ID_Metadata].adjuntos.split(";")
+          : "";
       setRecoveredFiles(spliced);
     }
     if (ID_Metadata === "Seleccionar") {
@@ -407,7 +415,9 @@ function EdicionCorreos() {
           value="Guardar Cambios"
           class="w3-button w3-green"
           onClick={actualizarPlantilla}
-        >Guardar Cambios</button>
+        >
+          Guardar Cambios
+        </button>
       </div>
     </Container>
   );

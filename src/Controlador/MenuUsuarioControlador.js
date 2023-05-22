@@ -30,44 +30,45 @@ const MenuUsuarioControlador = () => {
     const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/usuarios/consultar";
 
-    if (!usuarioActivo.length > 0) {
-      try {
-        const usuario = await axios.get(funcion, {
-          params: { matricula: location.state.matricula },
-        });
+    try {
+      const usuario = await axios.get(funcion, {
+        params: { matricula: location.state.matricula },
+      });
 
-        switch (usuario.status) {
-          case 200:
-            setUsuarioActivo(usuario.data.Informacion);
-            break;
-          default:
-            showToast(
-              "error",
-              "Inicio de sesión",
-              "Error de sistema, contacte al administrador"
-            );
-            break;
-        }
-      } catch (error) {
-        showToast(
-          "error",
-          "Inicio de sesión",
-          "Error de sistema, contacte al administrador"
-        );
+      switch (usuario.status) {
+        case 200:
+          setUsuarioActivo(usuario.data.Informacion);
+          break;
+        default:
+          showToast(
+            "error",
+            "Inicio de sesión",
+            "Error de sistema, contacte al administrador"
+          );
+          break;
       }
+    } catch (error) {
+      showToast(
+        "error",
+        "Inicio de sesión",
+        "Error de sistema, contacte al administrador"
+      );
     }
-  }, [location.state.matricula]);
+  }, []);
 
   //Llamamos a la funcion para obtener los datos del usuario al momento de cargar la pagina.
   useEffect(() => {
-    obtenerInformacionUsuario();
-  }, []);
+    const obtenerDatosUsuario = async () => {
+      await obtenerInformacionUsuario();
+    };
+    obtenerDatosUsuario();
+  }, [obtenerInformacionUsuario]);
 
   return (
     <MenuUsuario
       MenuIndex={indexMenu}
       MenuCambiarIndex={setIndexMenu}
-      MenuInformacionUsuario={usuarioActivo}
+      MenuUsuarioUsuarioActivo={usuarioActivo}
       MenuUsuarioTostado={toast}
       MenuUsuarioSetUsuarioActivo={setUsuarioActivo}
     />

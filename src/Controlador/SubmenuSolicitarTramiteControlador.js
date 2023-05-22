@@ -172,7 +172,32 @@ const SubmenuSolicitarTramiteControlador = ({
     }
   };
 
-  const enviarRequisitos = () => {};
+  const enviarRequisitos = async () => {
+    const servidor = new ConfigurarConexion();
+    const funcion = servidor.obtenerServidor() + "/solicitudes/correo";
+
+    const correoEnviado = await axios.post(funcion, {
+      matricula: SubmenuSolicitarTramiteControladorUsuarioActivo.matricula,
+    });
+
+    if (correoEnviado.status === 200) {
+      showToast(
+        "success",
+        "Correo enviado.",
+        "Se le ha enviado un correo electronico con los detalles de su solicitud a : " +
+          SubmenuSolicitarTramiteControladorUsuarioActivo.correo_e +
+          "."
+      );
+    } else {
+      showToast(
+        "error",
+        "Correo no enviado.",
+        "No se ha podido enviar el correo con los detalles de la solicitud a : " +
+          SubmenuSolicitarTramiteControladorUsuarioActivo.correo_e +
+          ". Intente mas tarde."
+      );
+    }
+  };
 
   useEffect(() => {
     obtenerListaTramites();

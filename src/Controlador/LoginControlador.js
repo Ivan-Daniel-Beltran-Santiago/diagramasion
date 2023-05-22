@@ -97,11 +97,7 @@ const LoginControlador = () => {
             );
             setTimeout(() => {
               navigate(
-                /*
-                InicioSesion.matricula.length > 7
-                  ? "/Menu-Estudiante"
-                  : "/Menu-Encargada",
-                */ "/Menu",
+                "/Menu",
                 {
                   state: { matricula: InicioSesion.matricula },
                 }

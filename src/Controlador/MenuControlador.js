@@ -1,5 +1,6 @@
 import SubmenuBienvenidaUsuarioControlador from "./SubmenuBienvenidaUsuarioControlador";
 import SubmenuSolicitarTramiteControlador from "./SubmenuSolicitarTramiteControlador";
+import SubmenuSolicitudEstudianteControlador from "./SubmenuSolicitudEstudianteControlador";
 import SubmenuInformacionUsuarioControlador from "./SubmenuInformacionUsuarioController";
 import SubmenuAdministracionUsuariosControlador from "./SubmenuAdministracionUsuariosController";
 
@@ -17,13 +18,15 @@ const MenuControlador = ({
     case 2:
       return (
         <SubmenuSolicitarTramiteControlador
-          SubmenuSolicitarTramiteControladorUsuarioActivo={
-            SubmenuUsuario
-          }
+          SubmenuSolicitarTramiteControladorUsuarioActivo={SubmenuUsuario}
         />
       );
     case 3:
-      break;
+      return (
+        <SubmenuSolicitudEstudianteControlador
+          SubmenuSolicitudEstudianteControladorUsuarioActivo={SubmenuUsuario}
+        />
+      );
     case 4:
     case 12:
       return (

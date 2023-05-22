@@ -13,7 +13,7 @@ const MenuControlador = ({
     case 1:
     case 5:
       return (
-        <SubmenuBienvenidaUsuarioControlador usuarioActual={SubmenuUsuario} />
+        <SubmenuBienvenidaUsuarioControlador SubmenuBienvenidaUsuarioControladorUsuarioActual={SubmenuUsuario} />
       );
     case 2:
       return (

@@ -253,10 +253,8 @@ const SubmenuSolicitudEstudianteControlador = ({
   }, []);
 
   return (
-    <div className="modules">
-    Haga clic sobre el tramite para expandir su informacion.
+    
     <SubmenuSolicitudEstudiante 
-    className="accordion-item"
       SubmenuSolicitudEstudianteTostado={toast}
       SubmenuSolicitudEstudianteListaSolicitudes={listaSolicitudes}
       SubmenuSolicitudEstudianteSetSolicitudVisible={setSolicitudVisible}
@@ -268,7 +266,7 @@ const SubmenuSolicitudEstudianteControlador = ({
       SubmenuSolicitudEstudianteEstatusLexico={estatusLexico}
       SubmenuSolicitudEstudianteSubirDocumentos={subirDocumentos}
     />
-    </div>
+    
   );
 };
 

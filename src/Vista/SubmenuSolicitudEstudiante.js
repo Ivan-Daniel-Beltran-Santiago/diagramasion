@@ -14,22 +14,24 @@ function SubmenuSolicitudEstudiante({
   SubmenuSolicitudEstudianteEstatusLexico,
   SubmenuSolicitudEstudianteSubirDocumentos,
 }) {
-
   return (
     <div id="solicitudEstudiante" className="modules">
+      <div>
+        Haga clic sobre el tramite para expandir su informacion.
+      </div>
       <Toast ref={SubmenuSolicitudEstudianteTostado} position="top-right" />
       {SubmenuSolicitudEstudianteListaSolicitudes &&
         SubmenuSolicitudEstudianteListaSolicitudes.map(function (solicitud) {
           return (
             <div
-              className="accordion-item"
+              className="accordion-item modules" 
               key={
                 SubmenuSolicitudEstudianteListaSolicitudes.indexOf(solicitud) +
                 ".Acordeon"
               }
             >
               <div
-                className="tituloAcordeon"
+                className="tituloAcordeon modules"
                 key={
                   SubmenuSolicitudEstudianteListaSolicitudes.indexOf(
                     solicitud
@@ -49,7 +51,7 @@ function SubmenuSolicitudEstudiante({
                 </div>
               </div>
               {SubmenuSolicitudEstudianteSolicitudVisible && (
-                <div className="contenidoAcordeon">
+                <div className="contenidoAcordeon modules">
                   <div className="contenedorSolicitud">
                     <p>
                       <label className="Indicador">

@@ -24,8 +24,9 @@
 }
 
 .content-section{
-  height: 60px;
-  background: #e7e7e7;
+  min-height: 48px;
+  display:flexbox;
+  max-height: 144px;
 }
 
 .contentSelector{

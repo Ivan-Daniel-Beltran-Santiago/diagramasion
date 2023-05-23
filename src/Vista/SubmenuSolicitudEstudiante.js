@@ -14,90 +14,10 @@ function SubmenuSolicitudEstudiante({
   SubmenuSolicitudEstudianteEstatusLexico,
   SubmenuSolicitudEstudianteSubirDocumentos,
 }) {
-  /*
-  const progresionEstatus = {
-    1: 2,
-    3: 2,
-    7: 8,
-    9: 8,
-  };
-
-  const uploadDocuments = () => {
-    showToast(
-      "info",
-      "Subiendo archivos",
-      "Subiendo archivos NO SALGA DE LA PAGINA HASTA QUE SE LE INDIQUE"
-    );
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/UploadDocuments";
-    const formData = new FormData();
-
-    formData.append("isSolicitud", true);
-    formData.append("subCarpeta", requestData.id);
-    formData.append("idSolicitud", requestData.id);
-
-    for (var indice = 0; indice < validatedFiles.length; indice++) {
-      formData.append(
-        "Archivo",
-        validatedFiles[indice],
-        validatedFiles[indice].name
-      );
-    }
-    axios
-      .post(srvReq, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((result) => {
-        if (result.data.successUpload) {
-          showToast(
-            "success",
-            "Archivos subidos correctamente",
-            "Los archivos han sido subidos exitosamente"
-          );
-          actualizarSolicitud();
-        } else {
-          showToast(
-            "error",
-            "Error al subir los archivos",
-            "Intente mas tarde"
-          );
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        showToast("error", "Error al subir los archivos", "Intente mas tarde");
-      });
-  };
-
-  const actualizarSolicitud = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/updateApplication";
-    axios
-      .post(srvReq, {
-        id: requestData.id,
-        nuevoEstatus: progresionEstatus[requestData.estatus],
-        estatusAnterior: requestData.estatus,
-        retroAnterior: requestData.retroalim,
-      })
-      .then((result) => {
-        obtenerSolicitud();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  */
 
   return (
     <div id="solicitudEstudiante" className="modules">
       <Toast ref={SubmenuSolicitudEstudianteTostado} position="top-right" />
-      {SubmenuSolicitudEstudianteListaSolicitudes &&
-        SubmenuSolicitudEstudianteListaSolicitudes.length > 0 && (
-          <span>
-            Clicle la solicitud para observar e interactuar con esta.{" "}
-          </span>
-        )}
       {SubmenuSolicitudEstudianteListaSolicitudes &&
         SubmenuSolicitudEstudianteListaSolicitudes.map(function (solicitud) {
           return (

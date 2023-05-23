@@ -54,107 +54,62 @@ const SubmenuSolicitudEstudianteControlador = ({
   };
 
   const handleFileEvent = (event) => {
-    handleLoadedFiles([...event.target.files]);
+    handleLoadedFiles([...event.target.files], event);
   };
 
-  const handleLoadedFiles = (archivos) => {
+  const handleLoadedFiles = (archivos, event) => {
     const seleccionados = archivos;
     archivos.some((archivo) => {
       if (seleccionados.findIndex((a) => a.name === archivo.name) === -1) {
         seleccionados.push(archivo);
       }
     });
-    setArchivosSeleccionados(seleccionados);
-    ValidateFiles();
+    validateFiles(seleccionados, event);
   };
 
-  const ValidateFiles = async () => {
-  const porValidar = [];
-  
-  for (let indice = 0; indice < archivosSeleccionados.length; indice++) {
-    const archivoActual = archivosSeleccionados[indice];
+  const validateFiles = async (archivos, event) => {
+    const porValidar = [];
 
-    try {
-      await validarArchivo(archivoActual);
-      porValidar.push(archivoActual);
-    } catch (error) {
-      showToast("error", "Formato de archivo invalido", error.message);
+    for (let indice = 0; indice < archivos.length; indice++) {
+      const archivoActual = archivos[indice];
+
+      try {
+        await validateFile(archivoActual);
+        porValidar.push(archivoActual);
+      } catch (error) {
+        console.log(error);
+        showToast("error", "Formato de archivo invalido", error);
+      }
     }
-  }
 
-  setArchivosSubir([...archivosSubir, ...porValidar]);
-};
+    event.target.value = "";
+    handleValidateFiles(porValidar);
+  };
 
-const validarArchivo = (archivo) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (archivo.size > 2000000) {
-        reject(
-          "El archivo " +
-            archivo.name +
-            " no será incluido, ya que excede el tamaño de 2MB."
-        );
-      } else {
-        const validarNombreArchivo = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
-        if (validarNombreArchivo.test(archivo.name)) {
-          resolve();
-        } else {
+  const validateFile = async (archivo) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (archivo.size > 2000000) {
           reject(
             "El archivo " +
               archivo.name +
-              " no será incluido, ya que contiene caracteres inválidos en el nombre."
+              " no será incluido, ya que excede el tamaño de 2MB."
           );
-        }
-      }
-    }, 500);
-  });
-};
-
-  /*
-
-  const ValidateFiles = () => {
-    var porValidar = [];
-    var indice = 0;
-
-    const validarSiguienteArchivo = () => {
-      if (indice >= archivosSeleccionados.length) {
-        handleValidateFiles(porValidar);
-        return;
-      }
-
-      const archivoActual = archivosSeleccionados[indice];
-
-      if (archivoActual.size > 2000000) {
-        showToast(
-          "error",
-          "Formato de archivo invalido",
-          "El archivo: " +
-            archivoActual.name +
-            " no sera incluido, ya que excede el tamaño de 2MB."
-        );
-      } else {
-        const validarNombreArchivo = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
-        if (validarNombreArchivo.test(archivoActual.name)) {
-          porValidar.push(archivoActual);
         } else {
-          showToast(
-            "error",
-            "Formato de archivo invalido",
-            "El archivo: " +
-              archivoActual.name +
-              " no sera incluido, ya que contiene caracteres invalidos en el nombre."
-          );
+          const validarNombreArchivo = new RegExp("[a-zA-Z0-9-_\\/]+\\.pdf");
+          if (validarNombreArchivo.test(archivo.name)) {
+            resolve();
+          } else {
+            reject(
+              "El archivo " +
+                archivo.name +
+                " no será incluido, ya que contiene caracteres inválidos en el nombre."
+            );
+          }
         }
-      }
-      setTimeout(() => {
-        indice++;
-        validarSiguienteArchivo();
       }, 500);
-    };
-    validarSiguienteArchivo();
+    });
   };
-
-  */
 
   const handleValidateFiles = (archivos) => {
     const validados = [...archivosSubir];
@@ -224,11 +179,7 @@ const validarArchivo = (archivo) => {
     setListaSolicitudes(solicitudesUsuario.data);
   }, []);
 
-  const subirDocumentos = (
-    idSolicitud,
-    estatusActual,
-    retroalimentacionActual
-  ) => {
+  const subirDocumentos = (idSolicitud, estatusActual) => {
     showToast(
       "info",
       "Subiendo archivos",

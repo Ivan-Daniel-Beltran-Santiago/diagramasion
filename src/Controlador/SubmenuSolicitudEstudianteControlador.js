@@ -77,7 +77,6 @@ const SubmenuSolicitudEstudianteControlador = ({
         await validateFile(archivoActual);
         porValidar.push(archivoActual);
       } catch (error) {
-        console.log(error);
         showToast("error", "Formato de archivo invalido", error);
       }
     }

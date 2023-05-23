@@ -59,7 +59,7 @@ function SubmenuInformacionUsuario({
                 name="nuevaContraseña"
                 id="newPassword"
                 onChange={HandleInputChange}
-              ></input>
+              />
             </p>
             <p>
               <label>Repetir nueva contraseña: </label>
@@ -78,7 +78,7 @@ function SubmenuInformacionUsuario({
                 InformacionUsuarioActualizar.nuevaContraseñaConfirmar.length >
                   0)) && (
               <label className="LoginWarning">
-                La nueva contraseña debe contener entre 4 y 8 digitos{" "}
+                La nueva contraseña debe contener entre 3 y 8 digitos{" "}
               </label>
             )}
             <br />

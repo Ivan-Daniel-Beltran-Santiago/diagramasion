@@ -41,48 +41,77 @@ const SubmenuInformacionUsuarioControlador = ({
 
   //Detectar los cambios en los campos de texto.
   const handleInputChange = (event) => {
-    setInformacionUsuarioActualizar({
+    const actualizadoInformacionUsuarioActualizar = {
       ...informacionUsuarioActualizar,
       [event.target.name]: event.target.value,
-    });
-    validateInputChange(event);
+    };
+
+    setInformacionUsuarioActualizar(actualizadoInformacionUsuarioActualizar);
+
+    validateInputChange(event, actualizadoInformacionUsuarioActualizar);
   };
 
   //Valida los cambios en los campos de texto.
-  const validateInputChange = (event) => {
+  const validateInputChange = (
+    event,
+    ActualizadoInformacionUsuarioActualizar
+  ) => {
     //Validaciones.
-    var validarContraseña = new RegExp("^[0-9]{3,8}");
+    var validarContraseña = new RegExp("^[0-9]{3,8}$");
     var validarCorreoElectronico = new RegExp(
       "^(?!$)[A-Za-z0-9]+([._-][A-Za-z0-9]+)*@[A-Za-z0-9]+([.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,}(.[A-Za-z]{2,})?$"
     );
 
+    //
+    var actualizadoValidacionInformacionUsuario;
+
     switch (event.target.name) {
       case "nuevoCorreo_e":
-        setValidacionInformacionUsuario({
+        actualizadoValidacionInformacionUsuario = {
           ...validacionInformacionUsuario,
-          [event.target.name]: validarCorreoElectronico.test(
-            event.target.value
-          ),
-        });
+          [event.target.name]:
+            ActualizadoInformacionUsuarioActualizar[event.target.name] !== "" &&
+            validarCorreoElectronico.test(
+              ActualizadoInformacionUsuarioActualizar[event.target.name]
+            ),
+        };
+        setValidacionInformacionUsuario(
+          actualizadoValidacionInformacionUsuario
+        );
         break;
       case "nuevaContraseña":
       case "nuevaContraseñaConfirmar":
-        setValidacionInformacionUsuario({
+        actualizadoValidacionInformacionUsuario = {
           ...validacionInformacionUsuario,
-          [event.target.name]: validarContraseña.test(event.target.value),
-        });
-        setValidacionInformacionUsuario({
-          ...validacionInformacionUsuario,
+          [event.target.name]:
+            ActualizadoInformacionUsuarioActualizar[event.target.name] !== "" &&
+            validarContraseña.test(
+              ActualizadoInformacionUsuarioActualizar[event.target.name]
+            ),
           nuevaContraseñaCoincide:
-            validacionInformacionUsuario.nuevaContraseña ===
-            validacionInformacionUsuario.nuevaContraseñaConfirmar,
-        });
+            ActualizadoInformacionUsuarioActualizar.nuevaContraseña !== "" &&
+            ActualizadoInformacionUsuarioActualizar.nuevaContraseñaConfirmar !==
+              "" &&
+            ActualizadoInformacionUsuarioActualizar.nuevaContraseña ===
+              ActualizadoInformacionUsuarioActualizar.nuevaContraseñaConfirmar,
+        };
+        setValidacionInformacionUsuario(
+          actualizadoValidacionInformacionUsuario
+        );
         break;
       default:
-        setValidacionInformacionUsuario({
+        setValidacionInformacionUsuario();
+        actualizadoValidacionInformacionUsuario = {
           ...validacionInformacionUsuario,
-          [event.target.name]: validarContraseña.test(event.target.value),
-        });
+          [event.target.name]:
+            ActualizadoInformacionUsuarioActualizar[event.target.name] !== "" &&
+            validarContraseña.test(
+              ActualizadoInformacionUsuarioActualizar[event.target.name]
+            ),
+        };
+        setValidacionInformacionUsuario(
+          actualizadoValidacionInformacionUsuario
+        );
         break;
     }
   };

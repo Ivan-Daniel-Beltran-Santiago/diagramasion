@@ -238,7 +238,7 @@ const SubmenuAdministracionUsuariosControlador = () => {
         }
       }
 
-      const eliminarUsuarios = await axios.get(funcion_C);
+      await axios.get(funcion_C);
     } else {
       showToast(
         "error",

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import ConfigurarConexion from "./ConfigurarConexion";
@@ -56,14 +56,6 @@ const MenuUsuarioControlador = () => {
     }
   }, []);
 
-  //Llamamos a la funcion para obtener los datos del usuario al momento de cargar la pagina.
-  useEffect(() => {
-    const obtenerDatosUsuario = async () => {
-      await obtenerInformacionUsuario();
-    };
-    obtenerDatosUsuario();
-  }, [obtenerInformacionUsuario]);
-
   return (
     <MenuUsuario
       MenuIndex={indexMenu}
@@ -71,6 +63,7 @@ const MenuUsuarioControlador = () => {
       MenuUsuarioUsuarioActivo={usuarioActivo}
       MenuUsuarioTostado={toast}
       MenuUsuarioSetUsuarioActivo={setUsuarioActivo}
+      MenuUsuarioObtenerInformacionUsuario={obtenerInformacionUsuario}
     />
   );
 };

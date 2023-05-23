@@ -93,6 +93,12 @@ function SubmenuSolicitudEstudiante({
     <div id="solicitudEstudiante" className="modules">
       <Toast ref={SubmenuSolicitudEstudianteTostado} position="top-right" />
       {SubmenuSolicitudEstudianteListaSolicitudes &&
+        SubmenuSolicitudEstudianteListaSolicitudes.length > 0 && (
+          <span>
+            Clicle la solicitud para observar e interactuar con esta.{" "}
+          </span>
+        )}
+      {SubmenuSolicitudEstudianteListaSolicitudes &&
         SubmenuSolicitudEstudianteListaSolicitudes.map(function (solicitud) {
           return (
             <div

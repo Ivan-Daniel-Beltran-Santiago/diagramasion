@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import ConfigurarConexion from "./ConfigurarConexion";
 import SubmenuBienvenidaUsuario from "../Vista/SubmenuBienvenidaUsuario";
@@ -29,6 +30,9 @@ const SubmenuBienvenidaUsuarioControlador = ({
     12: "Solicitud terminado",
   });
 
+  //Recibir información del menú anterior, que es el de login
+  const location = useLocation();
+
   const obtenerDescripciones = useCallback(async () => {
     const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/tramites/descripciones";
@@ -57,12 +61,19 @@ const SubmenuBienvenidaUsuarioControlador = ({
     const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/solicitudes/consulta";
 
-    const solicitudesUsuario = await axios.get(funcion, {
-      params: {
-        matricula: SubmenuBienvenidaUsuarioControladorUsuarioActual.matricula,
-      },
-    });
-    setListaSolicitudes(solicitudesUsuario.data);
+    const solicitudesUsuario =
+      location.state.matricula.length > 7
+        ? await axios.get(funcion, {
+            params: {
+              matricula: location.state.matricula,
+            },
+          })
+        : null;
+    setListaSolicitudes(
+      solicitudesUsuario && solicitudesUsuario.status === 200
+        ? solicitudesUsuario.data
+        : []
+    );
   }, []);
 
   const obtenerConteoSolicitudes = useCallback(async () => {
@@ -90,15 +101,6 @@ const SubmenuBienvenidaUsuarioControlador = ({
     });
   }, []);
 
-  useEffect(() => {
-    if (SubmenuBienvenidaUsuarioControladorUsuarioActual.Estudiante !== null) {
-      obtenerSolicitudes();
-      obtenerDescripciones();
-    } else {
-      obtenerConteoSolicitudes();
-    }
-  }, []);
-
   return (
     <SubmenuBienvenidaUsuario
       SubmenuBienvenidaUsuarioUsuarioActivo={
@@ -107,6 +109,11 @@ const SubmenuBienvenidaUsuarioControlador = ({
       SubmenuBienvenidaUsuarioListaSolicitudes={listaSolicitudes}
       SubmenuBienvenidaUsuarioEstatusLexico={estatusLexico}
       SubmenuBienvenidaUsuarioConteoSolicitudes={conteoSolicitudes}
+      SubmenuBienvenidaUsuarioObtenerConteoSolicitudes={
+        obtenerConteoSolicitudes
+      }
+      SubmenuBienvenidaUsuarioObtenerSolicitudes={obtenerSolicitudes}
+      SubmenuBienvenidaUsuarioObtenerDescripciones={obtenerDescripciones}
     />
   );
 };

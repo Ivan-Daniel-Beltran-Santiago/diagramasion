@@ -5,6 +5,7 @@ function SubmenuAdministracionUsuarios({
   AdminUsuariosTostado,
   AdminUsuariosHandleFileEvent,
   AdminUsuariosRegistrosUsuariosExcel,
+  SubmenuAdministracionUsuariosSubirNuevosUsuarios,
 }) {
   /*
   //Almancenar ultima matricula
@@ -827,7 +828,7 @@ function SubmenuAdministracionUsuarios({
                 type="button"
                 className="loadLogin"
                 value="Subir inicios de sesión al sistema"
-                onClick={null}
+                onClick={()=>{SubmenuAdministracionUsuariosSubirNuevosUsuarios(AdminUsuariosRegistrosUsuariosExcel)}}
               ></input>
             </div>
           )}

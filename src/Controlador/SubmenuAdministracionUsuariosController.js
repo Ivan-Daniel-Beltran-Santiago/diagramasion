@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import SubmenuAdministracionUsuarios from "../Vista/SubmenuAdministracionUsuarios";
+import ConfigurarConexion from "../Controlador/ConfigurarConexion";
+import axios from "axios";
 
 const SubmenuAdministracionUsuariosControlador = () => {
   //Variables de estado.
@@ -118,19 +120,25 @@ const SubmenuAdministracionUsuariosControlador = () => {
         defval: "",
       });
 
-      var filtroExcel = false;
       var regexMatricula = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
 
       const jsonExcelLimpio = jsonExcel.filter((columna, indiceExcel) => {
-        if (!filtroExcel) {
-          const valorCelda = columna[0];
-          filtroExcel =
-            indiceExcel === 0 ? false : !regexMatricula.test(valorCelda);
-          return indiceExcel === 0 ? false : regexMatricula.test(valorCelda);
+        const valorCelda = columna[0];
+        if (!regexMatricula.test(valorCelda)) {
+          showToast(
+            "error",
+            "Registro invalido.",
+            "EL registro de " +
+              valorCelda +
+              " en la columna " +
+              indiceExcel +
+              " no será incluido debido a que no tiene el formato de matricula valido."
+          );
         }
-        return indiceExcel === 0;
+        return indiceExcel === 0 ? false : regexMatricula.test(valorCelda);
       });
 
+      event.target.value = "";
       validateExcelRows(jsonExcelLimpio, jsonExcelLimpio.length);
     }, 100);
   };
@@ -181,21 +189,77 @@ const SubmenuAdministracionUsuariosControlador = () => {
           "De los " +
             originalCount +
             " registros en el archivo, se implementaran " +
-            registrosUsuariosExcel.length +
+            registrosUsuariosExcelTemp.length +
             " inicios de sesión."
         );
       }, 100);
-      subirNuevosUsuarios();
     }, 100);
   };
 
-  const subirNuevosUsuarios = async () => {};
+  const subirNuevosUsuarios = async (registrosExcel) => {
+    console.log(registrosExcel);
+    const servidor = new ConfigurarConexion();
+    const funcion_A = servidor.obtenerServidor() + "/usuarios/preparar";
+    const funcion_B = servidor.obtenerServidor() + "/usuarios/nuevo";
+    const funcion_C = servidor.obtenerServidor() + "/usuarios/eliminar";
+
+    const prepararUsuarios = await axios.get(funcion_A);
+    if (prepararUsuarios.status === 200) {
+      for (var indice = 0; indice < registrosExcel.length; indice++) {
+        const subirUsuario = await axios.post(funcion_B, {
+          matricula: registrosExcel[indice][0],
+          nombre_Completo:
+            registrosExcel[indice][1] +
+            " " +
+            registrosExcel[indice][2] +
+            " " +
+            registrosExcel[indice][3],
+          contraseña:
+            registrosExcel[indice][0].length > 8
+              ? registrosExcel[indice][0].substring(1)
+              : registrosExcel[indice][0],
+          correo_e:
+            registrosExcel[indice][4] === ""
+              ? "l" + registrosExcel[indice][0] + "@hermosillo.tecnm.mx"
+              : registrosExcel[indice][4],
+          Estudiante: {
+            carrera: registrosExcel[indice][5],
+            semestre: registrosExcel[indice][6],
+          },
+        });
+        if (subirUsuario.status === 200) {
+          showToast(
+            "success",
+            "Subida de usuarios.",
+            "Usuario " +
+              registrosExcel[indice][0] +
+              " subido o actualizado con exito."
+          );
+        }
+      }
+
+      const eliminarUsuarios = await axios.get(funcion_C);
+    } else {
+      showToast(
+        "error",
+        "Subida de usuarios.",
+        "Fallo general, contacte al administrador."
+      );
+    }
+  };
+
+  const subirNuevoUsuario = async (registroUsuario) => {
+    console.log(registroUsuario);
+    const servidor = new ConfigurarConexion();
+    const funcion = servidor.obtenerServidor() + "/usuarios/nuevo";
+  };
 
   return (
     <SubmenuAdministracionUsuarios
       AdminUsuariosTostado={toast}
       AdminUsuariosHandleFileEvent={handleFileEvent}
       AdminUsuariosRegistrosUsuariosExcel={registrosUsuariosExcel}
+      SubmenuAdministracionUsuariosSubirNuevosUsuarios={subirNuevosUsuarios}
     />
   );
 };

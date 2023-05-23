@@ -6,102 +6,19 @@ function SubmenuAdministracionUsuarios({
   AdminUsuariosHandleFileEvent,
   AdminUsuariosRegistrosUsuariosExcel,
   SubmenuAdministracionUsuariosSubirNuevosUsuarios,
+  SubmenuAdministracionUsuariosSetUsuarioEstudiante,
+  SubmenuAdministracionUsuariosUsuarioEstudiante,
+  SubmenuAdministracionUsuariosHandleInputChange,
+  SubmenuAdministracionUsuariosBuscarUsuario,
+  SubmenuAdministracionUsuariosSubirNuevoUsuario,
+  SubmenuAdministracionUsuariosActualizarContraseñaUsuario,
+  SubmenuAdministracionUsuariosActualizarUsuario,
+  SubmenuAdministracionUsuariosRegistroUsuarioManual,
+  SubmenuAdministracionUsuariosUsuarioManualValido
 }) {
   /*
   //Almancenar ultima matricula
   const [ultimaMatricula, setUltimaMatricula] = useState("");
-
-  //Toma todos los nuevos registros y los sube a la base de datos de uno en uno
-  const uploadNewUsers = () => {
-    console.log("Empezamos");
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/usuarios/SubirUsuarios";
-    var subidaExitosa = true;
-
-    showToast(
-      "info",
-      "Inicios de sesión",
-      "Se estan procesando los registros, por favor espere un momento."
-    );
-    try {
-      console.log("For Loop Iniciado");
-      for (var indice = 0; indice < registroUsuarios.length; indice++) {
-        console.log("Obteniendo datos");
-        console.log(registroUsuario);
-        let matricula = registroUsuarios[indice][0];
-        let nombre_Completo =
-          registroUsuarios[indice][1] + //Apellido Paterno
-          registroUsuarios[indice][2] + //Apellido Materno
-          registroUsuarios[indice][3]; //Nombres
-        let contraseña = matricula;
-        let correo_e = registroUsuarios[indice][4];
-        if (correo_e === "")
-          correo_e =
-            (matricula.tolowercase().startsWith("m")
-              ? matricula
-              : "l" + matricula) + "@hermosillo.tecnm.mx";
-        let carrera = registroUsuarios[indice][5];
-        let semestre = registroUsuarios[indice][6];
-        if (matricula === "Matricula") {
-          continue;
-        }
-        console.log("Llamando a la API");
-        axios
-          .post(srvReq, {
-            matriculaUser: matricula,
-            nombreUser: nombre_Completo,
-            contraseñaUser: contraseña,
-            correoUser: correo_e,
-            carreraUser: carrera,
-            semestreUser: semestre,
-            isEstudiante: true,
-          })
-          // eslint-disable-next-line no-loop-func
-          .then((result) => {
-            console.log("La api nos contesto");
-            console.log(result.data.Code);
-            subidaExitosa = result.data.Code === 1;
-            console.log(subidaExitosa);
-          })
-          // eslint-disable-next-line no-loop-func
-          .catch((error) => {
-            console.log("La api nos fallo");
-            console.log(error);
-            subidaExitosa = false;
-          });
-        if (!subidaExitosa) {
-          console.log("Me wa detener");
-          break;
-        }
-      }
-    } catch (exception) {
-      console.log("Algo fallo durante el For Loop");
-      console.log(exception);
-      showToast(
-        "error",
-        "Inicios de sesión",
-        "Ha ocurrido un error inesperado." + exception
-      );
-    } finally {
-      console.log(subidaExitosa);
-      console.log("Resultado final");
-      if (subidaExitosa) {
-        showToast(
-          "success",
-          "Inicios de sesión",
-          "Todos los inicios de sesión han sido cargados con exito."
-        );
-      } else {
-        showToast(
-          "error",
-          "Inicios de sesión",
-          "Error al subir inicios de sesión, intente de nuevo."
-        );
-      }
-      //setPermitirExcel(false);
-      //document.getElementById("subirArchivos").value = "";
-    }
-  };
 
   const handleCheckChange = (event) => {
     setEsEncargado(event.target.checked);
@@ -828,13 +745,16 @@ function SubmenuAdministracionUsuarios({
                 type="button"
                 className="loadLogin"
                 value="Subir inicios de sesión al sistema"
-                onClick={()=>{SubmenuAdministracionUsuariosSubirNuevosUsuarios(AdminUsuariosRegistrosUsuariosExcel)}}
+                onClick={() => {
+                  SubmenuAdministracionUsuariosSubirNuevosUsuarios(
+                    AdminUsuariosRegistrosUsuariosExcel
+                  );
+                }}
               ></input>
             </div>
           )}
         </form>
       </div>
-      {/*
       <div className="Insertar modules">
         <br />
         <label className="Indicador">Subir/modificar inicio de sesión</label>
@@ -871,7 +791,11 @@ function SubmenuAdministracionUsuarios({
             type="checkbox"
             id="checkEncargada"
             className="EncargadaCB"
-            onChange={handleCheckChange}
+            onChange={() => {
+              SubmenuAdministracionUsuariosSetUsuarioEstudiante(
+                !SubmenuAdministracionUsuariosUsuarioEstudiante
+              );
+            }}
           ></input>
         </p>
         <p>
@@ -881,11 +805,11 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="matricula"
             id="mat"
-            onChange={handleInputChange}
+            onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
           ></input>
-          {!validRegistro.matricula &&
-            registroUsuario &&
-            registroUsuario.matricula.length > 0 && (
+          {!SubmenuAdministracionUsuariosUsuarioManualValido.matricula &&
+            SubmenuAdministracionUsuariosRegistroUsuarioManual &&
+            SubmenuAdministracionUsuariosRegistroUsuarioManual.matricula.length > 0 && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
                 Debe contener 8 digitos, puede tener una m o M al principio si
                 se trata de un estudiante de posgrado.
@@ -899,7 +823,7 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="nombreCompleto"
             id="nom"
-            onChange={handleInputChange}
+            onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
           ></input>
         </p>
         <p>
@@ -909,16 +833,16 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="correoElectronico"
             id="cor"
-            onChange={handleInputChange}
+            onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
           ></input>
-          {!validRegistro.correoElectronico &&
-            registroUsuario.correoElectronico.length > 0 && (
+          {!SubmenuAdministracionUsuariosUsuarioManualValido.correoElectronico &&
+            SubmenuAdministracionUsuariosRegistroUsuarioManual.correoElectronico.length > 0 && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
                 El correo electronico no es valido.
               </label>
             )}
         </p>
-        {!esEncargado && (
+        {!SubmenuAdministracionUsuariosUsuarioEstudiante && (
           <p>
             <label>Carrera:</label>
             <label className="Obligatorio">*ㅤ</label>
@@ -926,11 +850,11 @@ function SubmenuAdministracionUsuarios({
               type="text"
               name="carrera"
               id="car"
-              onChange={handleInputChange}
+              onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
             ></input>
           </p>
         )}
-        {!esEncargado && (
+        {!SubmenuAdministracionUsuariosUsuarioEstudiante && (
           <p>
             <label>Semestre:</label>
             <label className="Obligatorio">*ㅤ</label>
@@ -938,18 +862,27 @@ function SubmenuAdministracionUsuarios({
               type="number"
               name="semestre"
               id="semest"
-              onChange={handleInputChange}
+              onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
             ></input>
           </p>
         )}
         <div>
-          <button onClick={searchUser}>Buscar por matricula</button>
-          <button onClick={updateUser}>Modificar</button>
-          <button onClick={uploadOneUser}>Dar de alta</button>
-          <button onClick={restartContraseña}>Restablecer Contraseña</button>
+          <button onClick={SubmenuAdministracionUsuariosBuscarUsuario}>
+            Buscar por matricula
+          </button>
+          <button onClick={SubmenuAdministracionUsuariosActualizarUsuario}>
+            Modificar
+          </button>
+          <button onClick={SubmenuAdministracionUsuariosSubirNuevoUsuario}>
+            Dar de alta
+          </button>
+          <button
+            onClick={SubmenuAdministracionUsuariosActualizarContraseñaUsuario}
+          >
+            Restablecer Contraseña
+          </button>
         </div>
       </div>
-        */}
     </div>
   );
 }

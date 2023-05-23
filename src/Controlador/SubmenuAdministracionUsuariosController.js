@@ -25,7 +25,7 @@ const SubmenuAdministracionUsuariosControlador = () => {
     matricula: "",
     esValida: false,
   });
-  const [usuarioEstudiante, setUsuarioEstudiante] = useState(true);
+  const [usuarioEstudiante, setUsuarioEstudiante] = useState(false);
 
   //Alertas
   const toast = useRef(null);
@@ -254,12 +254,29 @@ const SubmenuAdministracionUsuariosControlador = () => {
     const funcion = servidor.obtenerServidor() + "/usuarios/nuevo";
   };
 
+  const buscarUsuario = async () => {};
+
+  const actualizarUsuario = async () => {};
+
+  const actualizarContraseñaUsuario = async () => {};
+
   return (
     <SubmenuAdministracionUsuarios
       AdminUsuariosTostado={toast}
       AdminUsuariosHandleFileEvent={handleFileEvent}
       AdminUsuariosRegistrosUsuariosExcel={registrosUsuariosExcel}
       SubmenuAdministracionUsuariosSubirNuevosUsuarios={subirNuevosUsuarios}
+      SubmenuAdministracionUsuariosSetUsuarioEstudiante={setUsuarioEstudiante}
+      SubmenuAdministracionUsuariosUsuarioEstudiante={usuarioEstudiante}
+      SubmenuAdministracionUsuariosHandleInputChange={handleInputChange}
+      SubmenuAdministracionUsuariosBuscarUsuario={buscarUsuario}
+      SubmenuAdministracionUsuariosActualizarContraseñaUsuario={
+        actualizarContraseñaUsuario
+      }
+      SubmenuAdministracionUsuariosActualizarUsuario={actualizarUsuario}
+      SubmenuAdministracionUsuariosSubirNuevoUsuario={subirNuevoUsuario}
+      SubmenuAdministracionUsuariosUsuarioManualValido={usuarioManualValido}
+      SubmenuAdministracionUsuariosRegistroUsuarioManual={registroUsuarioManual}
     />
   );
 };

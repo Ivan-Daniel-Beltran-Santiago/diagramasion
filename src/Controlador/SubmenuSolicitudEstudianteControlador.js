@@ -302,7 +302,10 @@ const validarArchivo = (archivo) => {
   }, []);
 
   return (
-    <SubmenuSolicitudEstudiante
+    <div className="modules">
+    Haga clic sobre el tramite para expandir su informacion.
+    <SubmenuSolicitudEstudiante 
+    className="accordion-item"
       SubmenuSolicitudEstudianteTostado={toast}
       SubmenuSolicitudEstudianteListaSolicitudes={listaSolicitudes}
       SubmenuSolicitudEstudianteSetSolicitudVisible={setSolicitudVisible}
@@ -314,6 +317,7 @@ const validarArchivo = (archivo) => {
       SubmenuSolicitudEstudianteEstatusLexico={estatusLexico}
       SubmenuSolicitudEstudianteSubirDocumentos={subirDocumentos}
     />
+    </div>
   );
 };
 

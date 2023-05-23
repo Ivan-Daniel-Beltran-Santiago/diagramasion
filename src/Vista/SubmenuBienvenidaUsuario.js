@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const SubmenuBienvenidaUsuario = ({
   SubmenuBienvenidaUsuarioUsuarioActivo,
   SubmenuBienvenidaUsuarioListaSolicitudes,
+  SubmenuBienvenidaUsuarioObtenerSolicitudes,
   SubmenuBienvenidaUsuarioEstatusLexico,
+  SubmenuBienvenidaUsuarioObtenerDescripciones,
   SubmenuBienvenidaUsuarioConteoSolicitudes,
+  SubmenuBienvenidaUsuarioObtenerConteoSolicitudes,
 }) => {
+  useEffect(() => {
+    SubmenuBienvenidaUsuarioObtenerSolicitudes();
+    SubmenuBienvenidaUsuarioObtenerDescripciones();
+    SubmenuBienvenidaUsuarioObtenerConteoSolicitudes();
+  }, []);
+
   return (
     <div id="bienvenidaEstudiante" className="modules">
       <p>
@@ -49,13 +58,22 @@ const SubmenuBienvenidaUsuario = ({
               </span>
             </p>
           )}
-
           <p>
-            <span className="progreso_en_Solicitud">
-              En caso de querer actualizaciones en su solicitud, vea la pestaña
-              "Mis Solicitudes" o mande correo a{" "}
-              <i>ventanillaith@hermosillo.tecnm.mx</i>
-            </span>
+            {SubmenuBienvenidaUsuarioListaSolicitudes.length > 0 && (
+              <span className="progreso_en_Solicitud">
+                En caso de querer actualizaciones en su solicitud, vea la
+                pestaña "Mis Solicitudes" o mande correo a{" "}
+                <i>ventanillaith@hermosillo.tecnm.mx</i>
+              </span>
+            )}
+            {SubmenuBienvenidaUsuarioListaSolicitudes.length === 0 && (
+              <span className="progreso_en_Solicitud">
+                Aún no tienes solicitudes activas, puedes iniciar una en la
+                pestaña de Solicitar Tramite, para mas dudas, pongase en
+                contacto via correo electronico a{" "}
+                <i>ventanillaith@hermosillo.tecnm.mx</i>
+              </span>
+            )}
           </p>
         </div>
       )}

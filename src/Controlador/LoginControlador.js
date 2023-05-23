@@ -50,7 +50,7 @@ const LoginControlador = () => {
         let validarMatriculaEncargada = new RegExp("^[0-9]{3}$");
         setMatriculaValidada(
           validarMatriculaEstudiante.test(inputChange) ||
-          validarMatriculaEncargada.test(inputChange)
+            validarMatriculaEncargada.test(inputChange)
         );
       } else {
         let validarContraseña = new RegExp("^[0-9]{3,8}$");
@@ -86,7 +86,12 @@ const LoginControlador = () => {
     const funcion = servidor.obtenerServidor() + "/usuarios/sesion";
 
     await axios
-      .get(funcion, { params: { matricula: InicioSesion.matricula, contraseña: InicioSesion.contraseña } })
+      .get(funcion, {
+        params: {
+          matricula: InicioSesion.matricula,
+          contraseña: InicioSesion.contraseña,
+        },
+      })
       .then((respuesta) => {
         switch (respuesta.status) {
           case 200:
@@ -96,12 +101,9 @@ const LoginControlador = () => {
               "Usuario reconocido, iniciando sesión."
             );
             setTimeout(() => {
-              navigate(
-                "/Menu",
-                {
-                  state: { matricula: InicioSesion.matricula },
-                }
-              );
+              navigate("/Menu", {
+                state: { matricula: InicioSesion.matricula },
+              });
             }, 100);
             break;
           case 400:
@@ -127,12 +129,30 @@ const LoginControlador = () => {
             break;
         }
       })
-      .catch(() => {
-        showToast(
-          "error",
-          "Error de servidor",
-          "Contacte con el administrador del sistema."
-        );
+      .catch((error) => {
+        switch (error.response.status) {
+          case 400:
+            showToast(
+              "error",
+              "Formato invalido",
+              "Formato de usuario y/o contraseña incorrecto."
+            );
+            break;
+          case 404:
+            showToast(
+              "error",
+              "Datos invalidos",
+              "Usuario y/o contraseña incorrectos."
+            );
+            break;
+          default:
+            showToast(
+              "error",
+              "Error de servidor",
+              "Contacte con el administrador del sistema."
+            );
+            break;
+        }
       });
   };
 

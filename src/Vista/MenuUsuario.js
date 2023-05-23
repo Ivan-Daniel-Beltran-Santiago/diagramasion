@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Toast } from "primereact/toast";
 
 import "./MenuUsuario.css";
@@ -6,7 +6,22 @@ import LogoHeader from "../View/Auxiliary/Logo_Header";
 import MenuControlador from "../Controlador/MenuControlador";
 import RegresarMenu from "../View/Auxiliary/regresarMenu";
 
-function MenuUsuario({ MenuUsuarioTostado, MenuIndex, MenuCambiarIndex, MenuUsuarioUsuarioActivo, MenuUsuarioSetUsuarioActivo }) {
+function MenuUsuario({
+  MenuUsuarioTostado,
+  MenuIndex,
+  MenuCambiarIndex,
+  MenuUsuarioUsuarioActivo,
+  MenuUsuarioSetUsuarioActivo,
+  MenuUsuarioObtenerInformacionUsuario,
+}) {
+  //Llamamos a la funcion para obtener los datos del usuario al momento de cargar la pagina.
+  useEffect(() => {
+    const obtenerDatosUsuario = async () => {
+      await MenuUsuarioObtenerInformacionUsuario();
+    };
+    obtenerDatosUsuario();
+  }, [MenuUsuarioObtenerInformacionUsuario]);
+
   return (
     <div className="App">
       <LogoHeader />

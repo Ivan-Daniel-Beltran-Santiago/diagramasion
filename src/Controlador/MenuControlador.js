@@ -8,12 +8,12 @@ import SubmenuSolicitarTramiteControlador from "./SubmenuSolicitarTramiteControl
 import SubmenuSolicitudEstudianteControlador from "./SubmenuSolicitudEstudianteControlador";
 import SubmenuInformacionUsuarioControlador from "./SubmenuInformacionUsuarioController";
 import SubmenuAdministrarSolicitudesControlador from "./SubmenuAdministrarSolicitudesControlador";
+import SubmenuAdministrarSolicitudControlador from "./SubmenuAdministrarSolicitudControlador";
 import SubmenuAdministracionUsuariosControlador from "./SubmenuAdministracionUsuariosController";
 
 //Reemplazar despues
 import EdicionCorreos from "../Menus/Submodulos/edicionCorreos";
 import AdministracionTramites from "../Menus/Submodulos/administracionTramites";
-import AdministrarSolicitud from "../Menus/Submodulos/administrarSolicitud";
 import AdministracionGeneral from "../Menus/Submodulos/administracionGeneral";
 
 const MenuControlador = ({
@@ -95,7 +95,13 @@ const MenuControlador = ({
         />
       );
     case 7:
-      return <AdministrarSolicitud />;
+      return (
+        <SubmenuAdministrarSolicitudControlador
+          SubmenuAdministrarSolicitudControladorSolicitudSeleccionada={
+            registroSolicitud
+          }
+        />
+      );
     case 8:
       return <AdministracionGeneral />;
     case 9:

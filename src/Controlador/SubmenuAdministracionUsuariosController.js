@@ -25,7 +25,8 @@ const SubmenuAdministracionUsuariosControlador = () => {
     consultarMatricula: "",
     esValida: false,
   });
-  const [usuarioEstudiante, setUsuarioEstudiante] = useState(false);
+  const [usuarioBuscado, setUsuarioBuscado] = useState(false);
+  const [usuarioEstudiante, setUsuarioEstudiante] = useState(true);
 
   //Alertas
   const toast = useRef(null);
@@ -257,7 +258,7 @@ const SubmenuAdministracionUsuariosControlador = () => {
               registrosExcel[indice][0] +
               " subido o actualizado con exito."
           );
-        }else{
+        } else {
           showToast(
             "error",
             "Subida de usuarios.",
@@ -284,37 +285,70 @@ const SubmenuAdministracionUsuariosControlador = () => {
       usuarioManualValido.correoElectronico &&
       usuarioManualValido.semestre
     ) {
-      const servidor = new ConfigurarConexion();
-      const funcion = servidor.obtenerServidor() + "/usuarios/nuevo";
+      try {
+        const servidor = new ConfigurarConexion();
+        const funcion = servidor.obtenerServidor() + "/usuarios/alta";
 
-      const usuarioSubirEstudiante = usuarioEstudiante ? {
-        carrera: registroUsuarioManual.carrera,
-        semestre: registroUsuarioManual.semestre
-      } : null
+        const usuarioSubirEstudiante = usuarioEstudiante
+          ? {
+              carrera: registroUsuarioManual.carrera,
+              semestre: registroUsuarioManual.semestre,
+            }
+          : null;
 
-      const usuarioSubido = await axios.post(funcion, {
-        matricula: registroUsuarioManual.matricula,
-        nombre_Completo: registroUsuarioManual.nombreCompleto,
-        correo_e: registroUsuarioManual.correoElectronico,
-        Estudiante: usuarioSubirEstudiante,
-      })
+        const usuarioSubido = await axios.post(funcion, {
+          matricula: registroUsuarioManual.matricula,
+          nombre_Completo: registroUsuarioManual.nombreCompleto,
+          correo_e: registroUsuarioManual.correoElectronico,
+          Estudiante: usuarioSubirEstudiante,
+        });
 
-      if(usuarioSubido.status===200){
-        showToast(
-          "success",
-          "Subida de usuarios.",
-          "Usuario " +
-            registroUsuarioManual.matricula +
-            " subido con exito."
-        );
-      }else{
-        showToast(
-          "success",
-          "Subida de usuarios.",
-          "Usuario " +
-            registroUsuarioManual.matricula +
-            " no ha sido subido correctamente, intente mas tarde."
-        );
+        if (usuarioSubido.status === 200) {
+          showToast(
+            "success",
+            "Subida de usuarios.",
+            "Usuario " + registroUsuarioManual.matricula + " subido con exito."
+          );
+        } else {
+          showToast(
+            "success",
+            "Subida de usuarios.",
+            "Usuario " +
+              registroUsuarioManual.matricula +
+              " no ha sido subido correctamente, intente mas tarde."
+          );
+        }
+      } catch (error) {
+        switch (error.response.status) {
+          case 400:
+            showToast(
+              "error",
+              "Formato de datos.",
+              "Algunos de los datos ingresados no son validos, favor de verificar antes de proceder."
+            );
+            break;
+          case 404:
+            showToast(
+              "error",
+              "Usuario no dado de alta.",
+              "El usuario no pudo darse de alta."
+            );
+            break;
+          case 409:
+            showToast(
+              "error",
+              "Usuario existente.",
+              "El usuario ya existe, no se dará de alta."
+            );
+            break;
+          default:
+            showToast(
+              "error",
+              "Error de servidor.",
+              "Error de servidor, contacte al administrador."
+            );
+            break;
+        }
       }
     } else {
       showToast(
@@ -327,47 +361,84 @@ const SubmenuAdministracionUsuariosControlador = () => {
 
   const buscarUsuario = async () => {
     if (usuarioManualValido.matricula) {
-      const servidor = new ConfigurarConexion();
-      const funcion = servidor.obtenerServidor() + "/usuarios/consultar";
+      try {
+        const servidor = new ConfigurarConexion();
+        const funcion = servidor.obtenerServidor() + "/usuarios/consultar";
 
-      const usuarioBuscado = await axios.get(funcion, {
-        params: { matricula: registroUsuarioManual.matricula },
-      });
+        const usuarioBuscado = await axios.get(funcion, {
+          params: { matricula: registroUsuarioManual.matricula },
+        });
 
-      if (usuarioBuscado.status === 200) {
-        var usuarioEncontrado = {
-          matricula: usuarioBuscado.data.Informacion.matricula,
-          nombreCompleto: usuarioBuscado.data.Informacion.nombre_Completo,
-          correoElectronico: usuarioBuscado.data.Informacion.correo_e,
-          carrera: usuarioBuscado.data.Informacion.Estudiante
-            ? usuarioBuscado.data.Informacion.Estudiante.carrera
-            : "",
-          semestre: usuarioBuscado.data.Informacion.Estudiante
-            ? usuarioBuscado.data.Informacion.Estudiante.semestre
-            : "",
-        };
-        var usuarioEncontradoValido = {
-          matricula: true,
-          nombreCompleto: true,
-          correoElectronico: true,
-          carrera: true,
-          semestre: true,
-        };
-        setRegistroUsuarioManual(usuarioEncontrado);
-        setUsuarioManualValido(usuarioEncontradoValido);
-        document.getElementById("nom").value = usuarioEncontrado.nombreCompleto;
-        document.getElementById("cor").value =
-          usuarioEncontrado.correoElectronico;
-        if (usuarioBuscado.data.Informacion.Estudiante) {
-          document.getElementById("car").value = usuarioEncontrado.carrera;
-          document.getElementById("semest").value = usuarioEncontrado.semestre;
+        if (usuarioBuscado.status === 200) {
+          var usuarioEncontrado = {
+            matricula: usuarioBuscado.data.Informacion.matricula,
+            nombreCompleto: usuarioBuscado.data.Informacion.nombre_Completo,
+            correoElectronico: usuarioBuscado.data.Informacion.correo_e,
+            carrera: usuarioBuscado.data.Informacion.Estudiante
+              ? usuarioBuscado.data.Informacion.Estudiante.carrera
+              : "",
+            semestre: usuarioBuscado.data.Informacion.Estudiante
+              ? usuarioBuscado.data.Informacion.Estudiante.semestre
+              : "",
+          };
+          var usuarioEncontradoValido = {
+            matricula: true,
+            nombreCompleto: true,
+            correoElectronico: true,
+            carrera: true,
+            semestre: true,
+          };
+
+          setRegistroUsuarioManual(usuarioEncontrado);
+          setUsuarioManualValido(usuarioEncontradoValido);
+
+          document.getElementById("nom").value =
+            usuarioEncontrado.nombreCompleto;
+          document.getElementById("cor").value =
+            usuarioEncontrado.correoElectronico;
+
+          if (usuarioBuscado.data.Informacion.Estudiante) {
+            document.getElementById("car").value = usuarioEncontrado.carrera;
+            document.getElementById("semest").value =
+              usuarioEncontrado.semestre;
+          }
+
+          showToast(
+            "success",
+            "Usuario encontrado.",
+            "El usuario fue encontrado."
+          );
+        } else {
+          showToast(
+            "error",
+            "Usuario no encontrado.",
+            "El usuario no existe o la matricula no coincide."
+          );
         }
-      } else {
-        showToast(
-          "error",
-          "Usuario no encontrado.",
-          "El usuario no existe o la matricula no coincide."
-        );
+      } catch (error) {
+        switch (error.response.status) {
+          case 404:
+            showToast(
+              "error",
+              "Usuario no encontrado.",
+              "El usuario no existe o la matricula no coincide."
+            );
+            break;
+          case 400:
+            showToast(
+              "error",
+              "Formato de matricula.",
+              "La matricula ingresada no tiene un formato valido."
+            );
+            break;
+          default:
+            showToast(
+              "error",
+              "Error de servidor.",
+              "Error de servidor, contacte al administrador."
+            );
+            break;
+        }
       }
     } else {
       showToast(
@@ -384,23 +455,23 @@ const SubmenuAdministracionUsuariosControlador = () => {
       usuarioManualValido.correoElectronico &&
       usuarioManualValido.semestre
     ) {
+      try {
+
       const servidor = new ConfigurarConexion();
       const funcion = servidor.obtenerServidor() + "/usuarios/actualizar";
 
-      var usuarioActualizado;
-      if (usuarioEstudiante) {
-        var datosEstudiante = usuarioEstudiante
+      var datosEstudiante = usuarioEstudiante
           ? {
               carrera: registroUsuarioManual.carrera,
               semestre: registroUsuarioManual.semestre,
             }
           : null;
 
-        usuarioActualizado = await axios.put(funcion, {
+      const usuarioActualizado = await axios.put(funcion, {
           matricula: registroUsuarioManual.matricula,
           nombre_Completo: registroUsuarioManual.nombreCompleto,
           correo_e: registroUsuarioManual.correoElectronico,
-          Tramite: datosEstudiante,
+          Estudiante: datosEstudiante,
         });
 
         if (usuarioActualizado.status === 200) {
@@ -416,7 +487,31 @@ const SubmenuAdministracionUsuariosControlador = () => {
             "No fue posible actualizar el usuario, intente mas tarde."
           );
         }
-      } else {
+      }
+    catch(error){
+        switch(error.response.status){
+        case 400:
+          showToast(
+        "error",
+        "Formato de datos.",
+        "Algunos de los datos ingresados no son validos, favor de verificar antes de proceder."
+      );
+          break;
+        case 404:
+          showToast(
+        "error",
+        "Usuario no encontrado.",
+        "El usuario que se intenta modificar no existe en la base de datos."
+      );
+          break;
+        default:
+          showToast(
+        "error",
+        "Error de servidor.",
+        "Error de servidor, contacte al administrador."
+      );
+          break;
+        }
       }
     } else {
       showToast(
@@ -434,10 +529,9 @@ const SubmenuAdministracionUsuariosControlador = () => {
       const usuarioActualizarContraseña = await axios.put(funcion, {
         matricula: registroUsuarioManual.matricula,
       });
-      console.log(usuarioActualizarContraseña.status);
       if (usuarioActualizarContraseña.status === 200) {
         showToast(
-          "error",
+          "success",
           "Contraseña actualizada.",
           "Se ha reiniciado la contraseña exitosamente."
         );
@@ -474,6 +568,9 @@ const SubmenuAdministracionUsuariosControlador = () => {
       SubmenuAdministracionUsuariosSubirNuevoUsuario={subirNuevoUsuario}
       SubmenuAdministracionUsuariosUsuarioManualValido={usuarioManualValido}
       SubmenuAdministracionUsuariosRegistroUsuarioManual={registroUsuarioManual}
+      SubmenuAdministracionUsuariosConsultarMatricula={consultarMatricula}
+      SubmenuAdministracionUsuariosUsuarioBuscado={usuarioBuscado}
+      SubmenuAdministracionUsuariosSetUsuarioBuscado={setUsuarioBuscado}
     />
   );
 };

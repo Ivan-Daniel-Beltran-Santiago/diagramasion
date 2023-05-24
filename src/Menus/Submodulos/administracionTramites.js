@@ -128,7 +128,7 @@ function AdministracionTramites() {
           contenido: contenidoMetadata,
         })
         .then((respuesta) => {
-          if (respuesta.data.Code == 1) {
+          if (respuesta.status == 200) {
             showToast(
               "success",
               "Guardar Cambios",

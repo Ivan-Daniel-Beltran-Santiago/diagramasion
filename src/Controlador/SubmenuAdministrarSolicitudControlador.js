@@ -154,7 +154,8 @@ const SubmenuAdministrarSolicitudControlador = ({
   };
 
   const solicitarSeguimiento = async (ID_Solicitud) => {
-    const servidor = new ConfigurarConexion();
+    if(ID_Solicitud){
+      const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/solicitudes/seguimiento";
 
     const seguimientoEnviado = await axios.get(funcion, {
@@ -176,7 +177,19 @@ const SubmenuAdministrarSolicitudControlador = ({
         "No fue posible solicitar seguimiento, contacte al administrador."
       );
     }
+  }else{
+    showToast(
+        "warn",
+        "Solicitud de seguimiento",
+        "Esta solicitud aun no tiene un folio asignado, por lo que no podemos solicitar seguimiento a la aseguradora."
+      );
+  }
   };
+
+  const actualizarSolicitud = async (ID_Solicitud) =>{
+    const servidor = new ConfigurarConexion();
+    const funcion = servidor.obtenerServidor() + "/solicitudes/actualizar";
+  }
 
   return (
     <SubmenuAdministrarSolicitud
@@ -191,6 +204,7 @@ const SubmenuAdministrarSolicitudControlador = ({
         obtenerDocumentoSolicitud
       }
       SubmenuAdministrarSolicitudSolicitarSeguimiento={solicitarSeguimiento}
+      SubmenuAdministrarSolicitudActualizarSolicitud={actualizarSolicitud}
     />
   );
 };

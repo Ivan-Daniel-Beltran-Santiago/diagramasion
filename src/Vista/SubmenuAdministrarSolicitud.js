@@ -10,6 +10,7 @@ function SubmenuAdministrarSolicitud({
   SubmenuAdministrarSolicitudEstatusRetroalimentacion,
   SubmenuAdministrarSolicitudObtenerDocumentoSolicitud,
   SubmenuAdministrarSolicitudSolicitarSeguimiento,
+  SubmenuAdministrarSolicitudActualizarSolicitud,
 }) {
   useEffect(() => {
     SubmenuAdministrarSolicitudObtenerDescripciones();
@@ -75,8 +76,7 @@ function SubmenuAdministrarSolicitud({
             </label>
             <br />
             <br />
-            <div>
-              <label className="Indicador">Progreso de la solicitud: </label>
+            {SubmenuAdministrarSolicitudSolicitudSeleccionada && <div><label className="Indicador">Progreso de la solicitud: </label>
 
               <div className="progressBar">
                 <div
@@ -107,8 +107,7 @@ function SubmenuAdministrarSolicitud({
                       : 0
                   ] + "%"}
                 </div>
-              </div>
-            </div>
+              </div></div>}
             <br />
             <br />
             <label className="Indicador">Fecha del último estatus:⠀</label>
@@ -220,17 +219,17 @@ function SubmenuAdministrarSolicitud({
           <br />
           <button
             class="w3-button w3-green"
-            onClick={/*ActualizarSolicitud*/null}
+            onClick={()=>SubmenuAdministrarSolicitudSolicitudSeleccionada ? SubmenuAdministrarSolicitudActualizarSolicitud(SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud) : null}
           >
-            Actualizar solicitud
+            {SubmenuAdministrarSolicitudSolicitudSeleccionada ? "Actualizar solicitud" : "Solicitud no seleccionada"}
           </button>
           <br />
           <br />
           <button
             class="w3-button w3-green"
-            onClick={()=>SubmenuAdministrarSolicitudSolicitarSeguimiento(SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud)}
+            onClick={()=>SubmenuAdministrarSolicitudSolicitudSeleccionada ? SubmenuAdministrarSolicitudSolicitarSeguimiento(SubmenuAdministrarSolicitudSolicitudSeleccionada.folio_Solicitud ? SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud : null) : null}
           >
-            Solicitar seguimiento
+            {SubmenuAdministrarSolicitudSolicitudSeleccionada ? "Solicitar seguimiento" : "Solicitud no seleccionada"}
           </button>
         </div>
       </div>

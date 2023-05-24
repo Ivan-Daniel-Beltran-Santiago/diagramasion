@@ -19,7 +19,9 @@ function App() {
         <Route path="/" element={<LoginControlador />} />
         <Route path="/Menu" element={<MenuUsuarioControlador />} />
       </Routes>
+      {/*}
       <Footer />
+      {*/}
     </BrowserRouter>
   );
 }

@@ -14,7 +14,7 @@ function SubmenuAdministracionUsuarios({
   SubmenuAdministracionUsuariosActualizarContraseñaUsuario,
   SubmenuAdministracionUsuariosActualizarUsuario,
   SubmenuAdministracionUsuariosRegistroUsuarioManual,
-  SubmenuAdministracionUsuariosUsuarioManualValido
+  SubmenuAdministracionUsuariosUsuarioManualValido,
 }) {
   /*
   //Almancenar ultima matricula
@@ -805,11 +805,11 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="matricula"
             id="mat"
-            onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
+            onChange={SubmenuAdministracionUsuariosHandleInputChange}
           ></input>
           {!SubmenuAdministracionUsuariosUsuarioManualValido.matricula &&
-            SubmenuAdministracionUsuariosRegistroUsuarioManual &&
-            SubmenuAdministracionUsuariosRegistroUsuarioManual.matricula.length > 0 && (
+            SubmenuAdministracionUsuariosRegistroUsuarioManual.matricula
+              .length > 0 && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
                 Debe contener 8 digitos, puede tener una m o M al principio si
                 se trata de un estudiante de posgrado.
@@ -823,7 +823,7 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="nombreCompleto"
             id="nom"
-            onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
+            onChange={SubmenuAdministracionUsuariosHandleInputChange}
           ></input>
         </p>
         <p>
@@ -833,10 +833,11 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="correoElectronico"
             id="cor"
-            onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
+            onChange={SubmenuAdministracionUsuariosHandleInputChange}
           ></input>
           {!SubmenuAdministracionUsuariosUsuarioManualValido.correoElectronico &&
-            SubmenuAdministracionUsuariosRegistroUsuarioManual.correoElectronico.length > 0 && (
+            SubmenuAdministracionUsuariosRegistroUsuarioManual.correoElectronico
+              .length > 0 && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
                 El correo electronico no es valido.
               </label>
@@ -850,7 +851,7 @@ function SubmenuAdministracionUsuarios({
               type="text"
               name="carrera"
               id="car"
-              onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
+              onChange={SubmenuAdministracionUsuariosHandleInputChange}
             ></input>
           </p>
         )}
@@ -862,7 +863,7 @@ function SubmenuAdministracionUsuarios({
               type="number"
               name="semestre"
               id="semest"
-              onChange={() => SubmenuAdministracionUsuariosHandleInputChange()}
+              onChange={SubmenuAdministracionUsuariosHandleInputChange}
             ></input>
           </p>
         )}

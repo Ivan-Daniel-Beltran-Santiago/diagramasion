@@ -22,7 +22,7 @@ const SubmenuAdministracionUsuariosControlador = () => {
     semestre: false,
   });
   const [consultarMatricula, setConsultarMatricula] = useState({
-    matricula: "",
+    consultarMatricula: "",
     esValida: false,
   });
   const [usuarioEstudiante, setUsuarioEstudiante] = useState(false);
@@ -42,15 +42,30 @@ const SubmenuAdministracionUsuariosControlador = () => {
 
   //Captura los cambios en los campos de texto para la modificación individual de usuarios.
   const handleInputChange = (event) => {
-    setRegistroUsuarioManual({
-      ...registroUsuarioManual,
-      [event.target.name]: event.target.value,
-    });
-    validateInputChange(event);
+    if (event.target.name === "consultarMatricula") {
+      var regexEstudiante = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
+      var regexEncargada = new RegExp("^[0-9]{3}$");
+
+      var actualizadoConsultarMatricula = {
+        ...consultarMatricula,
+        consultarMatricula: event.target.value,
+        esValida:
+          regexEstudiante.test(event.target.value) ||
+          regexEncargada.test(event.target.value),
+      };
+      setConsultarMatricula(actualizadoConsultarMatricula);
+    } else {
+      const actualizadoRegistroUsuarioManual = {
+        ...registroUsuarioManual,
+        [event.target.name]: event.target.value,
+      };
+      setRegistroUsuarioManual(actualizadoRegistroUsuarioManual);
+      validateInputChange(event, actualizadoRegistroUsuarioManual);
+    }
   };
 
   //Valida los cambios detectados.
-  const validateInputChange = (event) => {
+  const validateInputChange = (event, ActualizadoState) => {
     var regexEstudiante = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
     var regexEncargada = new RegExp("^[0-9]{3}$");
     var regexCorreoElectronico = new RegExp(
@@ -58,47 +73,54 @@ const SubmenuAdministracionUsuariosControlador = () => {
     );
     var regexNombreCompleto = new RegExp("[A-Z a-z]{10,100}$");
     var regexCarrera = new RegExp("[A-Z a-z]{10,100}$");
+
+    var actualizadoUsuarioManualValido;
+
     switch (event.target.name) {
       case "matricula":
-        setUsuarioManualValido({
+        actualizadoUsuarioManualValido = {
           ...usuarioManualValido,
           [event.target.name]:
-            regexEstudiante.test(event.target.value) ||
-            regexEncargada.test(event.target.value),
-        });
-        break;
-      case "busquedaMatricula":
-        setConsultarMatricula({
-          ...consultarMatricula,
-          [event.target.name]:
-            regexEstudiante.test(event.target.value) ||
-            regexEncargada.test(event.target.value),
-        });
+            regexEstudiante.test(ActualizadoState[event.target.name]) ||
+            regexEncargada.test(ActualizadoState[event.target.name]),
+        };
+        setUsuarioManualValido(actualizadoUsuarioManualValido);
         break;
       case "correoElectronico":
-        setUsuarioManualValido({
+        actualizadoUsuarioManualValido = {
           ...usuarioManualValido,
-          [event.target.name]: regexCorreoElectronico.test(event.target.value),
-        });
+          [event.target.name]: regexCorreoElectronico.test(
+            ActualizadoState[event.target.name]
+          ),
+        };
+        setUsuarioManualValido(actualizadoUsuarioManualValido);
         break;
       case "nombreCompleto":
-        setUsuarioManualValido({
+        actualizadoUsuarioManualValido = {
           ...usuarioManualValido,
-          [event.target.name]: regexNombreCompleto.test(event.target.value),
-        });
+          [event.target.name]: regexNombreCompleto.test(
+            ActualizadoState[event.target.name]
+          ),
+        };
+        setUsuarioManualValido(actualizadoUsuarioManualValido);
         break;
       case "carrera":
-        setUsuarioManualValido({
+        actualizadoUsuarioManualValido = {
           ...usuarioManualValido,
-          [event.target.name]: regexCarrera.test(event.target.value),
-        });
+          [event.target.name]: regexCarrera.test(
+            ActualizadoState[event.target.name]
+          ),
+        };
+        setUsuarioManualValido(actualizadoUsuarioManualValido);
         break;
       default:
-        setUsuarioManualValido({
+        actualizadoUsuarioManualValido = {
           ...usuarioManualValido,
           [event.target.name]:
-            event.target.value > 0 && event.target.value < 15,
-        });
+            ActualizadoState[event.target.name] > 0 &&
+            ActualizadoState[event.target.name] < 15,
+        };
+        setUsuarioManualValido(actualizadoUsuarioManualValido);
         break;
     }
   };
@@ -248,17 +270,154 @@ const SubmenuAdministracionUsuariosControlador = () => {
     }
   };
 
-  const subirNuevoUsuario = async (registroUsuario) => {
-    console.log(registroUsuario);
-    const servidor = new ConfigurarConexion();
-    const funcion = servidor.obtenerServidor() + "/usuarios/nuevo";
+  const subirNuevoUsuario = async () => {
+    if (
+      usuarioManualValido.matricula &&
+      usuarioManualValido.correoElectronico &&
+      usuarioManualValido.semestre
+    ) {
+      const servidor = new ConfigurarConexion();
+      const funcion = servidor.obtenerServidor() + "/usuarios/nuevo";
+    } else {
+      showToast(
+        "error",
+        "Formato de datos.",
+        "Algunos de los datos ingresados no son validos, favor de verificar antes de proceder."
+      );
+    }
   };
 
-  const buscarUsuario = async () => {};
+  const buscarUsuario = async () => {
+    if (usuarioManualValido.matricula) {
+      const servidor = new ConfigurarConexion();
+      const funcion = servidor.obtenerServidor() + "/usuarios/consultar";
 
-  const actualizarUsuario = async () => {};
+      const usuarioBuscado = await axios.get(funcion, {
+        params: { matricula: registroUsuarioManual.matricula },
+      });
 
-  const actualizarContraseñaUsuario = async () => {};
+      if (usuarioBuscado.status === 200) {
+        var usuarioEncontrado = {
+          matricula: usuarioBuscado.data.Informacion.matricula,
+          nombreCompleto: usuarioBuscado.data.Informacion.nombre_Completo,
+          correoElectronico: usuarioBuscado.data.Informacion.correo_e,
+          carrera: usuarioBuscado.data.Informacion.Estudiante
+            ? usuarioBuscado.data.Informacion.Estudiante.carrera
+            : "",
+          semestre: usuarioBuscado.data.Informacion.Estudiante
+            ? usuarioBuscado.data.Informacion.Estudiante.semestre
+            : "",
+        };
+        var usuarioEncontradoValido = {
+          matricula: true,
+          nombreCompleto: true,
+          correoElectronico: true,
+          carrera: true,
+          semestre: true,
+        };
+        setRegistroUsuarioManual(usuarioEncontrado);
+        setUsuarioManualValido(usuarioEncontradoValido);
+        document.getElementById("nom").value = usuarioEncontrado.nombreCompleto;
+        document.getElementById("cor").value =
+          usuarioEncontrado.correoElectronico;
+        if (usuarioBuscado.data.Informacion.Estudiante) {
+          document.getElementById("car").value = usuarioEncontrado.carrera;
+          document.getElementById("semest").value = usuarioEncontrado.semestre;
+        }
+      } else {
+        showToast(
+          "error",
+          "Usuario no encontrado.",
+          "El usuario no existe o la matricula no coincide."
+        );
+      }
+    } else {
+      showToast(
+        "error",
+        "Formato de matricula.",
+        "La matricula ingresada no tiene un formato valido."
+      );
+    }
+  };
+
+  const actualizarUsuario = async () => {
+    if (
+      usuarioManualValido.matricula &&
+      usuarioManualValido.correoElectronico &&
+      usuarioManualValido.semestre
+    ) {
+      const servidor = new ConfigurarConexion();
+      const funcion = servidor.obtenerServidor() + "/usuarios/actualizar";
+
+      var usuarioActualizado;
+      if (usuarioEstudiante) {
+        var datosEstudiante = usuarioEstudiante
+          ? {
+              carrera: registroUsuarioManual.carrera,
+              semestre: registroUsuarioManual.semestre,
+            }
+          : null;
+
+        usuarioActualizado = await axios.put(funcion, {
+          matricula: registroUsuarioManual.matricula,
+          nombre_Completo: registroUsuarioManual.nombreCompleto,
+          correo_e: registroUsuarioManual.correoElectronico,
+          Tramite: datosEstudiante,
+        });
+
+        if (usuarioActualizado.status === 200) {
+          showToast(
+            "success",
+            "Actualizacion de usuario.",
+            "Actualizacion de datos de usuario exitosa."
+          );
+        } else {
+          showToast(
+            "error",
+            "Actualizacion de usuario.",
+            "No fue posible actualizar el usuario, intente mas tarde."
+          );
+        }
+      } else {
+      }
+    } else {
+      showToast(
+        "error",
+        "Formato de datos.",
+        "Algunos de los datos ingresados no son validos, favor de verificar antes de proceder."
+      );
+    }
+  };
+
+  const actualizarContraseñaUsuario = async () => {
+    if (usuarioManualValido.matricula) {
+      const servidor = new ConfigurarConexion();
+      const funcion = servidor.obtenerServidor() + "/usuarios/acceso";
+      const usuarioActualizarContraseña = await axios.put(funcion, {
+        matricula: registroUsuarioManual.matricula,
+      });
+      console.log(usuarioActualizarContraseña.status);
+      if (usuarioActualizarContraseña.status === 200) {
+        showToast(
+          "error",
+          "Contraseña actualizada.",
+          "Se ha reiniciado la contraseña exitosamente."
+        );
+      } else {
+        showToast(
+          "error",
+          "Contraseña no actualizada.",
+          "La contraseña no se ha actualizado apropiadamente, intentelo mas tarde."
+        );
+      }
+    } else {
+      showToast(
+        "error",
+        "Formato de matricula.",
+        "La matricula ingresada no tiene un formato valido."
+      );
+    }
+  };
 
   return (
     <SubmenuAdministracionUsuarios

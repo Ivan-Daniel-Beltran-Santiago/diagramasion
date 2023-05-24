@@ -153,16 +153,29 @@ const SubmenuAdministrarSolicitudControlador = ({
     }
   };
 
-  const solicitarSeguimiento = async (FolioSolicitud, NombreCompleto) => {
+  const solicitarSeguimiento = async (ID_Solicitud) => {
     const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/solicitudes/seguimiento";
 
     const seguimientoEnviado = await axios.get(funcion, {
       params: {
-        folio_Solicitud: FolioSolicitud,
-        Usuario: { nombre_Completo: NombreCompleto },
+        id_Solicitud: ID_Solicitud,
       },
     });
+
+    if(seguimientoEnviado.status===200){
+      showToast(
+        "success",
+        "Solicitud de seguimiento",
+        "Solicitud de seguimiento enviada a la aseguradora."
+      );
+    }else{
+      showToast(
+        "error",
+        "Solicitud de seguimiento",
+        "No fue posible solicitar seguimiento, contacte al administrador."
+      );
+    }
   };
 
   return (
@@ -177,6 +190,7 @@ const SubmenuAdministrarSolicitudControlador = ({
       SubmenuAdministrarSolicitudObtenerDocumentoSolicitud={
         obtenerDocumentoSolicitud
       }
+      SubmenuAdministrarSolicitudSolicitarSeguimiento={solicitarSeguimiento}
     />
   );
 };

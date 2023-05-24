@@ -9,73 +9,8 @@ function SubmenuAdministrarSolicitud({
   SubmenuAdministrarSolicitudEstatusLexico,
   SubmenuAdministrarSolicitudEstatusRetroalimentacion,
   SubmenuAdministrarSolicitudObtenerDocumentoSolicitud,
+  SubmenuAdministrarSolicitudSolicitarSeguimiento,
 }) {
-  /*
-
-  const actualizarSolicitud = () => {
-    const srvDir = new ServerConnectionConfig();
-    const srvReq = srvDir.getServer() + "/updateApplication";
-    let textoRetro = document.getElementById("retro").value;
-    let numfolio = 0;
-    let idEvento = document.getElementById("lang").value;
-
-    //console.log(numfolio)
-
-    if (
-      isNaN(Number(document.getElementById("Folio").value)) ||
-      Number(document.getElementById("Folio").value) < 0
-    ) {
-      showToast("error", "Guia invalido", "Debe de ser guia numerica");
-    } else {
-      if (Number(document.getElementById("Folio").value) !== 0) {
-        numfolio = Number(document.getElementById("Folio").value);
-        //console.log(true)
-      } else {
-        numfolio = datosSolicitud.folio_Solicitud;
-        //console.log(false);
-      }
-      //console.log(Number(document.getElementById("Folio").value))
-
-      axios
-        .post(srvReq, {
-          estatusAnterior: datosSolicitud.estatusAlMomento,
-          retroAnterior: datosSolicitud.retroalimentacion,
-          id: datosSolicitud.id_solicitud,
-          nuevoEstatus: idEvento,
-          retroNueva: retroalimentaciones[idEvento]+ ". " + textoRetro,
-          folio: numfolio,
-        })
-        .then((response) => {
-          switch (response.data.Code) {
-            case 1:
-              document.getElementById("Folio").value = "";
-              document.getElementById("retro").value = "";
-              conseguirSolicitud();
-              showToast(
-                "success",
-                "Solicitud actualizada",
-                "La actualizacion a sido exitosa al estado: " + idEvento
-              );
-              break;
-            case -1:
-              showToast(
-                "error",
-                "Actualizacion incorrecta",
-                "Porfavor cheque los datos"
-              );
-              break;
-            default:
-              showToast("warn", "Error inesperado", "Intentelo mas tarde");
-              break;
-          }
-        });
-    }
-  };
-
-  
-
-  */
-
   useEffect(() => {
     SubmenuAdministrarSolicitudObtenerDescripciones();
   }, []);
@@ -121,7 +56,7 @@ function SubmenuAdministrarSolicitud({
                     0 &&
                   SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual <
                     13
-                  ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual
+                  ? SubmenuAdministrarSolicitudEstatusLexico[SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual]
                   : "Error al obtener la solicitud"
                 : "Solicitud no seleccionada"}
             </label>
@@ -285,7 +220,7 @@ function SubmenuAdministrarSolicitud({
           <br />
           <button
             class="w3-button w3-green"
-            onClick={/*actualizarSolicitud*/ null}
+            onClick={/*ActualizarSolicitud*/null}
           >
             Actualizar solicitud
           </button>
@@ -293,7 +228,7 @@ function SubmenuAdministrarSolicitud({
           <br />
           <button
             class="w3-button w3-green"
-            onClick={/*solicitarSeguimiento*/ null}
+            onClick={()=>SubmenuAdministrarSolicitudSolicitarSeguimiento(SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud)}
           >
             Solicitar seguimiento
           </button>

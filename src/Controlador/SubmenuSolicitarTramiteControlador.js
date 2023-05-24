@@ -176,8 +176,8 @@ const SubmenuSolicitarTramiteControlador = ({
     const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/solicitudes/correo";
 
-    const correoEnviado = await axios.post(funcion, {
-      matricula: SubmenuSolicitarTramiteControladorUsuarioActivo.matricula,
+    const correoEnviado = await axios.get(funcion, {
+      params:{matricula: SubmenuSolicitarTramiteControladorUsuarioActivo.matricula,}
     });
 
     if (correoEnviado.status === 200) {

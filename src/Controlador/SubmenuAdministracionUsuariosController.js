@@ -257,6 +257,14 @@ const SubmenuAdministracionUsuariosControlador = () => {
               registrosExcel[indice][0] +
               " subido o actualizado con exito."
           );
+        }else{
+          showToast(
+            "error",
+            "Subida de usuarios.",
+            "Usuario " +
+              registrosExcel[indice][0] +
+              " no ha sido subido o actualizado, intente mas tarde."
+          );
         }
       }
 
@@ -278,6 +286,36 @@ const SubmenuAdministracionUsuariosControlador = () => {
     ) {
       const servidor = new ConfigurarConexion();
       const funcion = servidor.obtenerServidor() + "/usuarios/nuevo";
+
+      const usuarioSubirEstudiante = usuarioEstudiante ? {
+        carrera: registroUsuarioManual.carrera,
+        semestre: registroUsuarioManual.semestre
+      } : null
+
+      const usuarioSubido = await axios.post(funcion, {
+        matricula: registroUsuarioManual.matricula,
+        nombre_Completo: registroUsuarioManual.nombreCompleto,
+        correo_e: registroUsuarioManual.correoElectronico,
+        Estudiante: usuarioSubirEstudiante,
+      })
+
+      if(usuarioSubido.status===200){
+        showToast(
+          "success",
+          "Subida de usuarios.",
+          "Usuario " +
+            registroUsuarioManual.matricula +
+            " subido con exito."
+        );
+      }else{
+        showToast(
+          "success",
+          "Subida de usuarios.",
+          "Usuario " +
+            registroUsuarioManual.matricula +
+            " no ha sido subido correctamente, intente mas tarde."
+        );
+      }
     } else {
       showToast(
         "error",

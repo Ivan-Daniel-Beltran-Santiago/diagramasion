@@ -118,56 +118,88 @@ const SubmenuInformacionUsuarioControlador = ({
 
   //Actualiza los campos deseados.
   const actualizarDatosUsuario = async () => {
-    const servidor = new ConfigurarConexion();
-    const funcion = servidor.obtenerServidor() + "/usuarios/actualizar";
+    try {
+      const servidor = new ConfigurarConexion();
+      const funcion = servidor.obtenerServidor() + "/usuarios/actualizar";
 
-    const actualizacion = await axios.put(funcion, {
-      matricula: informacionUsuarioActualizar.matricula,
-      contraseña: informacionUsuarioActualizar.contraseñaActual,
-      nuevaContraseña: informacionUsuarioActualizar.nuevaContraseña,
-      correo_e: informacionUsuarioActualizar.nuevoCorreo_e,
-    });
+      const actualizacion = await axios.put(funcion, {
+        matricula: informacionUsuarioActualizar.matricula,
+        contraseña: informacionUsuarioActualizar.contraseñaActual,
+        nuevaContraseña: informacionUsuarioActualizar.nuevaContraseña,
+        correo_e: informacionUsuarioActualizar.nuevoCorreo_e,
+      });
 
-    switch (actualizacion.status) {
-      case 200:
-        SubmenuInformacionUsuarioControladorSetUsuarioActivo(
-          actualizacion.data
-        );
-        setTimeout(() => {
-          showToast(
-            "success",
-            "Usuario",
-            "Correo electronico y/o contraseña actualizados exitosamente."
+      switch (actualizacion.status) {
+        case 200:
+          SubmenuInformacionUsuarioControladorSetUsuarioActivo(
+            actualizacion.data
           );
-        }, 100);
-        break;
-      case 400:
-        setTimeout(() => {
-          showToast(
-            "error",
-            "Usuario",
-            "Formato de correo electronico y/o contraseña invalidos."
-          );
-        }, 100);
-        break;
-      case 404:
-        setTimeout(() => {
-          showToast(
-            "error",
-            "Usuario",
-            "Usuario no encontrado, contacte al administrador."
-          );
-        }, 100);
-        break;
-      default:
-        setTimeout(() => {
-          showToast(
-            "error",
-            "Usuario",
-            "Error del servidor, contacte al administrador."
-          );
-        }, 100);
-        break;
+          setTimeout(() => {
+            showToast(
+              "success",
+              "Usuario",
+              "Correo electronico y/o contraseña actualizados exitosamente."
+            );
+          }, 100);
+          break;
+        case 400:
+          setTimeout(() => {
+            showToast(
+              "error",
+              "Usuario",
+              "Formato de correo electronico y/o contraseña invalidos."
+            );
+          }, 100);
+          break;
+        case 404:
+          setTimeout(() => {
+            showToast(
+              "error",
+              "Usuario",
+              "Usuario no encontrado o contraseña no coincide."
+            );
+          }, 100);
+          break;
+        default:
+          setTimeout(() => {
+            showToast(
+              "error",
+              "Usuario",
+              "Error del servidor, contacte al administrador."
+            );
+          }, 100);
+          break;
+      }
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
+          setTimeout(() => {
+            showToast(
+              "error",
+              "Usuario",
+              "Formato de correo electronico y/o contraseña invalidos."
+            );
+          }, 100);
+          break;
+        case 404:
+          setTimeout(() => {
+            showToast(
+              "error",
+              "Usuario",
+              "Usuario no encontrado o contraseña no coincide."
+            );
+          }, 100);
+          break;
+        default:
+          setTimeout(() => {
+            showToast(
+              "error",
+              "Usuario",
+              "Error del servidor, contacte al administrador."
+            );
+          }, 100);
+          break;
+      }
     }
   };
 

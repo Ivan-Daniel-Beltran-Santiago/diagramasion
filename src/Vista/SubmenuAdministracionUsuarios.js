@@ -1,5 +1,6 @@
 import React from "react";
 import { Toast } from "primereact/toast";
+import SubmenuAdministracionUsuariosControlador from "../Controlador/SubmenuAdministracionUsuariosController";
 
 function SubmenuAdministracionUsuarios({
   AdminUsuariosTostado,
@@ -17,6 +18,7 @@ function SubmenuAdministracionUsuarios({
   SubmenuAdministracionUsuariosUsuarioManualValido,
   SubmenuAdministracionUsuariosUsuarioBuscado,
   SubmenuAdministracionUsuariosSetUsuarioBuscado,
+  SubmenuAdministracionUsuariosConsultarMatricula,
 }) {
   return (
     <div className="AdministracionUsuarios modules">
@@ -288,21 +290,38 @@ function SubmenuAdministracionUsuarios({
             name="matricula"
             id="mat"
             onChange={SubmenuAdministracionUsuariosHandleInputChange}
-          ></input>
-          {" "}
-          {SubmenuAdministracionUsuariosUsuarioBuscado && <div><label>Cambiar matricula:</label>
-          <input
-            type="text"
-            name="nuevaMatricula"
-            id="mat"
-            onChange={SubmenuAdministracionUsuariosHandleInputChange}
-          ></input></div>}
+          ></input>{" "}
+          {SubmenuAdministracionUsuariosUsuarioBuscado && (
+            <div>
+              <br />
+              <label>Cambiar matricula:</label>
+              <input
+                type="text"
+                name="nuevaMatricula"
+                id="mat"
+                onChange={SubmenuAdministracionUsuariosHandleInputChange}
+              ></input>
+            </div>
+          )}
           {!SubmenuAdministracionUsuariosUsuarioManualValido.matricula &&
             SubmenuAdministracionUsuariosRegistroUsuarioManual.matricula
-              .length > 0 && (
+              .length > 0 &&
+            SubmenuAdministracionUsuariosUsuarioBuscado && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
-                Debe contener 8 digitos, puede tener una m o M al principio si
-                se trata de un estudiante de posgrado.
+                {SubmenuAdministracionUsuariosUsuarioEstudiante
+                  ? "Debe contener 8 digitos, puede tener las letras B, b, C, c, D, d, M, m según el caso."
+                  : "Debe contener solo 3 digitos"}
+              </label>
+            )}
+          {SubmenuAdministracionUsuariosUsuarioBuscado &&
+            SubmenuAdministracionUsuariosConsultarMatricula &&
+            SubmenuAdministracionUsuariosConsultarMatricula.consultarMatricula
+              .length > 0 &&
+            !SubmenuAdministracionUsuariosConsultarMatricula.esValida && (
+              <label className="LoginWarning" style={{ textAlign: "left" }}>
+                {SubmenuAdministracionUsuariosUsuarioEstudiante
+                  ? "Debe contener 8 digitos, puede tener las letras B, b, C, c, D, d, M, m según el caso."
+                  : "Debe contener solo 3 digitos"}
               </label>
             )}
         </p>

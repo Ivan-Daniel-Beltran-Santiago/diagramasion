@@ -43,7 +43,7 @@ const SubmenuAdministracionUsuariosControlador = () => {
 
   //Captura los cambios en los campos de texto para la modificación individual de usuarios.
   const handleInputChange = (event) => {
-    if (event.target.name === "consultarMatricula") {
+    if (event.target.name === "nuevaMatricula") {
       var regexEstudiante = new RegExp("^(B|b|C|c|D|d|M|m)?[0-9]{8}$");
       var regexEncargada = new RegExp("^[0-9]{3}$");
 
@@ -56,6 +56,9 @@ const SubmenuAdministracionUsuariosControlador = () => {
       };
       setConsultarMatricula(actualizadoConsultarMatricula);
     } else {
+      if (event.target.name === "matricula") {
+        setUsuarioBuscado(false);
+      }
       const actualizadoRegistroUsuarioManual = {
         ...registroUsuarioManual,
         [event.target.name]: event.target.value,
@@ -391,6 +394,7 @@ const SubmenuAdministracionUsuariosControlador = () => {
 
           setRegistroUsuarioManual(usuarioEncontrado);
           setUsuarioManualValido(usuarioEncontradoValido);
+          setUsuarioBuscado(true);
 
           document.getElementById("nom").value =
             usuarioEncontrado.nombreCompleto;
@@ -453,24 +457,32 @@ const SubmenuAdministracionUsuariosControlador = () => {
     if (
       usuarioManualValido.matricula &&
       usuarioManualValido.correoElectronico &&
-      usuarioManualValido.semestre
+      usuarioManualValido.semestre &&
+      consultarMatricula.consultarMatricula !== ""
+        ? consultarMatricula.esValida
+        : true
     ) {
       try {
+        const servidor = new ConfigurarConexion();
+        const funcion = servidor.obtenerServidor() + "/usuarios/actualizar";
 
-      const servidor = new ConfigurarConexion();
-      const funcion = servidor.obtenerServidor() + "/usuarios/actualizar";
-
-      var datosEstudiante = usuarioEstudiante
+        var datosEstudiante = usuarioEstudiante
           ? {
               carrera: registroUsuarioManual.carrera,
               semestre: registroUsuarioManual.semestre,
             }
           : null;
 
-      const usuarioActualizado = await axios.put(funcion, {
+        const usuarioActualizado = await axios.put(funcion, {
           matricula: registroUsuarioManual.matricula,
           nombre_Completo: registroUsuarioManual.nombreCompleto,
           correo_e: registroUsuarioManual.correoElectronico,
+          nuevaMatricula:
+            consultarMatricula.consultarMatricula !== ""
+              ? consultarMatricula.esValida
+                ? consultarMatricula.consultarMatricula
+                : registroUsuarioManual.matricula
+              : registroUsuarioManual.matricula,
           Estudiante: datosEstudiante,
         });
 
@@ -487,30 +499,29 @@ const SubmenuAdministracionUsuariosControlador = () => {
             "No fue posible actualizar el usuario, intente mas tarde."
           );
         }
-      }
-    catch(error){
-        switch(error.response.status){
-        case 400:
-          showToast(
-        "error",
-        "Formato de datos.",
-        "Algunos de los datos ingresados no son validos, favor de verificar antes de proceder."
-      );
-          break;
-        case 404:
-          showToast(
-        "error",
-        "Usuario no encontrado.",
-        "El usuario que se intenta modificar no existe en la base de datos."
-      );
-          break;
-        default:
-          showToast(
-        "error",
-        "Error de servidor.",
-        "Error de servidor, contacte al administrador."
-      );
-          break;
+      } catch (error) {
+        switch (error.response.status) {
+          case 400:
+            showToast(
+              "error",
+              "Formato de datos.",
+              "Algunos de los datos ingresados no son validos, favor de verificar antes de proceder."
+            );
+            break;
+          case 404:
+            showToast(
+              "error",
+              "Usuario no encontrado.",
+              "El usuario que se intenta modificar no existe en la base de datos."
+            );
+            break;
+          default:
+            showToast(
+              "error",
+              "Error de servidor.",
+              "Error de servidor, contacte al administrador."
+            );
+            break;
         }
       }
     } else {

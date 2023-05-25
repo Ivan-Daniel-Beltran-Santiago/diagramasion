@@ -57,7 +57,10 @@ function SubmenuAdministrarSolicitud({
                     0 &&
                   SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual <
                     13
-                  ? SubmenuAdministrarSolicitudEstatusLexico[SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual]
+                  ? SubmenuAdministrarSolicitudEstatusLexico[
+                      SubmenuAdministrarSolicitudSolicitudSeleccionada
+                        .estatus_Actual
+                    ]
                   : "Error al obtener la solicitud"
                 : "Solicitud no seleccionada"}
             </label>
@@ -76,38 +79,42 @@ function SubmenuAdministrarSolicitud({
             </label>
             <br />
             <br />
-            {SubmenuAdministrarSolicitudSolicitudSeleccionada && <div><label className="Indicador">Progreso de la solicitud: </label>
+            {SubmenuAdministrarSolicitudSolicitudSeleccionada && (
+              <div>
+                <label className="Indicador">Progreso de la solicitud: </label>
 
-              <div className="progressBar">
-                <div
-                  id="progreso"
-                  className="progresando"
-                  style={{
-                    width:
-                      SubmenuAdministrarSolicitudProgresoEstatus[
-                        SubmenuAdministrarSolicitudSolicitudSeleccionada
-                          ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual >
-                              0 &&
-                            SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual <
-                              13
-                            ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual
+                <div className="progressBar">
+                  <div
+                    id="progreso"
+                    className="progresando"
+                    style={{
+                      width:
+                        SubmenuAdministrarSolicitudProgresoEstatus[
+                          SubmenuAdministrarSolicitudSolicitudSeleccionada
+                            ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual >
+                                0 &&
+                              SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual <
+                                13
+                              ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual
+                              : 0
                             : 0
+                        ] + "%",
+                    }}
+                  >
+                    {SubmenuAdministrarSolicitudProgresoEstatus[
+                      SubmenuAdministrarSolicitudSolicitudSeleccionada
+                        ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual >
+                            0 &&
+                          SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual <
+                            13
+                          ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual
                           : 0
-                      ] + "%",
-                  }}
-                >
-                  {SubmenuAdministrarSolicitudProgresoEstatus[
-                    SubmenuAdministrarSolicitudSolicitudSeleccionada
-                      ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual >
-                          0 &&
-                        SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual <
-                          13
-                        ? SubmenuAdministrarSolicitudSolicitudSeleccionada.estatus_Actual
                         : 0
-                      : 0
-                  ] + "%"}
+                    ] + "%"}
+                  </div>
                 </div>
-              </div></div>}
+              </div>
+            )}
             <br />
             <br />
             <label className="Indicador">Fecha del último estatus:⠀</label>
@@ -219,17 +226,35 @@ function SubmenuAdministrarSolicitud({
           <br />
           <button
             class="w3-button w3-green"
-            onClick={()=>SubmenuAdministrarSolicitudSolicitudSeleccionada ? SubmenuAdministrarSolicitudActualizarSolicitud(SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud) : null}
+            onClick={() =>
+              SubmenuAdministrarSolicitudSolicitudSeleccionada
+                ? SubmenuAdministrarSolicitudActualizarSolicitud(
+                    SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud,
+                  )
+                : null
+            }
           >
-            {SubmenuAdministrarSolicitudSolicitudSeleccionada ? "Actualizar solicitud" : "Solicitud no seleccionada"}
+            {SubmenuAdministrarSolicitudSolicitudSeleccionada
+              ? "Actualizar solicitud"
+              : "Solicitud no seleccionada"}
           </button>
           <br />
           <br />
           <button
             class="w3-button w3-green"
-            onClick={()=>SubmenuAdministrarSolicitudSolicitudSeleccionada ? SubmenuAdministrarSolicitudSolicitarSeguimiento(SubmenuAdministrarSolicitudSolicitudSeleccionada.folio_Solicitud ? SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud : null) : null}
+            onClick={() =>
+              SubmenuAdministrarSolicitudSolicitudSeleccionada
+                ? SubmenuAdministrarSolicitudSolicitarSeguimiento(
+                    SubmenuAdministrarSolicitudSolicitudSeleccionada.folio_Solicitud
+                      ? SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud
+                      : null
+                  )
+                : null
+            }
           >
-            {SubmenuAdministrarSolicitudSolicitudSeleccionada ? "Solicitar seguimiento" : "Solicitud no seleccionada"}
+            {SubmenuAdministrarSolicitudSolicitudSeleccionada
+              ? "Solicitar seguimiento"
+              : "Solicitud no seleccionada"}
           </button>
         </div>
       </div>

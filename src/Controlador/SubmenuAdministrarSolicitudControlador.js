@@ -154,42 +154,112 @@ const SubmenuAdministrarSolicitudControlador = ({
   };
 
   const solicitarSeguimiento = async (ID_Solicitud) => {
-    if(ID_Solicitud){
+    if (ID_Solicitud) {
       const servidor = new ConfigurarConexion();
-    const funcion = servidor.obtenerServidor() + "/solicitudes/seguimiento";
+      const funcion = servidor.obtenerServidor() + "/solicitudes/seguimiento";
 
-    const seguimientoEnviado = await axios.get(funcion, {
-      params: {
-        id_Solicitud: ID_Solicitud,
-      },
-    });
+      const seguimientoEnviado = await axios.get(funcion, {
+        params: {
+          id_Solicitud: ID_Solicitud,
+        },
+      });
 
-    if(seguimientoEnviado.status===200){
+      if (seguimientoEnviado.status === 200) {
+        showToast(
+          "success",
+          "Solicitud de seguimiento",
+          "Solicitud de seguimiento enviada a la aseguradora."
+        );
+      } else {
+        showToast(
+          "error",
+          "Solicitud de seguimiento",
+          "No fue posible solicitar seguimiento, contacte al administrador."
+        );
+      }
+    } else {
       showToast(
-        "success",
-        "Solicitud de seguimiento",
-        "Solicitud de seguimiento enviada a la aseguradora."
-      );
-    }else{
-      showToast(
-        "error",
-        "Solicitud de seguimiento",
-        "No fue posible solicitar seguimiento, contacte al administrador."
-      );
-    }
-  }else{
-    showToast(
         "warn",
         "Solicitud de seguimiento",
         "Esta solicitud aun no tiene un folio asignado, por lo que no podemos solicitar seguimiento a la aseguradora."
       );
-  }
+    }
   };
 
-  const actualizarSolicitud = async (ID_Solicitud) =>{
-    const servidor = new ConfigurarConexion();
-    const funcion = servidor.obtenerServidor() + "/solicitudes/actualizar";
-  }
+  const actualizarSolicitud = async (
+    ID_Solicitud,
+    NuevoEstatus,
+    RetroalimentacionActual,
+    FolioSolicitud
+  ) => {
+    try {
+      console.log(
+        document.getElementById("lang").options[
+          document.getElementById("lang").selected
+        ].value
+      );
+      const servidor = new ConfigurarConexion();
+      const funcion = servidor.obtenerServidor() + "/solicitudes/actualizar";
+
+      const solicitudActualizada = await axios.put(funcion, {
+        id_Solicitud: ID_Solicitud,
+        estatus_Actual: NuevoEstatus,
+        retroalimentacion_Actual: RetroalimentacionActual,
+        folio_Solicitud: FolioSolicitud,
+      });
+
+      switch (solicitudActualizada.status) {
+        case 200:
+          showToast("success", "Solicitud", "Solicitud actualizada con exito");
+          break;
+        case 400:
+          showToast(
+            "error",
+            "Solicitud",
+            "No fue posible actualizar la solicitud, contacte al administrador"
+          );
+          break;
+        case 404:
+          showToast(
+            "error",
+            "Solicitud",
+            "Solicitud no encontrada, intentelo mas tarde."
+          );
+          break;
+        default:
+          showToast(
+            "error",
+            "Servidor",
+            "Error de servidor, contacte al administrador"
+          );
+          break;
+      }
+    } catch (error) {
+      switch (error.response.status) {
+        case 400:
+          showToast(
+            "error",
+            "Solicitud",
+            "No fue posible actualizar la solicitud, contacte al administrador"
+          );
+          break;
+        case 404:
+          showToast(
+            "error",
+            "Solicitud",
+            "Solicitud no encontrada, intentelo mas tarde."
+          );
+          break;
+        default:
+          showToast(
+            "error",
+            "Servidor",
+            "Error de servidor, contacte al administrador"
+          );
+          break;
+      }
+    }
+  };
 
   return (
     <SubmenuAdministrarSolicitud

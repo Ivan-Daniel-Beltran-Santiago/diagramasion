@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Toast } from "primereact/toast";
+import { FaDownload } from "react-icons/fa";
 
 function SubmenuAdministrarSolicitud({
   SubmenuAdministrarSolicitudTostado,
@@ -139,6 +140,9 @@ function SubmenuAdministrarSolicitud({
                   <label className="Indicador">Lista de documentos: </label>
                   <br />
                   <br />
+                  <p>
+                    Presione el icono <FaDownload /> para descargar los archivos
+                  </p>
                   {SubmenuAdministrarSolicitudSolicitudSeleccionada.Documentos.map(
                     function (documento) {
                       return (
@@ -146,19 +150,18 @@ function SubmenuAdministrarSolicitud({
                           className="documentList"
                           key={documento.id_Documento}
                         >
-                          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
-                          <a
-                            id={documento.id_Documento}
+                          <FaDownload
+                            className="fa-5x"
                             onClick={() =>
                               SubmenuAdministrarSolicitudObtenerDocumentoSolicitud(
                                 documento.id_Documento,
                                 documento.nombre_Documento
                               )
                             }
-                            u
-                          >
+                          />
+                          <label id={documento.id_Documento}>
                             {documento.nombre_Documento}
-                          </a>
+                          </label>
                           <br />
                         </div>
                       );

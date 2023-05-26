@@ -51,7 +51,7 @@ export default function Login({
           <br />
           <input type="submit" id="save" value="Ingresar" className="ingress" />
           <p>
-            Si es tu primera vez en el sistema, la contraseña es tu matrícula
+            Si es tu primera vez en el sistema, la contraseña es tu matrícula, omitiendo las letras, solo digitos
           </p>
         </form>
       </div>

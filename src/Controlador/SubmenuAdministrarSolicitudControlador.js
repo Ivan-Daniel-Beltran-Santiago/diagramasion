@@ -5,6 +5,7 @@ import SubmenuAdministrarSolicitud from "../Vista/SubmenuAdministrarSolicitud";
 
 const SubmenuAdministrarSolicitudControlador = ({
   SubmenuAdministrarSolicitudControladorSolicitudSeleccionada,
+  SubmenuAdministrarSolicitudControladorObtenerSolicitudEspecifica,
 }) => {
   //Variables de estado
   const [progresoEstatus, setProgresoEstatus] = useState({
@@ -193,11 +194,6 @@ const SubmenuAdministrarSolicitudControlador = ({
     FolioSolicitud
   ) => {
     try {
-      console.log(
-        document.getElementById("lang").options[
-          document.getElementById("lang").selected
-        ].value
-      );
       const servidor = new ConfigurarConexion();
       const funcion = servidor.obtenerServidor() + "/solicitudes/actualizar";
 
@@ -211,6 +207,10 @@ const SubmenuAdministrarSolicitudControlador = ({
       switch (solicitudActualizada.status) {
         case 200:
           showToast("success", "Solicitud", "Solicitud actualizada con exito");
+          SubmenuAdministrarSolicitudControladorObtenerSolicitudEspecifica(
+            ID_Solicitud,
+            false
+          );
           break;
         case 400:
           showToast(
@@ -275,6 +275,9 @@ const SubmenuAdministrarSolicitudControlador = ({
       }
       SubmenuAdministrarSolicitudSolicitarSeguimiento={solicitarSeguimiento}
       SubmenuAdministrarSolicitudActualizarSolicitud={actualizarSolicitud}
+      SubmenuAdministrarSolicitudEstatusRetroalimentacion={
+        estatusRetroalimentacion
+      }
     />
   );
 };

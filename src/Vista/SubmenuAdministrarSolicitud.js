@@ -230,6 +230,19 @@ function SubmenuAdministrarSolicitud({
               SubmenuAdministrarSolicitudSolicitudSeleccionada
                 ? SubmenuAdministrarSolicitudActualizarSolicitud(
                     SubmenuAdministrarSolicitudSolicitudSeleccionada.id_Solicitud,
+                    document.getElementById("lang").options[
+                      document.getElementById("lang").selectedIndex
+                    ].value,
+                    SubmenuAdministrarSolicitudEstatusRetroalimentacion[
+                      document.getElementById("lang").options[
+                        document.getElementById("lang").selectedIndex
+                      ].value
+                    ] +
+                      "\n" +
+                      document.getElementById("retro").value,
+                    SubmenuAdministrarSolicitudSolicitudSeleccionada.folio_Solicitud
+                      ? SubmenuAdministrarSolicitudSolicitudSeleccionada.folio_Solicitud
+                      : null
                   )
                 : null
             }

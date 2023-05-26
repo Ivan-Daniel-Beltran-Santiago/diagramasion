@@ -59,7 +59,8 @@ const ComponenteSolicitud = ({
           onClick={() =>
             ComponenteSolicitudRegistro
               ? ComponenteSolicitudObtenerSolicitud(
-                  ComponenteSolicitudRegistro.id_Solicitud
+                  ComponenteSolicitudRegistro.id_Solicitud,
+                  true
                 )
               : null
           }

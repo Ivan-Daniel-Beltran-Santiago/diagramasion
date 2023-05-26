@@ -38,7 +38,10 @@ const MenuControlador = ({
   };
 
   //Obtener una solicitud en particular
-  const obtenerSolicitudEspecifica = async (IDSolicitud) => {
+  const obtenerSolicitudEspecifica = async (
+    IDSolicitud,
+    isMenuAdministrarSolicitudes
+  ) => {
     const servidor = new ConfigurarConexion();
     const funcion = servidor.obtenerServidor() + "/solicitudes/consultar";
 
@@ -47,11 +50,12 @@ const MenuControlador = ({
     });
 
     if (solicitudEncontrada.status === 200) {
-      showToast(
-        "success",
-        "Solicitud seleccionada",
-        "Ahora puede cambiar a la pestaña Administrar Solicitud Individual para ver los detalles de la solicitud selecciionada."
-      );
+      if (isMenuAdministrarSolicitudes)
+        showToast(
+          "success",
+          "Solicitud seleccionada",
+          "Ahora puede cambiar a la pestaña Administrar Solicitud Individual para ver los detalles de la solicitud selecciionada."
+        );
       setRegistroSolicitud(solicitudEncontrada.data);
     } else {
       showToast(
@@ -99,6 +103,9 @@ const MenuControlador = ({
         <SubmenuAdministrarSolicitudControlador
           SubmenuAdministrarSolicitudControladorSolicitudSeleccionada={
             registroSolicitud
+          }
+          SubmenuAdministrarSolicitudControladorObtenerSolicitudEspecifica={
+            obtenerSolicitudEspecifica
           }
         />
       );

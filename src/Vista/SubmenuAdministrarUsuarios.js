@@ -1,28 +1,26 @@
 import React from "react";
 import { Toast } from "primereact/toast";
-import SubmenuAdministracionUsuariosControlador from "../Controlador/SubmenuAdministracionUsuariosController";
 
-function SubmenuAdministracionUsuarios({
-  AdminUsuariosTostado,
-  AdminUsuariosHandleFileEvent,
-  AdminUsuariosRegistrosUsuariosExcel,
-  SubmenuAdministracionUsuariosSubirNuevosUsuarios,
-  SubmenuAdministracionUsuariosSetUsuarioEstudiante,
-  SubmenuAdministracionUsuariosUsuarioEstudiante,
-  SubmenuAdministracionUsuariosHandleInputChange,
-  SubmenuAdministracionUsuariosBuscarUsuario,
-  SubmenuAdministracionUsuariosSubirNuevoUsuario,
-  SubmenuAdministracionUsuariosActualizarContraseñaUsuario,
-  SubmenuAdministracionUsuariosActualizarUsuario,
-  SubmenuAdministracionUsuariosRegistroUsuarioManual,
-  SubmenuAdministracionUsuariosUsuarioManualValido,
-  SubmenuAdministracionUsuariosUsuarioBuscado,
-  SubmenuAdministracionUsuariosSetUsuarioBuscado,
-  SubmenuAdministracionUsuariosConsultarMatricula,
+function SubmenuAdministrarUsuarios({
+  SubmenuAdministrarUsuariosTostado,
+  SubmenuAdministrarUsuariosHandleFileEvent,
+  SubmenuAdministrarUsuariosRegistrosUsuariosExcel,
+  SubmenuAdministrarUsuariosSubirNuevosUsuarios,
+  SubmenuAdministrarUsuariosSetUsuarioEstudiante,
+  SubmenuAdministrarUsuariosUsuarioEstudiante,
+  SubmenuAdministrarUsuariosHandleInputChange,
+  SubmenuAdministrarUsuariosBuscarUsuario,
+  SubmenuAdministrarUsuariosSubirNuevoUsuario,
+  SubmenuAdministrarUsuariosActualizarContraseñaUsuario,
+  SubmenuAdministrarUsuariosActualizarUsuario,
+  SubmenuAdministrarUsuariosRegistroUsuarioManual,
+  SubmenuAdministrarUsuariosUsuarioManualValido,
+  SubmenuAdministrarUsuariosUsuarioBuscado,
+  SubmenuAdministrarUsuariosConsultarMatricula,
 }) {
   return (
     <div className="AdministracionUsuarios modules">
-      <Toast ref={AdminUsuariosTostado} position="top-right" />
+      <Toast ref={SubmenuAdministrarUsuariosTostado} position="top-right" />
       <div className="InsertarExcel modules">
         <br />{" "}
         <label className="Indicador">Subir inicios de sesión (Excel)</label>{" "}
@@ -99,7 +97,7 @@ function SubmenuAdministracionUsuarios({
             name="Elegir archivos"
             accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             multiple
-            onChange={AdminUsuariosHandleFileEvent}
+            onChange={SubmenuAdministrarUsuariosHandleFileEvent}
             style={{ display: "none" }}
           ></input>
           <label htmlFor="subirArchivos">
@@ -110,19 +108,19 @@ function SubmenuAdministracionUsuarios({
               </a>
             }
           </label>
-          {AdminUsuariosRegistrosUsuariosExcel.length > 0 && (
+          {SubmenuAdministrarUsuariosRegistrosUsuariosExcel.length > 0 && (
             <div>
               <details>
                 <summary>Inicios de sesión detectados: </summary>
                 <ul>
-                  {AdminUsuariosRegistrosUsuariosExcel.map(
+                  {SubmenuAdministrarUsuariosRegistrosUsuariosExcel.map(
                     (registroUsuarioExcel) => {
                       return (
                         <li
                           key={
                             registroUsuarioExcel[0] +
                             "." +
-                            AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                            SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                               registroUsuarioExcel
                             ) +
                             ".Registro"
@@ -132,7 +130,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".matricula"
@@ -145,7 +143,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".apellidoPaterno"
@@ -158,7 +156,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".apellidoMaterno"
@@ -171,7 +169,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".nombreCompleto"
@@ -184,7 +182,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".correoElectronico"
@@ -197,7 +195,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".carrera"
@@ -210,7 +208,7 @@ function SubmenuAdministracionUsuarios({
                             key={
                               registroUsuarioExcel[0] +
                               "." +
-                              AdminUsuariosRegistrosUsuariosExcel.indexOf(
+                              SubmenuAdministrarUsuariosRegistrosUsuariosExcel.indexOf(
                                 registroUsuarioExcel
                               ) +
                               ".semestre"
@@ -230,8 +228,8 @@ function SubmenuAdministracionUsuarios({
                 className="loadLogin"
                 value="Subir inicios de sesión al sistema"
                 onClick={() => {
-                  SubmenuAdministracionUsuariosSubirNuevosUsuarios(
-                    AdminUsuariosRegistrosUsuariosExcel
+                  SubmenuAdministrarUsuariosSubirNuevosUsuarios(
+                    SubmenuAdministrarUsuariosRegistrosUsuariosExcel
                   );
                 }}
               ></input>
@@ -276,8 +274,8 @@ function SubmenuAdministracionUsuarios({
             id="checkEncargada"
             className="EncargadaCB"
             onChange={() => {
-              SubmenuAdministracionUsuariosSetUsuarioEstudiante(
-                !SubmenuAdministracionUsuariosUsuarioEstudiante
+              SubmenuAdministrarUsuariosSetUsuarioEstudiante(
+                !SubmenuAdministrarUsuariosUsuarioEstudiante
               );
             }}
           ></input>
@@ -289,9 +287,9 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="matricula"
             id="mat"
-            onChange={SubmenuAdministracionUsuariosHandleInputChange}
+            onChange={SubmenuAdministrarUsuariosHandleInputChange}
           ></input>{" "}
-          {SubmenuAdministracionUsuariosUsuarioBuscado && (
+          {SubmenuAdministrarUsuariosUsuarioBuscado && (
             <div>
               <br />
               <label>Cambiar matricula:</label>
@@ -299,27 +297,27 @@ function SubmenuAdministracionUsuarios({
                 type="text"
                 name="nuevaMatricula"
                 id="mat"
-                onChange={SubmenuAdministracionUsuariosHandleInputChange}
+                onChange={SubmenuAdministrarUsuariosHandleInputChange}
               ></input>
             </div>
           )}
-          {!SubmenuAdministracionUsuariosUsuarioManualValido.matricula &&
-            SubmenuAdministracionUsuariosRegistroUsuarioManual.matricula
-              .length > 0 &&
-            SubmenuAdministracionUsuariosUsuarioBuscado && (
+          {!SubmenuAdministrarUsuariosUsuarioManualValido.matricula &&
+            SubmenuAdministrarUsuariosRegistroUsuarioManual.matricula.length >
+              0 &&
+            SubmenuAdministrarUsuariosUsuarioBuscado && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
-                {SubmenuAdministracionUsuariosUsuarioEstudiante
+                {SubmenuAdministrarUsuariosUsuarioEstudiante
                   ? "Debe contener 8 digitos, puede tener las letras B, b, C, c, D, d, M, m según el caso."
                   : "Debe contener solo 3 digitos"}
               </label>
             )}
-          {SubmenuAdministracionUsuariosUsuarioBuscado &&
-            SubmenuAdministracionUsuariosConsultarMatricula &&
-            SubmenuAdministracionUsuariosConsultarMatricula.consultarMatricula
+          {SubmenuAdministrarUsuariosUsuarioBuscado &&
+            SubmenuAdministrarUsuariosConsultarMatricula &&
+            SubmenuAdministrarUsuariosConsultarMatricula.consultarMatricula
               .length > 0 &&
-            !SubmenuAdministracionUsuariosConsultarMatricula.esValida && (
+            !SubmenuAdministrarUsuariosConsultarMatricula.esValida && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
-                {SubmenuAdministracionUsuariosUsuarioEstudiante
+                {SubmenuAdministrarUsuariosUsuarioEstudiante
                   ? "Debe contener 8 digitos, puede tener las letras B, b, C, c, D, d, M, m según el caso."
                   : "Debe contener solo 3 digitos"}
               </label>
@@ -332,7 +330,7 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="nombreCompleto"
             id="nom"
-            onChange={SubmenuAdministracionUsuariosHandleInputChange}
+            onChange={SubmenuAdministrarUsuariosHandleInputChange}
           ></input>
         </p>
         <p>
@@ -342,17 +340,17 @@ function SubmenuAdministracionUsuarios({
             type="text"
             name="correoElectronico"
             id="cor"
-            onChange={SubmenuAdministracionUsuariosHandleInputChange}
+            onChange={SubmenuAdministrarUsuariosHandleInputChange}
           ></input>
-          {!SubmenuAdministracionUsuariosUsuarioManualValido.correoElectronico &&
-            SubmenuAdministracionUsuariosRegistroUsuarioManual.correoElectronico
+          {!SubmenuAdministrarUsuariosUsuarioManualValido.correoElectronico &&
+            SubmenuAdministrarUsuariosRegistroUsuarioManual.correoElectronico
               .length > 0 && (
               <label className="LoginWarning" style={{ textAlign: "left" }}>
                 El correo electronico no es valido.
               </label>
             )}
         </p>
-        {SubmenuAdministracionUsuariosUsuarioEstudiante && (
+        {SubmenuAdministrarUsuariosUsuarioEstudiante && (
           <p>
             <label>Carrera:</label>
             <label className="Obligatorio">*ㅤ</label>
@@ -360,11 +358,11 @@ function SubmenuAdministracionUsuarios({
               type="text"
               name="carrera"
               id="car"
-              onChange={SubmenuAdministracionUsuariosHandleInputChange}
+              onChange={SubmenuAdministrarUsuariosHandleInputChange}
             ></input>
           </p>
         )}
-        {SubmenuAdministracionUsuariosUsuarioEstudiante && (
+        {SubmenuAdministrarUsuariosUsuarioEstudiante && (
           <p>
             <label>Semestre:</label>
             <label className="Obligatorio">*ㅤ</label>
@@ -372,22 +370,22 @@ function SubmenuAdministracionUsuarios({
               type="number"
               name="semestre"
               id="semest"
-              onChange={SubmenuAdministracionUsuariosHandleInputChange}
+              onChange={SubmenuAdministrarUsuariosHandleInputChange}
             ></input>
           </p>
         )}
         <div>
-          <button onClick={SubmenuAdministracionUsuariosBuscarUsuario}>
+          <button onClick={SubmenuAdministrarUsuariosBuscarUsuario}>
             Buscar por matricula
           </button>
-          <button onClick={SubmenuAdministracionUsuariosActualizarUsuario}>
+          <button onClick={SubmenuAdministrarUsuariosActualizarUsuario}>
             Modificar
           </button>
-          <button onClick={SubmenuAdministracionUsuariosSubirNuevoUsuario}>
+          <button onClick={SubmenuAdministrarUsuariosSubirNuevoUsuario}>
             Dar de alta
           </button>
           <button
-            onClick={SubmenuAdministracionUsuariosActualizarContraseñaUsuario}
+            onClick={SubmenuAdministrarUsuariosActualizarContraseñaUsuario}
           >
             Restablecer Contraseña
           </button>
@@ -397,4 +395,4 @@ function SubmenuAdministracionUsuarios({
   );
 }
 
-export default SubmenuAdministracionUsuarios;
+export default SubmenuAdministrarUsuarios;

@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import * as XLSX from "xlsx";
-import SubmenuAdministracionUsuarios from "../Vista/SubmenuAdministracionUsuarios";
-import ConfigurarConexion from "../Controlador/ConfigurarConexion";
+import SubmenuAdministrarUsuarios from "../Vista/SubmenuAdministrarUsuarios";
+import ConfigurarConexion from "./ConfigurarConexion";
 import axios from "axios";
 
-const SubmenuAdministracionUsuariosControlador = () => {
+const SubmenuAdministrarUsuariosControlador = () => {
   //Variables de estado.
   const [registrosUsuariosExcel, setRegistrosUsuariosExcel] = useState([]);
   const [registroUsuarioManual, setRegistroUsuarioManual] = useState({
@@ -563,27 +563,26 @@ const SubmenuAdministracionUsuariosControlador = () => {
   };
 
   return (
-    <SubmenuAdministracionUsuarios
-      AdminUsuariosTostado={toast}
-      AdminUsuariosHandleFileEvent={handleFileEvent}
-      AdminUsuariosRegistrosUsuariosExcel={registrosUsuariosExcel}
-      SubmenuAdministracionUsuariosSubirNuevosUsuarios={subirNuevosUsuarios}
-      SubmenuAdministracionUsuariosSetUsuarioEstudiante={setUsuarioEstudiante}
-      SubmenuAdministracionUsuariosUsuarioEstudiante={usuarioEstudiante}
-      SubmenuAdministracionUsuariosHandleInputChange={handleInputChange}
-      SubmenuAdministracionUsuariosBuscarUsuario={buscarUsuario}
-      SubmenuAdministracionUsuariosActualizarContraseñaUsuario={
+    <SubmenuAdministrarUsuarios
+      SubmenuAdministrarUsuariosTostado={toast}
+      SubmenuAdministrarUsuariosHandleFileEvent={handleFileEvent}
+      SubmenuAdministrarUsuariosRegistrosUsuariosExcel={registrosUsuariosExcel}
+      SubmenuAdministrarUsuariosSubirNuevosUsuarios={subirNuevosUsuarios}
+      SubmenuAdministrarUsuariosSetUsuarioEstudiante={setUsuarioEstudiante}
+      SubmenuAdministrarUsuariosUsuarioEstudiante={usuarioEstudiante}
+      SubmenuAdministrarUsuariosHandleInputChange={handleInputChange}
+      SubmenuAdministrarUsuariosBuscarUsuario={buscarUsuario}
+      SubmenuAdministrarUsuariosActualizarContraseñaUsuario={
         actualizarContraseñaUsuario
       }
-      SubmenuAdministracionUsuariosActualizarUsuario={actualizarUsuario}
-      SubmenuAdministracionUsuariosSubirNuevoUsuario={subirNuevoUsuario}
-      SubmenuAdministracionUsuariosUsuarioManualValido={usuarioManualValido}
-      SubmenuAdministracionUsuariosRegistroUsuarioManual={registroUsuarioManual}
-      SubmenuAdministracionUsuariosConsultarMatricula={consultarMatricula}
-      SubmenuAdministracionUsuariosUsuarioBuscado={usuarioBuscado}
-      SubmenuAdministracionUsuariosSetUsuarioBuscado={setUsuarioBuscado}
+      SubmenuAdministrarUsuariosActualizarUsuario={actualizarUsuario}
+      SubmenuAdministrarUsuariosSubirNuevoUsuario={subirNuevoUsuario}
+      SubmenuAdministrarUsuariosUsuarioManualValido={usuarioManualValido}
+      SubmenuAdministrarUsuariosRegistroUsuarioManual={registroUsuarioManual}
+      SubmenuAdministrarUsuariosConsultarMatricula={consultarMatricula}
+      SubmenuAdministrarUsuariosUsuarioBuscado={usuarioBuscado}
     />
   );
 };
 
-export default SubmenuAdministracionUsuariosControlador;
+export default SubmenuAdministrarUsuariosControlador;

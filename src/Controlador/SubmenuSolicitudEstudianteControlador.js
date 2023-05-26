@@ -9,7 +9,6 @@ const SubmenuSolicitudEstudianteControlador = ({
   //Variables de estado
   const [listaSolicitudes, setListaSolicitudes] = useState([]);
   const [archivosSubir, setArchivosSubir] = useState([]);
-  const [archivosSeleccionados, setArchivosSeleccionados] = useState([]);
   const [solicitudVisible, setSolicitudVisible] = useState(false);
   const [estatusProgreso, setProgresoEstatus] = useState({
     1: 0,

@@ -9,11 +9,11 @@ import SubmenuSolicitudEstudianteControlador from "./SubmenuSolicitudEstudianteC
 import SubmenuInformacionUsuarioControlador from "./SubmenuInformacionUsuarioController";
 import SubmenuAdministrarSolicitudesControlador from "./SubmenuAdministrarSolicitudesControlador";
 import SubmenuAdministrarSolicitudControlador from "./SubmenuAdministrarSolicitudControlador";
+import SubmenuAdministrarTramitesControlador from "./SubmenuAdministrarTramitesControlador";
 import SubmenuAdministracionUsuariosControlador from "./SubmenuAdministracionUsuariosController";
 
 //Reemplazar despues
 import EdicionCorreos from "../Menus/Submodulos/edicionCorreos";
-import AdministracionTramites from "../Menus/Submodulos/administracionTramites";
 import AdministracionGeneral from "../Menus/Submodulos/administracionGeneral";
 
 const MenuControlador = ({
@@ -114,7 +114,7 @@ const MenuControlador = ({
     case 9:
       return <SubmenuAdministracionUsuariosControlador />;
     case 10:
-      return <AdministracionTramites />;
+      return <SubmenuAdministrarTramitesControlador />;
     case 11:
       return <EdicionCorreos />;
     default:

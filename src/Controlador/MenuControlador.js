@@ -11,10 +11,8 @@ import SubmenuAdministrarSolicitudesControlador from "./SubmenuAdministrarSolici
 import SubmenuAdministrarSolicitudControlador from "./SubmenuAdministrarSolicitudControlador";
 import SubmenuAdministrarReportesControlador from "./SubmenuAdministrarReportesControlador";
 import SubmenuAdministrarTramitesControlador from "./SubmenuAdministrarTramitesControlador";
+import SubmenuAdministrarCorreosControlador from "./SubmenuAdministrarCorreosControlador";
 import SubmenuAdministrarUsuariosControlador from "./SubmenuAdministrarUsuariosController";
-
-//Reemplazar despues
-import EdicionCorreos from "../Menus/Submodulos/edicionCorreos";
 
 const MenuControlador = ({
   SubmenuIndex,
@@ -116,7 +114,7 @@ const MenuControlador = ({
     case 10:
       return <SubmenuAdministrarTramitesControlador />;
     case 11:
-      return <EdicionCorreos />;
+      return <SubmenuAdministrarCorreosControlador />;
     default:
       return (
         <SubmenuBienvenidaUsuarioControlador

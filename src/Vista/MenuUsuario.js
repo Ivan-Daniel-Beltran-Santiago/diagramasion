@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Toast } from "primereact/toast";
-
 import "./MenuUsuario.css";
-import ComponenteLogo from "./ComponenteLogo";
+import { Toast } from "primereact/toast";
 import MenuControlador from "../Controlador/MenuControlador";
+import ComponenteLogo from "./ComponenteLogo";
+import ComponenteFooter from "./ComponenteFooter";
 import ComponenteRegresar from "./ComponenteRegresar";
 
 function MenuUsuario({
@@ -30,7 +30,7 @@ function MenuUsuario({
           <Toast ref={MenuUsuarioTostado} position="top-right" />
           <div className="content-section">
             <div className="contentSelector">
-              <div >
+              <div>
                 {MenuUsuarioUsuarioActivo.Estudiante !== null && (
                   <div>
                     <button
@@ -154,6 +154,7 @@ function MenuUsuario({
           </div>
         </div>
       </div>
+      {/*}<ComponenteFooter />{*/}
     </div>
   );
 }

@@ -1,9 +1,8 @@
 import React from "react";
-
-import { Toast } from "primereact/toast";
-
-import ComponenteLogo from "./ComponenteLogo";
 import "./MenuLogin.css";
+import { Toast } from "primereact/toast";
+import ComponenteLogo from "./ComponenteLogo";
+import ComponenteFooter from "./ComponenteFooter";
 
 export default function MenuLogin({
   Tostado,
@@ -51,10 +50,12 @@ export default function MenuLogin({
           <br />
           <input type="submit" id="save" value="Ingresar" className="ingress" />
           <p>
-            Si es tu primera vez en el sistema, la contraseña es tu matrícula, omitiendo las letras, solo digitos
+            Si es tu primera vez en el sistema, la contraseña es tu matrícula,
+            omitiendo las letras, solo digitos
           </p>
         </form>
       </div>
+      {/*}<ComponenteFooter />{*/}
     </>
   );
 }

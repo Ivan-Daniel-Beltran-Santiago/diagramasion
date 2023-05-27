@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
-const RegresarMenu = ({navigateRoute}) => {
+const ComponenteRegresar = ({ navigateRoute }) => {
   const navigate = useNavigate();
-  let destination = navigateRoute ? navigateRoute : "/";
+  const destination = navigateRoute ? navigateRoute : "/";
+
   return (
     <button
       id="salirButton"
@@ -14,4 +15,4 @@ const RegresarMenu = ({navigateRoute}) => {
   );
 };
 
-export default RegresarMenu;
+export default ComponenteRegresar;

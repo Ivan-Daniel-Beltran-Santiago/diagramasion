@@ -279,6 +279,103 @@ const SubmenuAdministrarCorreosControlador = () => {
           "Correo actualizado",
           "La plantilla de correo ha sido actualizada correctamente."
         );
+        setTimeout(async () => {
+          if (archivosPlantillaCorreoAñadir.length > 0) {
+            showToast(
+              "info",
+              "Subiendo documentos",
+              "Se estan procesando los documentos nuevos, por favor, espere."
+            );
+
+            const funcionSubir = servidor.obtenerServidor() + "/correos/subir";
+            const formData = new FormData();
+
+            formData.append("isSolicitud", false);
+            formData.append(
+              "subCarpeta",
+              listaPlantillasCorreo[parametrosPlantillaCorreo.Indice].titulo
+            );
+
+            for (
+              var indice = 0;
+              indice < archivosPlantillaCorreoAñadir.length;
+              indice++
+            ) {
+              formData.append(
+                "Archivo",
+                archivosPlantillaCorreoAñadir[indice],
+                archivosPlantillaCorreoAñadir[indice].name
+              );
+            }
+
+            const subirDocumentos = await axios.post(funcionSubir, formData, {
+              headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            if (subirDocumentos.status === 200) {
+              showToast(
+                "success",
+                "Subiendo archivos",
+                "Los archivos se han subido con exito, actualizando plantilla."
+              );
+            } else {
+              showToast(
+                "info",
+                "Subiendo archivos",
+                "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
+              );
+            }
+          }
+          if (archivosPlantillaCorreoEliminar.length > 0) {
+            showToast(
+              "info",
+              "Eliminando documentos",
+              "Se estan procesando los documentos a eliminar, por favor, espere."
+            );
+            const funcionEliminar =
+              servidor.obtenerServidor() + "/correos/eliminar";
+
+            const eliminarDocumentos = await axios.get(funcionEliminar, {
+              params: {
+                DocumentosEliminar: archivosPlantillaCorreoEliminar,
+                subCarpeta:
+                  listaPlantillasCorreo[parametrosPlantillaCorreo.Indice]
+                    .titulo,
+              },
+            });
+
+            if (eliminarDocumentos.status === 200) {
+              showToast(
+                "success",
+                "Eliminando archivos",
+                "Los archivos se han eliminado con exito, actualizando plantilla."
+              );
+            } else {
+              showToast(
+                "info",
+                "Subiendo archivos",
+                "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
+              );
+            }
+          }
+          setArchivosPlantillaCorreo([]);
+          setArchivosPlantillaCorreoAñadir([]);
+          setArchivosPlantillaCorreoEliminar([]);
+
+          setArchivosPlantillaCorreo([]);
+          setParametrosPlantillaCorreo({
+            Indice: -1,
+            Asunto: "",
+            Destinatario: "",
+          });
+
+          document.getElementById("seleccionMetadataCorreo").selectedIndex = 0;
+          document.getElementById("correoAsunto").value = "";
+          document.getElementById("correoDestinatario").value = "";
+          document.getElementById("cuerpoCorreo").value = "";
+
+          obtenerListaPlantillasCorreo();
+        }, 100);
       } else {
         showToast(
           "error",

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import ConfigurarConexion from "./ConfigurarConexion";
-import Login from "../Vista/Login";
+import MenuLogin from "../Vista/MenuLogin";
 
-const LoginControlador = () => {
+const MenuLoginControlador = () => {
   //Variables de estado.
   const [InicioSesion, setInicioSesion] = useState({
     matricula: "",
@@ -158,7 +158,7 @@ const LoginControlador = () => {
 
   //Mostramos el componente visual
   return (
-    <Login
+    <MenuLogin
       Tostado={toast}
       iniciarSesion={IniciarSesion}
       handleInputChange={HandleInputChange}
@@ -169,4 +169,4 @@ const LoginControlador = () => {
   );
 };
 
-export default LoginControlador;
+export default MenuLoginControlador;

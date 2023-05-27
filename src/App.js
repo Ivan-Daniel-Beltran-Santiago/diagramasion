@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginControlador from "./Controlador/LoginControlador";
+import MenuLoginControlador from "./Controlador/MenuLoginControlador";
 import MenuUsuarioControlador from "./Controlador/MenuUsuarioControlador";
 import Footer from "./View/Auxiliary/footer";
 
@@ -16,7 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginControlador />} />
+        <Route path="/" element={<MenuLoginControlador />} />
         <Route path="/Menu" element={<MenuUsuarioControlador />} />
       </Routes>
       {/*}

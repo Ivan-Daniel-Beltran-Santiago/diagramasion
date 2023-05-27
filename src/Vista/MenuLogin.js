@@ -3,9 +3,9 @@ import React from "react";
 import { Toast } from "primereact/toast";
 
 import ComponenteLogo from "./ComponenteLogo";
-import "./Login.css";
+import "./MenuLogin.css";
 
-export default function Login({
+export default function MenuLogin({
   Tostado,
   iniciarSesion,
   handleInputChange,

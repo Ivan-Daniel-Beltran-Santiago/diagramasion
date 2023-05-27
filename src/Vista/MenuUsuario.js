@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { Toast } from "primereact/toast";
 
 import "./MenuUsuario.css";
-import LogoHeader from "../View/Auxiliary/Logo_Header";
+import ComponenteLogo from "./ComponenteLogo";
 import MenuControlador from "../Controlador/MenuControlador";
-import RegresarMenu from "../View/Auxiliary/regresarMenu";
+import ComponenteRegresar from "./ComponenteRegresar";
 
 function MenuUsuario({
   MenuUsuarioTostado,
@@ -24,7 +24,7 @@ function MenuUsuario({
 
   return (
     <div className="App">
-      <LogoHeader />
+      <ComponenteLogo />
       <div>
         <div>
           <Toast ref={MenuUsuarioTostado} position="top-right" />
@@ -147,7 +147,7 @@ function MenuUsuario({
                     SubmenuUsuario={MenuUsuarioUsuarioActivo}
                     SubmenuSetUsuarioActivo={MenuUsuarioSetUsuarioActivo}
                   />
-                  <RegresarMenu />
+                  <ComponenteRegresar />
                 </div>
               </div>
             </div>

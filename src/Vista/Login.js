@@ -2,7 +2,7 @@ import React from "react";
 
 import { Toast } from "primereact/toast";
 
-import LogoHeader from "../View/Auxiliary/Logo_Header";
+import ComponenteLogo from "./ComponenteLogo";
 import "./Login.css";
 
 export default function Login({
@@ -15,7 +15,7 @@ export default function Login({
 }) {
   return (
     <>
-      <LogoHeader />
+      <ComponenteLogo />
       <div className="login">
         <Toast ref={Tostado} position="top-right" />
         <h2 className="title">Iniciar sesión</h2>

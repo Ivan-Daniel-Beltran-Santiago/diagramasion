@@ -333,6 +333,14 @@ function SubmenuAdministrarUsuarios({
             onChange={SubmenuAdministrarUsuariosHandleInputChange}
           ></input>
         </p>
+        {!SubmenuAdministrarUsuariosUsuarioManualValido.nombreCompleto &&
+          SubmenuAdministrarUsuariosRegistroUsuarioManual.nombreCompleto !==
+            "" && (
+            <p>
+              El nombre debe tener una longitud total de 10 caracteres como
+              minimo y 100 como maximo.
+            </p>
+          )}
         <p>
           <label>Correo Electronico:</label>
           <label className="Obligatorio">*ㅤ</label>
@@ -362,6 +370,13 @@ function SubmenuAdministrarUsuarios({
             ></input>
           </p>
         )}
+        {!SubmenuAdministrarUsuariosUsuarioManualValido.carrera &&
+          SubmenuAdministrarUsuariosRegistroUsuarioManual.carrera !== "" && (
+            <p>
+              El nombre de la carrera debe ser de minimo 10 caracteres y maximo
+              100 caracteres.
+            </p>
+          )}
         {SubmenuAdministrarUsuariosUsuarioEstudiante && (
           <p>
             <label>Semestre:</label>

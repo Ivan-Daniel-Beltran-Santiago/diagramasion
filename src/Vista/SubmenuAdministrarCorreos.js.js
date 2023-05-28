@@ -95,7 +95,7 @@ const SubmenuAdministrarCorreos = ({
               "" && (
               <Requisito>
                 Sólo se permiten caracteres A-Z, números, comas, puntos y
-                espacios en blanco
+                espacios en blanco. Ademas solo se permiten entre 10 y 100 caracteres.
               </Requisito>
             )}
           <br></br>

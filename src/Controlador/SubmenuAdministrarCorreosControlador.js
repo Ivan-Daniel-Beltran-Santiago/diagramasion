@@ -52,7 +52,7 @@ const SubmenuAdministrarCorreosControlador = () => {
     const validarDestinatario = new RegExp(
       "^(?!$)[A-Za-z0-9]+([._-][A-Za-z0-9]+)*@[A-Za-z0-9]+([.-][A-Za-z0-9]+)*\\.[A-Za-z]{2,}(.[A-Za-z]{2,})?$"
     );
-    const validarAsunto = new RegExp("^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ., ]+$");
+    const validarAsunto = new RegExp("^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ., ]{10,100}$");
 
     const parametrosValidadosPlantillaCorreoActualizados = {
       ...parametrosValidadosPlantillaCorreo,
@@ -221,6 +221,7 @@ const SubmenuAdministrarCorreosControlador = () => {
     var metadataCorreo;
     var cuerpoCorreo;
     var documentosCorreo;
+    var validaciones;
 
     setArchivosPlantillaCorreo([]);
     setArchivosPlantillaCorreoAñadir([]);
@@ -233,6 +234,10 @@ const SubmenuAdministrarCorreosControlador = () => {
         Destinatario: listaPlantillasCorreo[IndiceMetadata].destinatario,
       };
       cuerpoCorreo = listaPlantillasCorreo[IndiceMetadata].cuerpo;
+      validaciones = {
+        Asunto: true,
+        Destinatario: true,
+      };
       if (
         listaPlantillasCorreo[IndiceMetadata].adjuntos !== "" &&
         listaPlantillasCorreo[IndiceMetadata].adjuntos !== null &&
@@ -249,10 +254,15 @@ const SubmenuAdministrarCorreosControlador = () => {
       };
       cuerpoCorreo = "";
       documentosCorreo = [];
+      validaciones = {
+        Asunto: false,
+        Destinatario: false,
+      };
     }
 
     setArchivosPlantillaCorreo(documentosCorreo);
     setParametrosPlantillaCorreo(metadataCorreo);
+    setParametrosValidadosPlantillaCorreo(validaciones);
     document.getElementById("correoAsunto").value = metadataCorreo.Asunto;
     document.getElementById("correoDestinatario").value =
       metadataCorreo.Destinatario;
@@ -262,125 +272,139 @@ const SubmenuAdministrarCorreosControlador = () => {
   //Actualizamos la plantilla
   const actualizarPlantilla = async () => {
     try {
-      const servidor = new ConfigurarConexion();
-      const funcion = servidor.obtenerServidor() + "/correos/actualizar";
+      if (
+        parametrosValidadosPlantillaCorreo.Asunto &&
+        parametrosValidadosPlantillaCorreo.Destinatario
+      ) {
+        const servidor = new ConfigurarConexion();
+        const funcion = servidor.obtenerServidor() + "/correos/actualizar";
 
-      const modificarPlantilla = await axios.put(funcion, {
-        nombreArchivoPlantilla:
-          listaPlantillasCorreo[parametrosPlantillaCorreo.Indice].titulo,
-        nuevoDestinatario: parametrosPlantillaCorreo.Destinatario,
-        nuevoAsunto: parametrosPlantillaCorreo.Asunto,
-        nuevoCuerpo: document.getElementById("cuerpoCorreo").value,
-      });
+        const modificarPlantilla = await axios.put(funcion, {
+          nombreArchivoPlantilla:
+            listaPlantillasCorreo[parametrosPlantillaCorreo.Indice].titulo,
+          nuevoDestinatario: parametrosPlantillaCorreo.Destinatario,
+          nuevoAsunto: parametrosPlantillaCorreo.Asunto,
+          nuevoCuerpo: document.getElementById("cuerpoCorreo").value,
+        });
 
-      if (modificarPlantilla.status === 200) {
-        showToast(
-          "success",
-          "Correo actualizado",
-          "La plantilla de correo ha sido actualizada correctamente."
-        );
-        setTimeout(async () => {
-          if (archivosPlantillaCorreoAñadir.length > 0) {
-            showToast(
-              "info",
-              "Subiendo documentos",
-              "Se estan procesando los documentos nuevos, por favor, espere."
-            );
+        if (modificarPlantilla.status === 200) {
+          showToast(
+            "success",
+            "Correo actualizado",
+            "La plantilla de correo ha sido actualizada correctamente."
+          );
+          setTimeout(async () => {
+            if (archivosPlantillaCorreoAñadir.length > 0) {
+              showToast(
+                "info",
+                "Subiendo documentos",
+                "Se estan procesando los documentos nuevos, por favor, espere."
+              );
 
-            const funcionSubir = servidor.obtenerServidor() + "/correos/subir";
-            const formData = new FormData();
+              const funcionSubir =
+                servidor.obtenerServidor() + "/correos/subir";
+              const formData = new FormData();
 
-            formData.append("isSolicitud", false);
-            formData.append(
-              "subCarpeta",
-              listaPlantillasCorreo[parametrosPlantillaCorreo.Indice].titulo
-            );
-
-            for (
-              var indice = 0;
-              indice < archivosPlantillaCorreoAñadir.length;
-              indice++
-            ) {
+              formData.append("isSolicitud", false);
               formData.append(
-                "Archivo",
-                archivosPlantillaCorreoAñadir[indice],
-                archivosPlantillaCorreoAñadir[indice].name
+                "subCarpeta",
+                listaPlantillasCorreo[parametrosPlantillaCorreo.Indice].titulo
               );
+
+              for (
+                var indice = 0;
+                indice < archivosPlantillaCorreoAñadir.length;
+                indice++
+              ) {
+                formData.append(
+                  "Archivo",
+                  archivosPlantillaCorreoAñadir[indice],
+                  archivosPlantillaCorreoAñadir[indice].name
+                );
+              }
+
+              const subirDocumentos = await axios.post(funcionSubir, formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+              });
+
+              if (subirDocumentos.status === 200) {
+                showToast(
+                  "success",
+                  "Subiendo archivos",
+                  "Los archivos se han subido con exito, actualizando plantilla."
+                );
+              } else {
+                showToast(
+                  "info",
+                  "Subiendo archivos",
+                  "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
+                );
+              }
             }
-
-            const subirDocumentos = await axios.post(funcionSubir, formData, {
-              headers: { "Content-Type": "multipart/form-data" },
-            });
-
-            if (subirDocumentos.status === 200) {
-              showToast(
-                "success",
-                "Subiendo archivos",
-                "Los archivos se han subido con exito, actualizando plantilla."
-              );
-            } else {
+            if (archivosPlantillaCorreoEliminar.length > 0) {
               showToast(
                 "info",
-                "Subiendo archivos",
-                "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
+                "Eliminando documentos",
+                "Se estan procesando los documentos a eliminar, por favor, espere."
               );
-            }
-          }
-          if (archivosPlantillaCorreoEliminar.length > 0) {
-            showToast(
-              "info",
-              "Eliminando documentos",
-              "Se estan procesando los documentos a eliminar, por favor, espere."
-            );
-            const funcionEliminar =
-              servidor.obtenerServidor() + "/correos/eliminar";
+              const funcionEliminar =
+                servidor.obtenerServidor() + "/correos/eliminar";
 
-            const eliminarDocumentos = await axios.get(funcionEliminar, {
-              params: {
-                DocumentosEliminar: archivosPlantillaCorreoEliminar,
-                subCarpeta:
-                  listaPlantillasCorreo[parametrosPlantillaCorreo.Indice]
-                    .titulo,
-              },
+              const eliminarDocumentos = await axios.get(funcionEliminar, {
+                params: {
+                  DocumentosEliminar: archivosPlantillaCorreoEliminar,
+                  subCarpeta:
+                    listaPlantillasCorreo[parametrosPlantillaCorreo.Indice]
+                      .titulo,
+                },
+              });
+
+              if (eliminarDocumentos.status === 200) {
+                showToast(
+                  "success",
+                  "Eliminando archivos",
+                  "Los archivos se han eliminado con exito, actualizando plantilla."
+                );
+              } else {
+                showToast(
+                  "info",
+                  "Subiendo archivos",
+                  "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
+                );
+              }
+            }
+            setArchivosPlantillaCorreo([]);
+            setArchivosPlantillaCorreoAñadir([]);
+            setArchivosPlantillaCorreoEliminar([]);
+
+            setArchivosPlantillaCorreo([]);
+            setParametrosPlantillaCorreo({
+              Indice: -1,
+              Asunto: "",
+              Destinatario: "",
             });
 
-            if (eliminarDocumentos.status === 200) {
-              showToast(
-                "success",
-                "Eliminando archivos",
-                "Los archivos se han eliminado con exito, actualizando plantilla."
-              );
-            } else {
-              showToast(
-                "info",
-                "Subiendo archivos",
-                "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
-              );
-            }
-          }
-          setArchivosPlantillaCorreo([]);
-          setArchivosPlantillaCorreoAñadir([]);
-          setArchivosPlantillaCorreoEliminar([]);
+            document.getElementById(
+              "seleccionMetadataCorreo"
+            ).selectedIndex = 0;
+            document.getElementById("correoAsunto").value = "";
+            document.getElementById("correoDestinatario").value = "";
+            document.getElementById("cuerpoCorreo").value = "";
 
-          setArchivosPlantillaCorreo([]);
-          setParametrosPlantillaCorreo({
-            Indice: -1,
-            Asunto: "",
-            Destinatario: "",
-          });
-
-          document.getElementById("seleccionMetadataCorreo").selectedIndex = 0;
-          document.getElementById("correoAsunto").value = "";
-          document.getElementById("correoDestinatario").value = "";
-          document.getElementById("cuerpoCorreo").value = "";
-
-          obtenerListaPlantillasCorreo();
-        }, 100);
+            obtenerListaPlantillasCorreo();
+          }, 100);
+        } else {
+          showToast(
+            "error",
+            "Servidor",
+            "Error de servidor, contacte al administrador"
+          );
+        }
       } else {
         showToast(
           "error",
-          "Servidor",
-          "Error de servidor, contacte al administrador"
+          "Formato de datos",
+          "El Destinatario y/o el Asunto no tienen el formato especificado."
         );
       }
     } catch (error) {

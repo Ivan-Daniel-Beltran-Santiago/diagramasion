@@ -3,8 +3,7 @@ import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const FooterContainer = styled.div`
-  margin-top: 15%;
-  top: 150px;
+  margin-top: 10%;
   padding: 3em;
   padding-top: 2em;
   background-color: #e6e6e6;
@@ -77,12 +76,12 @@ const ComponenteFooter = () => {
             </FooterList>
             <FooterList>
               <FooterLink href="http://ith.mx/" target="_blank">
-                Página inicial ITH
+                Página web Oficial ITH
               </FooterLink>
             </FooterList>
             <FooterList>
               <FooterLink href="http://www.sith.ith.mx/menu/" target="_blank">
-                SITH
+                Pagina web SITH
               </FooterLink>
             </FooterList>
           </ul>
@@ -97,7 +96,6 @@ const ComponenteFooter = () => {
         </div>
       </div>
       <Line />
-
       <FooterEnd>
         <FText>
           Instituto Tecnológico de Hermosillo, www.hermosillo.tecnm.mx

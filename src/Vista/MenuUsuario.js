@@ -150,11 +150,12 @@ function MenuUsuario({
                   <ComponenteRegresar />
                 </div>
               </div>
+              <ComponenteFooter />
             </div>
           </div>
         </div>
       </div>
-      {/*}<ComponenteFooter />{*/}
+      
     </div>
   );
 }

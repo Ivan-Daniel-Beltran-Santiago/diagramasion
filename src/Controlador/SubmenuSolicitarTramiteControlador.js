@@ -111,16 +111,26 @@ const SubmenuSolicitarTramiteControlador = ({
                 }, 100);
               } else {
                 showToast(
-                  "error",
+                  "warn",
                   "Solicitud",
                   "Por politicas de la aseguradora, no puede iniciar una nueva solicitud si ya termino una el mismo año."
                 );
                 setTimeout(() => {
                   showToast(
-                    "error",
+                    "warn",
                     "Solicitud",
                     "Si lo cree necesario, favor de acudir presencialmente a Servicios Escolares."
                   );
+                  setTimeout(() => {
+                    showToast(
+                      "warn",
+                      "Solicitud",
+                      "Se creara una solicitud, pero es imperativo que se presente en Servicios Escolares para revisar su caso en particular."
+                    );
+                    setTimeout(() => {
+                      empezarSolicitud(idTramite);
+                    }, 100);
+                  }, 100);
                 }, 100);
                 break;
               }
@@ -177,7 +187,9 @@ const SubmenuSolicitarTramiteControlador = ({
     const funcion = servidor.obtenerServidor() + "/solicitudes/correo";
 
     const correoEnviado = await axios.get(funcion, {
-      params:{matricula: SubmenuSolicitarTramiteControladorUsuarioActivo.matricula,}
+      params: {
+        matricula: SubmenuSolicitarTramiteControladorUsuarioActivo.matricula,
+      },
     });
 
     if (correoEnviado.status === 200) {

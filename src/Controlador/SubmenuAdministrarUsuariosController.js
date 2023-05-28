@@ -261,6 +261,7 @@ const SubmenuAdministrarUsuariosControlador = () => {
               registrosExcel[indice][0] +
               " subido o actualizado con exito."
           );
+          setRegistrosUsuariosExcel([]);
         } else {
           showToast(
             "error",

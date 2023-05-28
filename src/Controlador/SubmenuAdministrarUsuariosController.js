@@ -246,7 +246,9 @@ const SubmenuAdministrarUsuariosControlador = () => {
               : registrosExcel[indice][0],
           correo_e:
             registrosExcel[indice][4] === ""
-              ? "l" + registrosExcel[indice][0] + "@hermosillo.tecnm.mx"
+              ? "l" + registrosExcel[indice][0].length === 9
+                ? String(registrosExcel[indice][0]).slice(1)
+                : registrosExcel[indice][0] + "@hermosillo.tecnm.mx"
               : registrosExcel[indice][4],
           Estudiante: {
             carrera: registrosExcel[indice][5],

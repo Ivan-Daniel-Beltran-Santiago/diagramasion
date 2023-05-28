@@ -9,7 +9,7 @@ const SubmenuSolicitudEstudianteControlador = ({
   //Variables de estado
   const [listaSolicitudes, setListaSolicitudes] = useState([]);
   const [archivosSubir, setArchivosSubir] = useState([]);
-  const [solicitudVisible, setSolicitudVisible] = useState(false);
+  const [solicitudVisible, setSolicitudVisible] = useState([]);
   const [estatusProgreso, setProgresoEstatus] = useState({
     1: 0,
     2: 20,
@@ -58,6 +58,7 @@ const SubmenuSolicitudEstudianteControlador = ({
 
   const handleLoadedFiles = (archivos, event) => {
     const seleccionados = archivos;
+    // eslint-disable-next-line array-callback-return
     archivos.some((archivo) => {
       if (seleccionados.findIndex((a) => a.name === archivo.name) === -1) {
         seleccionados.push(archivo);
@@ -105,12 +106,13 @@ const SubmenuSolicitudEstudianteControlador = ({
             );
           }
         }
-      }, 500);
+      }, 10);
     });
   };
 
   const handleValidateFiles = (archivos) => {
     const validados = [...archivosSubir];
+    // eslint-disable-next-line array-callback-return
     archivos.some((archivo) => {
       if (validados.findIndex((a) => a.name === archivo.name) === -1) {
         validados.push(archivo);
@@ -124,6 +126,13 @@ const SubmenuSolicitudEstudianteControlador = ({
     const indice = archivos.indexOf(archivo);
     archivos.splice(indice, 1);
     setArchivosSubir(archivos);
+  };
+
+  const handleChangeVisibility = (IndiceSolicitud) => {
+    const solicitudVisibleTemp = [...solicitudVisible];
+    solicitudVisibleTemp[IndiceSolicitud] =
+      !solicitudVisibleTemp[IndiceSolicitud];
+    setSolicitudVisible(solicitudVisibleTemp);
   };
 
   const obtenerDescripciones = useCallback(async () => {
@@ -175,6 +184,12 @@ const SubmenuSolicitudEstudianteControlador = ({
       },
     });
     setListaSolicitudes(solicitudesUsuario.data);
+    var solicitudVisibleSet = [];
+    for (var indice = 0; indice < solicitudesUsuario.data.length; indice++) {
+      solicitudVisibleSet.push(false);
+    }
+    setSolicitudVisible(solicitudVisibleSet);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const subirDocumentos = (idSolicitud, estatusActual) => {
@@ -218,7 +233,7 @@ const SubmenuSolicitudEstudianteControlador = ({
           "Puede que no todos los archivos se hayan subido con exito, intente de nuevo."
         );
       }
-    }, 100);
+    }, 10);
   };
 
   const actualizarSolicitud = async (idSolicitud, estatusActual) => {
@@ -248,23 +263,22 @@ const SubmenuSolicitudEstudianteControlador = ({
   useEffect(() => {
     obtenerSolicitudes();
     obtenerDescripciones();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    
-    <SubmenuSolicitudEstudiante 
+    <SubmenuSolicitudEstudiante
       SubmenuSolicitudEstudianteTostado={toast}
       SubmenuSolicitudEstudianteListaSolicitudes={listaSolicitudes}
-      SubmenuSolicitudEstudianteSetSolicitudVisible={setSolicitudVisible}
-      SubmenuSolicitudEstudianteSolicitudVisible={solicitudVisible}
       SubmenuSolicitudEstudianteArchivosSubir={archivosSubir}
+      SubmenuSolicitudEstudianteHandleChangeVisibility={handleChangeVisibility}
+      SubmenuSolicitudEstudianteSolicitudVisible={solicitudVisible}
       SubmenuSolicitudEstudianteHandleFileEvent={handleFileEvent}
       SubmenuSolicitudEstudianteHandleRemoveFile={handleRemoveFile}
       SubmenuSolicitudEstudianteEstatusProgreso={estatusProgreso}
       SubmenuSolicitudEstudianteEstatusLexico={estatusLexico}
       SubmenuSolicitudEstudianteSubirDocumentos={subirDocumentos}
     />
-    
   );
 };
 

@@ -1,14 +1,15 @@
 import { useCallback, useState } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
 import ConfigurarConexion from "./ConfigurarConexion";
 import SubmenuBienvenidaUsuario from "../Vista/SubmenuBienvenidaUsuario";
 
 const SubmenuBienvenidaUsuarioControlador = ({
   SubmenuBienvenidaUsuarioControladorUsuarioActual,
+  SubmenuBienvenidaUsuarioControladorObtenerSolicitudes,
+  SubmenuBienvenidaUsuarioControladorListaSolicitudes,
 }) => {
   //Variables de estado
-  const [listaSolicitudes, setListaSolicitudes] = useState([]);
+  
   const [conteoSolicitudes, setConteoSolicitudes] = useState({
     nuevas: 0,
     documentos: 0,
@@ -29,9 +30,6 @@ const SubmenuBienvenidaUsuarioControlador = ({
     11: "Finiquito en espera de firma en persona",
     12: "Solicitud terminado",
   });
-
-  //Recibir información del menú anterior, que es el de login
-  const location = useLocation();
 
   const obtenerDescripciones = useCallback(async () => {
     const servidor = new ConfigurarConexion();
@@ -55,25 +53,6 @@ const SubmenuBienvenidaUsuarioControlador = ({
         12: descripciones.data[11].texto,
       });
     }
-  }, []);
-
-  const obtenerSolicitudes = useCallback(async () => {
-    const servidor = new ConfigurarConexion();
-    const funcion = servidor.obtenerServidor() + "/solicitudes/consulta";
-
-    const solicitudesUsuario =
-      location.state.matricula.length > 7
-        ? await axios.get(funcion, {
-            params: {
-              matricula: location.state.matricula,
-            },
-          })
-        : null;
-    setListaSolicitudes(
-      solicitudesUsuario && solicitudesUsuario.status === 200
-        ? solicitudesUsuario.data
-        : []
-    );
   }, []);
 
   const obtenerConteoSolicitudes = useCallback(async () => {
@@ -106,13 +85,13 @@ const SubmenuBienvenidaUsuarioControlador = ({
       SubmenuBienvenidaUsuarioUsuarioActivo={
         SubmenuBienvenidaUsuarioControladorUsuarioActual
       }
-      SubmenuBienvenidaUsuarioListaSolicitudes={listaSolicitudes}
+      SubmenuBienvenidaUsuarioListaSolicitudes={SubmenuBienvenidaUsuarioControladorListaSolicitudes}
       SubmenuBienvenidaUsuarioEstatusLexico={estatusLexico}
       SubmenuBienvenidaUsuarioConteoSolicitudes={conteoSolicitudes}
       SubmenuBienvenidaUsuarioObtenerConteoSolicitudes={
         obtenerConteoSolicitudes
       }
-      SubmenuBienvenidaUsuarioObtenerSolicitudes={obtenerSolicitudes}
+      SubmenuBienvenidaUsuarioObtenerSolicitudes={SubmenuBienvenidaUsuarioControladorObtenerSolicitudes}
       SubmenuBienvenidaUsuarioObtenerDescripciones={obtenerDescripciones}
     />
   );

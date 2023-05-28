@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-
-import ConfigurarConexion from "./ConfigurarConexion";
+import { useCallback, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
+import ConfigurarConexion from "./ConfigurarConexion";
 
 import SubmenuBienvenidaUsuarioControlador from "./SubmenuBienvenidaUsuarioControlador";
 import SubmenuSolicitarTramiteControlador from "./SubmenuSolicitarTramiteControlador";
@@ -21,6 +21,10 @@ const MenuControlador = ({
 }) => {
   //Variables de estado
   const [registroSolicitud, setRegistroSolicitud] = useState(null);
+  const [listaSolicitudes, setListaSolicitudes] = useState([]);
+
+  //Recibir información del menú anterior, que es el de login
+  const location = useLocation();
 
   //Alertas
   const toast = useRef(null);
@@ -64,11 +68,35 @@ const MenuControlador = ({
     }
   };
 
+  //Obtener todas las solicitudes del estudiante logueado
+  const obtenerSolicitudes = useCallback(async () => {
+    const servidor = new ConfigurarConexion();
+    const funcion = servidor.obtenerServidor() + "/solicitudes/consulta";
+
+    const solicitudesUsuario =
+      location.state.matricula.length > 7
+        ? await axios.get(funcion, {
+            params: {
+              matricula: location.state.matricula,
+            },
+          })
+        : null;
+    setListaSolicitudes(
+      solicitudesUsuario && solicitudesUsuario.status === 200
+        ? solicitudesUsuario.data
+        : []
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   switch (SubmenuIndex) {
     case 2:
       return (
         <SubmenuSolicitarTramiteControlador
           SubmenuSolicitarTramiteControladorUsuarioActivo={SubmenuUsuario}
+          SubmenuSolicitarTramiteControladorObtenerSolicitudes={
+            obtenerSolicitudes
+          }
         />
       );
     case 3:
@@ -119,6 +147,10 @@ const MenuControlador = ({
       return (
         <SubmenuBienvenidaUsuarioControlador
           SubmenuBienvenidaUsuarioControladorUsuarioActual={SubmenuUsuario}
+          SubmenuBienvenidaUsuarioControladorObtenerSolicitudes={
+            obtenerSolicitudes
+          }
+          SubmenuBienvenidaUsuarioControladorListaSolicitudes={listaSolicitudes}
         />
       );
   }

@@ -5,6 +5,7 @@ import SubmenuSolicitarTramite from "../Vista/SubmenuSolicitarTramite";
 
 const SubmenuSolicitarTramiteControlador = ({
   SubmenuSolicitarTramiteControladorUsuarioActivo,
+  SubmenuSolicitarTramiteControladorObtenerSolicitudes,
 }) => {
   //Variables de estado.
   const [listaTramites, setListaTramites] = useState([]);
@@ -87,7 +88,7 @@ const SubmenuSolicitarTramiteControlador = ({
           );
           setTimeout(() => {
             empezarSolicitud(idTramite);
-          }, 100);
+          }, 10);
         } else {
           for (
             var indice = 0;
@@ -108,7 +109,7 @@ const SubmenuSolicitarTramiteControlador = ({
                 );
                 setTimeout(() => {
                   empezarSolicitud(idTramite);
-                }, 100);
+                }, 10);
               } else {
                 showToast(
                   "warn",
@@ -129,9 +130,10 @@ const SubmenuSolicitarTramiteControlador = ({
                     );
                     setTimeout(() => {
                       empezarSolicitud(idTramite);
-                    }, 100);
-                  }, 100);
-                }, 100);
+                      SubmenuSolicitarTramiteControladorObtenerSolicitudes();
+                    }, 10);
+                  }, 10);
+                }, 10);
                 break;
               }
             } else {
@@ -172,7 +174,7 @@ const SubmenuSolicitarTramiteControlador = ({
       );
       setTimeout(() => {
         enviarRequisitos();
-      }, 100);
+      }, 10);
     } else {
       showToast(
         "error",
@@ -213,6 +215,7 @@ const SubmenuSolicitarTramiteControlador = ({
 
   useEffect(() => {
     obtenerListaTramites();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

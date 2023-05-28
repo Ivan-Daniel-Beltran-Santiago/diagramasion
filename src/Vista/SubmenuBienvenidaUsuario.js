@@ -13,6 +13,7 @@ const SubmenuBienvenidaUsuario = ({
     SubmenuBienvenidaUsuarioObtenerSolicitudes();
     SubmenuBienvenidaUsuarioObtenerDescripciones();
     SubmenuBienvenidaUsuarioObtenerConteoSolicitudes();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -27,37 +28,36 @@ const SubmenuBienvenidaUsuario = ({
       </p>
       {SubmenuBienvenidaUsuarioUsuarioActivo.Estudiante !== null && (
         <div>
-          {SubmenuBienvenidaUsuarioListaSolicitudes.length > 0 && (
-            <p>
-              <span className="progreso_en_Solicitud">
-                Su solicitud tiene un estatus a esta fecha de:{" "}
-                <b>
-                  {
-                    SubmenuBienvenidaUsuarioEstatusLexico[
-                      SubmenuBienvenidaUsuarioListaSolicitudes[0].estatus_Actual
-                    ]
-                  }
-                </b>
-              </span>
-            </p>
-          )}
-          {SubmenuBienvenidaUsuarioListaSolicitudes.length > 0 && (
-            <p>
-              <span className="impedimentos_en_Solicitud">
-                La ultima modificacion a sido a fecha de{" "}
-                <b>
-                  "
-                  {
-                    SubmenuBienvenidaUsuarioListaSolicitudes[0].fecha_Actualizacion.split(
-                      "T"
-                    )[0]
-                  }
-                  "
-                </b>
-                , favor de estar atento a actualizaciones.
-              </span>
-            </p>
-          )}
+          {SubmenuBienvenidaUsuarioListaSolicitudes &&
+            SubmenuBienvenidaUsuarioListaSolicitudes.length > 0 &&
+            SubmenuBienvenidaUsuarioListaSolicitudes.map(function (solicitud) {
+              return (
+                <div>
+                  <p>
+                    <span className="progreso_en_Solicitud">
+                      Su solicitud #<b>{solicitud.id_Solicitud}</b> tiene un
+                      estatus a esta fecha de:{" "}
+                      <b>
+                        {
+                          SubmenuBienvenidaUsuarioEstatusLexico[
+                            solicitud.estatus_Actual
+                          ]
+                        }
+                      </b>
+                    </span>
+                  </p>
+                  <p>
+                    <span className="impedimentos_en_Solicitud">
+                      La ultima modificacion a sido a fecha de{" "}
+                      <b>"{solicitud.fecha_Actualizacion.split("T")[0]}"</b>
+                      {solicitud.estatus_Actual === 12
+                        ? "."
+                        : ", favor de estar atent@ a actualizaciones."}
+                    </span>
+                  </p>
+                </div>
+              );
+            })}
           <p>
             {SubmenuBienvenidaUsuarioListaSolicitudes.length > 0 && (
               <span className="progreso_en_Solicitud">

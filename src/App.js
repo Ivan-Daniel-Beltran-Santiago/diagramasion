@@ -3,7 +3,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MenuLoginControlador from "./Controlador/MenuLoginControlador";
 import MenuUsuarioControlador from "./Controlador/MenuUsuarioControlador";
-import Footer from "./View/Auxiliary/footer";
 
 import "primereact/resources/themes/saga-green/theme.css";
 import "primereact/resources/themes/saga-orange/theme.css";
@@ -19,9 +18,6 @@ function App() {
         <Route path="/" element={<MenuLoginControlador />} />
         <Route path="/Menu" element={<MenuUsuarioControlador />} />
       </Routes>
-      {/*}
-      <Footer />
-      {*/}
     </BrowserRouter>
   );
 }

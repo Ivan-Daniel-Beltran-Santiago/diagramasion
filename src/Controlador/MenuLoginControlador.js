@@ -104,7 +104,7 @@ const MenuLoginControlador = () => {
               navigate("/Menu", {
                 state: { matricula: InicioSesion.matricula },
               });
-            }, 100);
+            }, 10);
             break;
           case 400:
             showToast(

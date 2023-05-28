@@ -86,6 +86,7 @@ const SubmenuAdministrarCorreosControlador = () => {
     const archivosSeleccionadosFiltrados = [...ArchivosSeleccionados];
 
     //Filtramos para evitar archivos con nombre igual
+    // eslint-disable-next-line array-callback-return
     ArchivosSeleccionados.some((archivoSeleccionado) => {
       if (
         archivosSeleccionadosFiltrados.findIndex(
@@ -392,7 +393,7 @@ const SubmenuAdministrarCorreosControlador = () => {
             document.getElementById("cuerpoCorreo").value = "";
 
             obtenerListaPlantillasCorreo();
-          }, 100);
+          }, 10);
         } else {
           showToast(
             "error",

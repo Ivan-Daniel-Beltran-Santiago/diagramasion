@@ -140,7 +140,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Correo electronico y/o contraseña actualizados exitosamente."
             );
-          }, 100);
+          }, 10);
           break;
         case 400:
           setTimeout(() => {
@@ -149,7 +149,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Formato de correo electronico y/o contraseña invalidos."
             );
-          }, 100);
+          }, 10);
           break;
         case 404:
           setTimeout(() => {
@@ -158,7 +158,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Usuario no encontrado o contraseña no coincide."
             );
-          }, 100);
+          }, 10);
           break;
         default:
           setTimeout(() => {
@@ -167,7 +167,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Error del servidor, contacte al administrador."
             );
-          }, 100);
+          }, 10);
           break;
       }
     } catch (error) {
@@ -179,7 +179,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Formato de correo electronico y/o contraseña invalidos."
             );
-          }, 100);
+          }, 10);
           break;
         case 404:
           setTimeout(() => {
@@ -188,7 +188,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Usuario no encontrado o contraseña no coincide."
             );
-          }, 100);
+          }, 10);
           break;
         default:
           setTimeout(() => {
@@ -197,7 +197,7 @@ const SubmenuInformacionUsuarioControlador = ({
               "Usuario",
               "Error del servidor, contacte al administrador."
             );
-          }, 100);
+          }, 10);
           break;
       }
     }

@@ -166,7 +166,7 @@ const SubmenuAdministrarUsuariosControlador = () => {
 
       event.target.value = "";
       validateExcelRows(jsonExcelLimpio, jsonExcelLimpio.length);
-    }, 100);
+    }, 10);
   };
 
   //Validar las filas del archivo excel en busca de registros de usuario validos.
@@ -218,8 +218,8 @@ const SubmenuAdministrarUsuariosControlador = () => {
             registrosUsuariosExcelTemp.length +
             " inicios de sesión."
         );
-      }, 100);
-    }, 100);
+      }, 10);
+    }, 10);
   };
 
   const subirNuevosUsuarios = async (registrosExcel) => {

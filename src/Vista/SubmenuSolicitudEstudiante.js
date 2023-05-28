@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa";
 function SubmenuSolicitudEstudiante({
   SubmenuSolicitudEstudianteTostado,
   SubmenuSolicitudEstudianteListaSolicitudes,
-  SubmenuSolicitudEstudianteSetSolicitudVisible,
+  SubmenuSolicitudEstudianteHandleChangeVisibility,
   SubmenuSolicitudEstudianteSolicitudVisible,
   SubmenuSolicitudEstudianteArchivosSubir,
   SubmenuSolicitudEstudianteHandleFileEvent,
@@ -38,8 +38,10 @@ function SubmenuSolicitudEstudiante({
                     ) + ".AcordeonTitulo"
                   }
                   onClick={() =>
-                    SubmenuSolicitudEstudianteSetSolicitudVisible(
-                      !SubmenuSolicitudEstudianteSolicitudVisible
+                    SubmenuSolicitudEstudianteHandleChangeVisibility(
+                      SubmenuSolicitudEstudianteListaSolicitudes.indexOf(
+                        solicitud
+                      )
                     )
                   }
                 >
@@ -47,10 +49,18 @@ function SubmenuSolicitudEstudiante({
                     {"Solicitud #: " + solicitud.id_Solicitud}
                   </div>
                   <div>
-                    {SubmenuSolicitudEstudianteSolicitudVisible ? "-" : "+"}
+                    {SubmenuSolicitudEstudianteSolicitudVisible[
+                      SubmenuSolicitudEstudianteListaSolicitudes.indexOf(
+                        solicitud
+                      )
+                    ]
+                      ? "-"
+                      : "+"}
                   </div>
                 </div>
-                {SubmenuSolicitudEstudianteSolicitudVisible && (
+                {SubmenuSolicitudEstudianteSolicitudVisible[
+                  SubmenuSolicitudEstudianteListaSolicitudes.indexOf(solicitud)
+                ] && (
                   <div className="contenidoAcordeon">
                     <div className="contenedorSolicitud">
                       <p>

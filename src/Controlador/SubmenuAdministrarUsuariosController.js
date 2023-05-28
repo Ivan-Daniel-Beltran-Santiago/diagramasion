@@ -285,8 +285,16 @@ const SubmenuAdministrarUsuariosControlador = () => {
   const subirNuevoUsuario = async () => {
     if (
       usuarioManualValido.matricula &&
+      registroUsuarioManual.matricula !== "" &&
+      usuarioManualValido.nombreCompleto &&
+      registroUsuarioManual.nombreCompleto !== "" &&
       usuarioManualValido.correoElectronico &&
-      usuarioManualValido.semestre
+      usuarioEstudiante
+        ? usuarioManualValido.carrera &&
+          registroUsuarioManual.carrera !== "" &&
+          usuarioManualValido.semestre &&
+          registroUsuarioManual.semestre !== ""
+        : true
     ) {
       try {
         const servidor = new ConfigurarConexion();
@@ -363,7 +371,10 @@ const SubmenuAdministrarUsuariosControlador = () => {
   };
 
   const buscarUsuario = async () => {
-    if (usuarioManualValido.matricula) {
+    if (
+      usuarioManualValido.matricula &&
+      registroUsuarioManual.matricula !== ""
+    ) {
       try {
         const servidor = new ConfigurarConexion();
         const funcion = servidor.obtenerServidor() + "/usuarios/consultar";
@@ -456,10 +467,18 @@ const SubmenuAdministrarUsuariosControlador = () => {
   const actualizarUsuario = async () => {
     if (
       usuarioManualValido.matricula &&
+      registroUsuarioManual.matricula !== "" &&
+      usuarioManualValido.nombreCompleto &&
+      registroUsuarioManual.nombreCompleto !== "" &&
       usuarioManualValido.correoElectronico &&
-      usuarioManualValido.semestre &&
+      registroUsuarioManual.correoElectronico !== "" &&
       consultarMatricula.consultarMatricula !== ""
         ? consultarMatricula.esValida
+        : true && usuarioEstudiante
+        ? usuarioManualValido.carrera &&
+          registroUsuarioManual.carrera !== "" &&
+          usuarioManualValido.semestre &&
+          registroUsuarioManual.semestre !== ""
         : true
     ) {
       try {

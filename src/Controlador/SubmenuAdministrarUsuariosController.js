@@ -284,18 +284,19 @@ const SubmenuAdministrarUsuariosControlador = () => {
   };
 
   const subirNuevoUsuario = async () => {
+    var isEstudianteValido = usuarioEstudiante
+      ? usuarioManualValido.carrera &&
+        registroUsuarioManual.carrera !== "" &&
+        usuarioManualValido.semestre &&
+        registroUsuarioManual.semestre !== ""
+      : true;
     if (
       usuarioManualValido.matricula &&
       registroUsuarioManual.matricula !== "" &&
       usuarioManualValido.nombreCompleto &&
       registroUsuarioManual.nombreCompleto !== "" &&
       usuarioManualValido.correoElectronico &&
-      usuarioEstudiante
-        ? usuarioManualValido.carrera &&
-          registroUsuarioManual.carrera !== "" &&
-          usuarioManualValido.semestre &&
-          registroUsuarioManual.semestre !== ""
-        : true
+      isEstudianteValido
     ) {
       try {
         const servidor = new ConfigurarConexion();
@@ -466,6 +467,16 @@ const SubmenuAdministrarUsuariosControlador = () => {
   };
 
   const actualizarUsuario = async () => {
+    var isEstudianteValido = usuarioEstudiante
+      ? usuarioManualValido.carrera &&
+        registroUsuarioManual.carrera !== "" &&
+        usuarioManualValido.semestre &&
+        registroUsuarioManual.semestre !== ""
+      : true;
+    var isNuevaMatriculaValida =
+      consultarMatricula.consultarMatricula !== ""
+        ? consultarMatricula.esValida
+        : true;
     if (
       usuarioManualValido.matricula &&
       registroUsuarioManual.matricula !== "" &&
@@ -473,14 +484,8 @@ const SubmenuAdministrarUsuariosControlador = () => {
       registroUsuarioManual.nombreCompleto !== "" &&
       usuarioManualValido.correoElectronico &&
       registroUsuarioManual.correoElectronico !== "" &&
-      consultarMatricula.consultarMatricula !== ""
-        ? consultarMatricula.esValida
-        : true && usuarioEstudiante
-        ? usuarioManualValido.carrera &&
-          registroUsuarioManual.carrera !== "" &&
-          usuarioManualValido.semestre &&
-          registroUsuarioManual.semestre !== ""
-        : true
+      isEstudianteValido &&
+      isNuevaMatriculaValida
     ) {
       try {
         const servidor = new ConfigurarConexion();
@@ -554,7 +559,10 @@ const SubmenuAdministrarUsuariosControlador = () => {
   };
 
   const actualizarContraseñaUsuario = async () => {
-    if (usuarioManualValido.matricula) {
+    if (
+      usuarioManualValido.matricula &&
+      registroUsuarioManual.matricula !== ""
+    ) {
       const servidor = new ConfigurarConexion();
       const funcion = servidor.obtenerServidor() + "/usuarios/acceso";
       const usuarioActualizarContraseña = await axios.put(funcion, {

@@ -96,7 +96,7 @@ const SubmenuSolicitarTramiteControlador = ({
           ) {
             if (solicitudesUsuario.data[indice].estatus_Actual === 12) {
               var ahora = new Date();
-              var año_cliente = ahora.toISOString().getFullYear();
+              var año_cliente = ahora.getFullYear();
               var año_solicitud = new Date(
                 solicitudesUsuario.data[indice].fecha_Actualizacion
               ).getFullYear();

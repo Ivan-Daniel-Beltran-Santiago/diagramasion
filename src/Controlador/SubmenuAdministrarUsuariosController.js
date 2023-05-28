@@ -190,7 +190,7 @@ const SubmenuAdministrarUsuariosControlador = () => {
     );
 
     setTimeout(() => {
-      for (var indice = 1; indice < jsonExcel.length; indice++) {
+      for (var indice = 0; indice < jsonExcel.length; indice++) {
         registroUsuariosExcelValido =
           regexApellidos.test(jsonExcel[indice][1]) &&
           regexApellidos.test(jsonExcel[indice][2]) &&

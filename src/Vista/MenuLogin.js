@@ -3,7 +3,6 @@ import "./MenuLogin.css";
 import { Toast } from "primereact/toast";
 import ComponenteLogo from "./ComponenteLogo";
 import ComponenteFooter from "./ComponenteFooter";
-import Footer from "../View/Auxiliary/footer";
 
 export default function MenuLogin({
   Tostado,

@@ -154,8 +154,8 @@ const SubmenuAdministrarCorreos = ({
         <br />
         {SubmenuAdministrarCorreosParametrosPlantillaCorreo.Indice !== -1 &&
           SubmenuAdministrarCorreosArchivosPlantillaCorreoAñadir.length > 0 && (
-            <div>
-              <label>Documentos por añadir a la plantilla: </label>
+            <div className="modules">
+              <label className="Indicador">Documentos por añadir a la plantilla: </label>
               <br />
               <br />
               <p>
@@ -188,8 +188,8 @@ const SubmenuAdministrarCorreos = ({
         {SubmenuAdministrarCorreosParametrosPlantillaCorreo.Indice !== -1 &&
           SubmenuAdministrarCorreosArchivosPlantillaCorreo &&
           SubmenuAdministrarCorreosArchivosPlantillaCorreo.length > 0 && (
-            <div>
-              <label>Documentos que ya existen en la plantilla: </label>
+            <div className="modules">
+              <label className="Indicador">Documentos que ya existen en la plantilla: </label>
               <br />
               <br />
               <p>

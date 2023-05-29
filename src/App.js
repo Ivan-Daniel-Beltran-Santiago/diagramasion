@@ -1,10 +1,8 @@
 import "./App.css";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginControlador from "./Controlador/LoginControlador";
-import MenuEncargada from "./Menus/menuEncargada";
-import MenuEstudiante from "./Menus/menuEstudiante";
-import Footer from "./View/Auxiliary/footer";
+import MenuLoginControlador from "./Controlador/MenuLoginControlador";
+import MenuUsuarioControlador from "./Controlador/MenuUsuarioControlador";
 
 import "primereact/resources/themes/saga-green/theme.css";
 import "primereact/resources/themes/saga-orange/theme.css";
@@ -17,12 +15,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginControlador />} />
-        <Route path="/Menu-Encargada" element={<MenuEncargada />} />
-        <Route path="/Menu-Estudiante" element={<MenuEstudiante />} />
-        <Route path="/Menu/Solicitud" />
+        <Route path="/" element={<MenuLoginControlador />} />
+        <Route path="/Menu" element={<MenuUsuarioControlador />} />
       </Routes>
-      <Footer />
     </BrowserRouter>
   );
 }
